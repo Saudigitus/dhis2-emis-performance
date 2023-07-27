@@ -33,16 +33,14 @@ function WorkingLits() {
 
         <div>
           <ButtonStrip>
-            <Button onClick={() => { setOpen(true); }} icon={<IconAddCircle24 />}>Enrol single student</Button>
             <DropdownButtonComponent
-              name="Bulk enrollment"
+              name="Bulk Performance"
               icon={<IconUserGroup16 />}
               options={enrollmentOptions}
             />
           </ButtonStrip>
         </div>
       </div>
-      {open && <ModalComponent title="Single Student Enrollment" open={open} setOpen={setOpen} actions={modalActions}><ModalContentComponent /></ModalComponent>}
     </WithPadding>
   )
 }
