@@ -12,7 +12,7 @@ import AppWrapper from './AppWrapper';
 function App() {
     return (
         <DataStoreProvider
-            namespace="emis-apps-configuration"
+            namespace="semis"
             loadingComponent={
                 <CenteredContent>
                     <CircularLoader />

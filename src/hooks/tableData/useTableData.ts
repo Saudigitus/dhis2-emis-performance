@@ -106,9 +106,10 @@ export function useTableData() {
             ouMode: "SELECTED",
             page: 1,
             pageSize: 10,
-            program: dataStoreState?.enrollment.program as unknown as string,
+            program: dataStoreState?.program as unknown as string,
             order: "createdAt:desc",
-            programStage: dataStoreState?.enrollment.programStage as unknown as string,
+            // change here the programStage id based on selected programStage id
+            programStage: "mBEhR2M4DRQ",
             filter: headerFieldsState?.dataElements,
             filterAttributes: headerFieldsState?.attributes,
             orgUnit: school
@@ -126,7 +127,7 @@ export function useTableData() {
             ? await engine.query(TEI_QUERY({
                 ouMode: "SELECTED",
                 pageSize: 10,
-                program: dataStoreState?.enrollment.program as unknown as string,
+                program: dataStoreState?.program as unknown as string,
                 orgUnit: school,
                 trackedEntity: trackedEntityToFetch
             })).catch((error) => {

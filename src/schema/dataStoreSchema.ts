@@ -1,19 +1,21 @@
 import { atom } from "recoil"
 import { z } from "zod"
 
-const dataStoreRecord = z.record(
-    z.string(),
-    z.object({
-        program: z.string(),
-        programStage: z.string()
-    })
-)
-
 export const dataStoreSchema = z.object({
-    enrollment: dataStoreRecord,
-    class: z.string(),
-    grade: z.string(),
-    academicYear: z.string()
+    performance: z.object({
+        programStages: z.array(
+            z.object({
+                programStage: z.string()
+            })
+        )
+    }),
+    registration: z.object({
+        academicYear: z.string(),
+        grade: z.string(),
+        section: z.string(),
+        programStage: z.string()
+    }),
+    program: z.string()
 })
 
 type DataStoreSchema = z.infer<typeof dataStoreSchema>

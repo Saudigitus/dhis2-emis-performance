@@ -3,8 +3,9 @@ import i18n from '@dhis2/d2-i18n';
 import classNames from 'classnames';
 import { makeStyles, type Theme, createStyles } from '@material-ui/core/styles';
 import { RowCell, RowTable } from '../components';
-import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption';
-import { type CustomAttributeProps } from '../../../types/table/AttributeColumns';
+import { VariablesTypes, type CustomAttributeProps } from '../../../types/table/AttributeColumns';
+import GenericFields from '../../genericFields/GenericFields';
+import { Form } from "react-final-form";
 
 interface RenderHeaderProps {
     rowsData: any[]
@@ -63,7 +64,8 @@ function RenderRows({ headerData, rowsData }: RenderHeaderProps): React.ReactEle
                             className={classNames(classes.cell, classes.bodyCell)}
                         >
                             <div>
-                                {getDisplayName({ attribute: column.id, headers: headerData, value: row[column.id] })}
+                                {/* {getDisplayName({ attribute: column.id, headers: headerData, value: row[column.id] })} */}
+                                {showFieldsBasedValueType(column, row[column.id])}
                             </div>
                         </RowCell>
                     ));
@@ -82,3 +84,22 @@ function RenderRows({ headerData, rowsData }: RenderHeaderProps): React.ReactEle
 }
 
 export default RenderRows
+
+function showFieldsBasedValueType(column: CustomAttributeProps, value: string) {
+    if (column.type === VariablesTypes.DataElement) {
+        return (
+            <Form onSubmit={() => { alert("") }}>
+                {({  }) => (
+                    <form>
+                        <GenericFields
+                            attribute={column}
+                            disabled={false}
+                            valueType={column.valueType}
+                        />
+                    </form>
+                )}
+            </Form>
+        )
+    }
+    return value
+}

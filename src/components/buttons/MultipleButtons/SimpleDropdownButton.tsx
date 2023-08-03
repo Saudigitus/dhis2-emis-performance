@@ -30,7 +30,7 @@ export default function SimpleDropdownButton(props: ButtonProps): React.ReactEle
         onClick={handleClick}
         endIcon={anchorEl === null ? <ExpandMore className={styles.dropdownIcon}/> : <ExpandLess className={styles.dropdownIcon}/>}
       >
-        {selectedTerm.label ?? "Terms"}
+        {selectedTerm?.label ?? "Terms"}
       </Button>
       <Menu
         id="simple-menu"
@@ -44,14 +44,14 @@ export default function SimpleDropdownButton(props: ButtonProps): React.ReactEle
           style: { boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px" }
          }}
       >
-        {items.map((item, i) => (
+        {items?.map((item, i) => (
           <MenuItem
             key={i}
-            className={selectedTerm.id === item.id && styles.activeMenuItem}
+            className={selectedTerm?.id === item?.id && styles.activeMenuItem}
             style={{ minWidth: 127 }}
             onClick={() => { setSelectedTerm(item); setAnchorEl(null); }}
           >
-            {item.label}
+            {item?.label}
           </MenuItem>
         ))}
       </Menu>{" "}
