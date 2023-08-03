@@ -19,7 +19,7 @@ export interface ProgramConfig {
                         displayName: string
                         id: string
                         valueType: string
-                        optionSet: any
+                        optionSet: { id: string }
                     }
                 }
             ]
@@ -28,10 +28,12 @@ export interface ProgramConfig {
     programTrackedEntityAttributes: [
         {
             trackedEntityAttribute: {
+                generated: boolean
+                pattern: string | undefined
                 displayName: string
                 id: string
                 valueType: string
-                optionSet: any
+                optionSet: { id: string, options: {value: string, label: string} }
             }
             searchable: boolean
             displayInList: boolean
