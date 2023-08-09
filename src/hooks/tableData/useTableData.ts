@@ -7,6 +7,7 @@ import { formatResponseRows } from "../../utils/table/rows/formatResponseRows";
 import { useParams } from "../commons/useQueryParams";
 import { HeaderFieldsState } from "../../schema/headersSchema";
 import useShowAlerts from "../commons/useShowAlert";
+import { TermMaksState } from "../../schema/termMarksSchema";
 
 type TableDataProps = Record<string, string>;
 
@@ -94,6 +95,7 @@ export function useTableData() {
     const engine = useDataEngine();
     const dataStoreState = useRecoilValue(DataStoreState);
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
+    const termMarksState = useRecoilValue(TermMaksState)
     const { urlParamiters } = useParams()
     const [loading, setLoading] = useState<boolean>(false)
     const [tableData, setTableData] = useState<TableDataProps[]>([])
@@ -109,7 +111,7 @@ export function useTableData() {
             program: dataStoreState?.program as unknown as string,
             order: "createdAt:desc",
             // change here the programStage id based on selected programStage id
-            programStage: "mBEhR2M4DRQ",
+            programStage: termMarksState?.id,
             filter: headerFieldsState?.dataElements,
             filterAttributes: headerFieldsState?.attributes,
             orgUnit: school

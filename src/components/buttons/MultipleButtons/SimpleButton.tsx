@@ -6,7 +6,7 @@ import { type SimpleButtonsProps } from "../../../types/Buttons/SimpleButtonsPro
 interface ButtonProps {
   items: SimpleButtonsProps[]
   selectedTerm: any
-  setSelectedTerm: (arg: object) => void
+  setSelectedTerm: (arg: any) => void
 }
 
 export default function SimpleButton(props: ButtonProps): React.ReactElement {
