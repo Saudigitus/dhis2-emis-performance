@@ -53,7 +53,7 @@ export function formatResponse(data: ProgramConfig, programStageId: string): Cus
                 }) as []
                 : []
         )
-    }, [data]);
+    }, [data, programStageId]);
 
     return headerResponse;
 }

@@ -13,6 +13,7 @@ import { useTableData } from '../../../hooks/tableData/useTableData';
 import { useParams } from '../../../hooks/commons/useQueryParams';
 import { useRecoilValue } from 'recoil';
 import { HeaderFieldsState } from '../../../schema/headersSchema';
+import { TermMaksState } from '../../../schema/termMarksSchema';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -27,12 +28,13 @@ function Table() {
     const { useQuery, urlParamiters } = useParams()
     const school = urlParamiters().school as unknown as string
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
+    const termMarksState = useRecoilValue(TermMaksState)
 
     useEffect(() => {
         if (school !== null) {
             void getData()
         }
-    }, [columns, useQuery(), headerFieldsState])
+    }, [columns, useQuery(), headerFieldsState, termMarksState])
 
     return (
         <Paper>
