@@ -6,7 +6,7 @@ import { type SimpleButtonsProps } from "../../../types/Buttons/SimpleButtonsPro
 interface ButtonProps {
   items: SimpleButtonsProps[]
   selectedTerm: any
-  setSelectedTerm: (arg: object) => void
+  setSelectedTerm: (arg: any) => void
 }
 
 export default function SimpleButton(props: ButtonProps): React.ReactElement {
@@ -14,9 +14,9 @@ export default function SimpleButton(props: ButtonProps): React.ReactElement {
 
   return (
     <ButtonStrip>
-      {items.map((item) => (
-        <div key={item.id} className={selectedTerm.id === item.id ? styles["active-button"] : styles.simpleButton} onClick={() => { setSelectedTerm(item) }}>
-          <span className={styles.simpleButtonLabel}>{item.label}</span>
+      {items?.map((item) => (
+        <div key={item?.id} className={selectedTerm?.id === item?.id ? styles["active-button"] : styles.simpleButton} onClick={() => { setSelectedTerm(item) }}>
+          <span className={styles.simpleButtonLabel}>{item?.label}</span>
         </div>
       ))}
     </ButtonStrip>

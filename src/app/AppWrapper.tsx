@@ -17,7 +17,7 @@ export default function AppWrapper(props: Props) {
         )
     }
 
-    if (error != null || !Object.prototype.hasOwnProperty.call(data?.config, "enrollment")) {
+    if (error != null || !Object.prototype.hasOwnProperty.call(data?.config[0], "registration")) {
         return (
             <CenteredContent>
                 Something went wrong wen loading the app, please check if you app is already configured
