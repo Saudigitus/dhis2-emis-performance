@@ -3,11 +3,12 @@ import { type ProgramConfig } from "../../../types/programConfig/ProgramConfig";
 import { VariablesTypes, type CustomAttributeProps } from "../../../types/table/AttributeColumns";
 import { useMemo } from "react";
 
-export function formatResponse(data: ProgramConfig): CustomAttributeProps[] {
+export function formatResponse(data: ProgramConfig, programStageId: string): CustomAttributeProps[] {
     const headerResponse = useMemo(() => {
         // TODO: Remove this when the API is fixed and solve this bug 👇
+        // Pass here the specific programStage
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        const originalData = ((data?.programStages?.find(programStge => programStge.id === "Ni2qsy2WJn4")) ?? {} as ProgramConfig["programStages"][0])
+        const originalData = ((data?.programStages?.find(programStge => programStge.id === programStageId)) ?? {} as ProgramConfig["programStages"][0])
 
         return data?.programTrackedEntityAttributes?.map((item) => {
             return {
@@ -52,7 +53,7 @@ export function formatResponse(data: ProgramConfig): CustomAttributeProps[] {
                 }) as []
                 : []
         )
-    }, [data]);
+    }, [data, programStageId]);
 
     return headerResponse;
 }

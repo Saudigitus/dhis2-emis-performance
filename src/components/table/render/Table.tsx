@@ -14,6 +14,7 @@ import { useParams } from '../../../hooks/commons/useQueryParams';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { HeaderFieldsState } from '../../../schema/headersSchema';
 import { teiRefetch } from '../../../hooks/tei/usePostTei';
+import { TermMarksState } from '../../../schema/termMarksSchema';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -30,10 +31,11 @@ function Table() {
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
     const [refetch] = useRecoilState(teiRefetch)
+    const termMarksState = useRecoilValue(TermMarksState)
 
     useEffect(() => {
         void getData(page, pageSize)
-    }, [columns, useQuery(), headerFieldsState, page, pageSize, refetch])
+    }, [columns, useQuery(), headerFieldsState, page, pageSize, refetch, termMarksState])
 
     const onPageChange = (newPage: number) => {
         setpage(newPage)

@@ -32,7 +32,7 @@ interface dataStoreRecord {
 
 }
 
-export const DataStoreState = atom<dataStoreRecord | null>({
+export const DataStoreState = atom<dataStoreRecord[] | null>({
     key: "dataStore-get-state",
     default: null
 })

@@ -1,6 +1,6 @@
 interface SimpleButtonsProps {
     id: string
-    label: string
+    label?: string
     type: string
 }
 

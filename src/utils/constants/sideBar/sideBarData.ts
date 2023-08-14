@@ -31,9 +31,9 @@ function sideBarData (): SideBarItemProps[] {
                     icon: fileDocument,
                     label: "Performance",
                     showBadge: false,
-                    disabled: true,
-                    appName: "DHIS2-App-Name",
-                    route: "#"
+                    disabled: false,
+                    appName: "SEMIS-Enrollment",
+                    route: "/performance"
                 },
                 {
                     icon: gauge,
