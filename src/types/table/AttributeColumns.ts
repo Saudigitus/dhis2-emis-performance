@@ -11,6 +11,8 @@ export interface CustomAttributeProps {
     header: string
     required: boolean
     name: string
+    programStage?: string
+    value?: string
     labelName: string
     valueType: typeof Attribute.valueType
     disabled: boolean
@@ -18,11 +20,10 @@ export interface CustomAttributeProps {
     options: {
         optionSet: {
             id: string
-            options: {
-                [x: string]: any
+            options: [{
                 value: string
                 label: string
-            }
+            }]
         }
     }
     pattern?: string

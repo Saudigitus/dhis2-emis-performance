@@ -12,6 +12,7 @@ export default function SwitchButtonView(): React.ReactElement {
   const dataStoreConfig = useRecoilValue(DataStoreState)
   const [selectedTerm, setSelectedTerm] = useRecoilState(TermMarksState);
 
+  //TODO: @ajhmohammed, please remove this code to the useDataStore hook
   const items: SimpleButtonsProps[] = dataStoreConfig?.find(dta => dta.key === "student")?.performance?.programStages.map(x => {
     return {
       id: x.programStage,
