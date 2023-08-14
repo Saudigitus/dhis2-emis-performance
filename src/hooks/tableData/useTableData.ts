@@ -7,6 +7,7 @@ import { formatResponseRows } from "../../utils/table/rows/formatResponseRows";
 import { useParams } from "../commons/useQueryParams";
 import { HeaderFieldsState } from "../../schema/headersSchema";
 import useShowAlerts from "../commons/useShowAlert";
+import { TermMarksState } from "../../schema/termMarksSchema";
 
 type TableDataProps = Record<string, string>;
 
@@ -94,6 +95,7 @@ export function useTableData() {
     const engine = useDataEngine();
     const dataStoreState = useRecoilValue(DataStoreState);
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
+    const termMarksState = useRecoilValue(TermMarksState)
     const { urlParamiters } = useParams()
     const [loading, setLoading] = useState<boolean>(false)
     const [tableData, setTableData] = useState<TableDataProps[]>([])
@@ -106,9 +108,10 @@ export function useTableData() {
             ouMode: "SELECTED",
             page: 1,
             pageSize: 10,
-            program: dataStoreState?.enrollment.program as unknown as string,
+            program: dataStoreState?.program as unknown as string,
             order: "createdAt:desc",
-            programStage: dataStoreState?.enrollment.programStage as unknown as string,
+            // change here the programStage id based on selected programStage id
+            programStage: termMarksState.id,
             filter: headerFieldsState?.dataElements,
             filterAttributes: headerFieldsState?.attributes,
             orgUnit: school
@@ -126,7 +129,7 @@ export function useTableData() {
             ? await engine.query(TEI_QUERY({
                 ouMode: "SELECTED",
                 pageSize: 10,
-                program: dataStoreState?.enrollment.program as unknown as string,
+                program: dataStoreState?.program as unknown as string,
                 orgUnit: school,
                 trackedEntity: trackedEntityToFetch
             })).catch((error) => {

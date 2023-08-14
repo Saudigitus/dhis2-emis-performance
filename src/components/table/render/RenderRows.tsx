@@ -4,7 +4,9 @@ import classNames from 'classnames';
 import { makeStyles, type Theme, createStyles } from '@material-ui/core/styles';
 import { RowCell, RowTable } from '../components';
 import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption';
-import { type CustomAttributeProps } from '../../../types/table/AttributeColumns';
+import { VariablesTypes, type CustomAttributeProps } from '../../../types/table/AttributeColumns';
+import GenericFields from '../../genericFields/GenericFields';
+import { Form } from "react-final-form";
 
 interface RenderHeaderProps {
     rowsData: any[]
