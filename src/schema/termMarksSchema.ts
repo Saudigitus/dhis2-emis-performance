@@ -3,7 +3,7 @@ import { z } from "zod"
 
 export const termMarksSchema = z.object({
     id: z.string(),
-    name: z.string(),
+    label: z.string().optional(),
     type: z.string()
 })
 
@@ -13,7 +13,7 @@ export const TermMarksState = atom<TermMarksSchema>({
     key: "termMarks-state",
     default: {
         id: "",
-        name: "",
+        label: "",
         type: ""
     }
 })
