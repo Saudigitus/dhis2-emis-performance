@@ -23,7 +23,7 @@ export function useGetInitialValues() {
 
             if(key === "programStage") {
                 setSelectedTerm({
-                    id: key,
+                    id: value,
                     label: programConfig?.programStages.find(pStage => pStage.id === key)?.displayName,
                     type: "programStage"
                 })
