@@ -5,6 +5,7 @@ import { makeStyles, type Theme, createStyles } from '@material-ui/core/styles';
 import { RowCell, RowTable } from '../components';
 import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption';
 import { type CustomAttributeProps } from '../../../types/table/AttributeColumns';
+import showFieldsBasedValueType from '../components/row/showFieldsBasedValueType';
 
 interface RenderHeaderProps {
     rowsData: any[]
@@ -63,7 +64,8 @@ function RenderRows({ headerData, rowsData }: RenderHeaderProps): React.ReactEle
                             className={classNames(classes.cell, classes.bodyCell)}
                         >
                             <div>
-                                {getDisplayName({ attribute: column.id, headers: headerData, value: row[column.id] })}
+                                {/* {getDisplayName({ attribute: column.id, headers: headerData, value: row[column.id] })} */}
+                                { showFieldsBasedValueType(column, row[column.id]) }
                             </div>
                         </RowCell>
                     ));
@@ -82,3 +84,4 @@ function RenderRows({ headerData, rowsData }: RenderHeaderProps): React.ReactEle
 }
 
 export default RenderRows
+
