@@ -4,21 +4,24 @@ import { Form } from 'react-final-form';
 import GenericFields from '../../../genericFields/GenericFields';
 
 function showFieldsBasedValueType(column: CustomAttributeProps, value: string) {
-    // console.log(value)
+    const onSubmit = (event: any) => {
+        console.log(event.target.value)
+    }
+
     if (column.type === VariablesTypes.DataElement) {
         return (
-            <Form 
-                onSubmit={() => { alert("") }} 
-                initialValues={{[column.name]:value}} 
+            <Form
+                onSubmit={() => { alert("") }}
+                initialValues={{ [column.name]: value }}
                 render={({
                     handleSubmit
                 }) => (
-                    <form onSubmit={handleSubmit}>
-                            <GenericFields
-                                attribute={column}
-                                disabled={false}
-                                valueType={column.valueType}
-                            />
+                    <form onSubmit={handleSubmit} onBlur={(event) => { onSubmit(event) }}>
+                        <GenericFields
+                            attribute={column}
+                            disabled={false}
+                            valueType={column.valueType}
+                        />
                     </form>
                 )}
             />
