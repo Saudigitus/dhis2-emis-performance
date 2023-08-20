@@ -111,9 +111,9 @@ export function useTableData() {
             ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
             page,
             pageSize,
-            program: dataStoreState?.program as unknown as string,
+            program: dataStoreState?.find(section => section.key === "student")?.performance?.program as unknown as string,
             order: "createdAt:desc",
-            programStage: selectedTerm.id,
+            programStage: selectedTerm?.id || dataStoreState?.find(section => section.key === "student")?.performance.programStages[0].programStage,
             filter: headerFieldsState?.dataElements,
             filterAttributes: headerFieldsState?.attributes,
             orgUnit: school
