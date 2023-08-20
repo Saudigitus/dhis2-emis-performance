@@ -97,7 +97,7 @@ export function useTableData() {
     const engine = useDataEngine();
     const dataStoreState = useRecoilValue(DataStoreState);
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
-    const termMarksState = useRecoilValue(TermMarksState)
+    const [selectedTerm] = useRecoilState(TermMarksState)
     const { urlParamiters } = useParams()
     const [loading, setLoading] = useState<boolean>(false)
     const [tableData, setTableData] = useState<TableDataProps[]>([])
@@ -113,7 +113,7 @@ export function useTableData() {
             pageSize,
             program: dataStoreState?.program as unknown as string,
             order: "createdAt:desc",
-            programStage: termMarksState.id,
+            programStage: selectedTerm.id,
             filter: headerFieldsState?.dataElements,
             filterAttributes: headerFieldsState?.attributes,
             orgUnit: school

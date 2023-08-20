@@ -8,6 +8,7 @@ import { type CustomAttributeProps } from '../../../types/table/AttributeColumns
 import showFieldsBasedValueType from '../components/row/showFieldsBasedValueType';
 import { useRecoilState } from 'recoil';
 import { EventsState } from '../../../schema/termMarksSchema';
+import usePostDataElement from '../../../hooks/dataElements/usePostDataElement';
 
 interface RenderHeaderProps {
     rowsData: any[]
@@ -41,6 +42,7 @@ const useStyles = makeStyles((theme: Theme) =>
 function RenderRows({ headerData, rowsData }: RenderHeaderProps): React.ReactElement {
     const classes = useStyles()
     const [allEvents] = useRecoilState(EventsState);
+    const { saveMarks } = usePostDataElement()
 
     if (rowsData.length === 0) {
         return (
@@ -67,8 +69,7 @@ function RenderRows({ headerData, rowsData }: RenderHeaderProps): React.ReactEle
                             className={classNames(classes.cell, classes.bodyCell)}
                         >
                             <div>
-                                {/* {getDisplayName({ attribute: column.id, headers: headerData, value: row[column.id] })} */}
-                                {showFieldsBasedValueType(column, row[column.id], allEvents[index])}
+                                {showFieldsBasedValueType(column, row[column.id], allEvents[index], saveMarks)}
                             </div>
                         </RowCell>
                     ));

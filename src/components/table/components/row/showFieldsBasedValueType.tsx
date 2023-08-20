@@ -3,20 +3,32 @@ import { VariablesTypes, type CustomAttributeProps } from '../../../../types/tab
 import { Form } from 'react-final-form';
 import GenericFields from '../../../genericFields/GenericFields';
 
-function showFieldsBasedValueType(column: CustomAttributeProps, value: string, currentEvent: object) {
+function showFieldsBasedValueType(column: CustomAttributeProps, value: string, currentEvent: object, saveMarks: any) {
     const onSubmit = (event: any) => {
-        console.log(currentEvent, event.target.value)
+        void saveMarks({
+            data: {
+                event: currentEvent?.event,
+                orgUnit: currentEvent?.orgUnit,
+                dataValues: [{
+                    dataElement: column.id,
+                    value: event.target.value
+                }],
+                program: currentEvent?.program,
+                status: currentEvent?.status,
+                trackedEntity: currentEvent?.trackedEntity,
+                programStage: currentEvent?.programStage,
+            },
+            id: `${currentEvent?.event}/${column.id}`
+        })
     }
 
     if (column.type === VariablesTypes.DataElement) {
         return (
             <Form
-                onSubmit={() => { alert("") }}
+                onSubmit={() => { }}
                 initialValues={{ [column.name]: value }}
-                render={({
-                    handleSubmit
-                }) => (
-                    <form onSubmit={handleSubmit} onBlur={(event) => { onSubmit(event) }}>
+                render={({ handleSubmit }) => (
+                    <form onBlur={(event) => { onSubmit(event) }}>
                         <GenericFields
                             attribute={column}
                             disabled={false}
