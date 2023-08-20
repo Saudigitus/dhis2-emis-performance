@@ -6,6 +6,8 @@ import { RowCell, RowTable } from '../components';
 import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption';
 import { type CustomAttributeProps } from '../../../types/table/AttributeColumns';
 import showFieldsBasedValueType from '../components/row/showFieldsBasedValueType';
+import { useRecoilState } from 'recoil';
+import { EventsState } from '../../../schema/termMarksSchema';
 
 interface RenderHeaderProps {
     rowsData: any[]
@@ -38,6 +40,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function RenderRows({ headerData, rowsData }: RenderHeaderProps): React.ReactElement {
     const classes = useStyles()
+    const [allEvents] = useRecoilState(EventsState);
 
     if (rowsData.length === 0) {
         return (
@@ -65,7 +68,7 @@ function RenderRows({ headerData, rowsData }: RenderHeaderProps): React.ReactEle
                         >
                             <div>
                                 {/* {getDisplayName({ attribute: column.id, headers: headerData, value: row[column.id] })} */}
-                                { showFieldsBasedValueType(column, row[column.id]) }
+                                {showFieldsBasedValueType(column, row[column.id], allEvents[index])}
                             </div>
                         </RowCell>
                     ));

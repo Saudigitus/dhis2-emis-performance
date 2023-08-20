@@ -3,9 +3,9 @@ import { VariablesTypes, type CustomAttributeProps } from '../../../../types/tab
 import { Form } from 'react-final-form';
 import GenericFields from '../../../genericFields/GenericFields';
 
-function showFieldsBasedValueType(column: CustomAttributeProps, value: string) {
+function showFieldsBasedValueType(column: CustomAttributeProps, value: string, currentEvent: object) {
     const onSubmit = (event: any) => {
-        console.log(event.target.value)
+        console.log(currentEvent, event.target.value)
     }
 
     if (column.type === VariablesTypes.DataElement) {
