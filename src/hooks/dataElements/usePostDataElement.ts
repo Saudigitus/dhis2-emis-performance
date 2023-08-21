@@ -11,8 +11,8 @@ const POST_DATA_ELEMENT: any = {
 export default function usePostDataElement() {
     const { hide, show } = useShowAlerts()
 
-    const [create, { loading, data }] = useDataMutation(POST_DATA_ELEMENT, {
-        onComplete: () => {
+    const [create, { loading, data, error }] = useDataMutation(POST_DATA_ELEMENT, {
+        onComplete: (response) => {
             show({ message: "Enrollment saved successfully", type: { success: true } })
         },
         onError: (error) => {
@@ -27,6 +27,7 @@ export default function usePostDataElement() {
     return {
         loading,
         saveMarks: create,
-        data
+        saved: data,
+        error
     }
 }

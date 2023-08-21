@@ -1,9 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import i18n from '@dhis2/d2-i18n';
 import classNames from 'classnames';
 import { makeStyles, type Theme, createStyles } from '@material-ui/core/styles';
 import { RowCell, RowTable } from '../components';
-import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption';
 import { type CustomAttributeProps } from '../../../types/table/AttributeColumns';
 import showFieldsBasedValueType from '../components/row/showFieldsBasedValueType';
 import { useRecoilState } from 'recoil';
@@ -42,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
 function RenderRows({ headerData, rowsData }: RenderHeaderProps): React.ReactElement {
     const classes = useStyles()
     const [allEvents] = useRecoilState(EventsState);
-    const { saveMarks } = usePostDataElement()
+    const { saveMarks, saved, error } = usePostDataElement()
 
     if (rowsData.length === 0) {
         return (
@@ -69,7 +68,7 @@ function RenderRows({ headerData, rowsData }: RenderHeaderProps): React.ReactEle
                             className={classNames(classes.cell, classes.bodyCell)}
                         >
                             <div>
-                                {showFieldsBasedValueType(column, row[column.id], allEvents[index], saveMarks)}
+                                {showFieldsBasedValueType(column, row[column.id], allEvents[index], saveMarks, saved, error)}
                             </div>
                         </RowCell>
                     ));
