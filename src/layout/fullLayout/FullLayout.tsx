@@ -5,10 +5,7 @@ import { useParams } from '../../hooks/commons/useQueryParams';
 import InfoPage from '../../components/info/InfoPage';
 
 export default function FullLayout({ children }: { children: React.ReactNode }) {
-    // useGetInitialValues()
     const { urlParamiters } = useParams();
-
-    console.log(urlParamiters());
 
     return (
         <div className={style.LayoutContainer}>

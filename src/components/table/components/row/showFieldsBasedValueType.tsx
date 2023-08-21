@@ -28,7 +28,8 @@ function showFieldsBasedValueType(column: CustomAttributeProps, value: string, c
                 onSubmit={() => { }}
                 initialValues={{ [column.name]: value }}
                 render={({ form }) => (
-                    <form onBlur={(event) => { onSubmit(event, form) }}>
+                    <form onClick={(event) => { event.stopPropagation() }}
+                        onBlur={(event) => { onSubmit(event, form) }}>
                         <GenericFields
                             attribute={column}
                             disabled={false}
