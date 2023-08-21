@@ -20,7 +20,7 @@ function WorkingLits() {
     <WithPadding>
       <div className='d-flex justify-content-between'>
         <div>
-          <Chip>
+          {/* <Chip>
             Active enrollments
           </Chip>
           <Chip>
@@ -28,7 +28,7 @@ function WorkingLits() {
           </Chip>
           <Chip>
             Cancelled enrollments
-          </Chip>
+          </Chip> */}
         </div>
 
         <div>
