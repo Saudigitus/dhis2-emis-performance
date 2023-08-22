@@ -26,11 +26,6 @@ export default function ShowFieldsBasedValueType({ column, value, currentEvent, 
                 dataElement: `${currentEvent?.event}/${column.id}`,
                 feedbackType: 'success'
             })
-        }).catch(() => {
-            setShowFeedBack({
-                dataElement: `${currentEvent?.event}/${column.id}`,
-                feedbackType: 'error'
-            })
         })
     }
 
