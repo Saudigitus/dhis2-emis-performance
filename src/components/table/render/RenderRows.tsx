@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import i18n from '@dhis2/d2-i18n';
 import classNames from 'classnames';
 import { makeStyles, type Theme, createStyles } from '@material-ui/core/styles';
 import { RowCell, RowTable } from '../components';
 import { type CustomAttributeProps } from '../../../types/table/AttributeColumns';
-import showFieldsBasedValueType from '../components/row/showFieldsBasedValueType';
 import { useRecoilState } from 'recoil';
-import { EventsState } from '../../../schema/termMarksSchema';
-import { useConfig } from '@dhis2/app-runtime'
+import { EventsState, TermMarksState } from '../../../schema/termMarksSchema';
 import usePostDataElement from '../../../hooks/dataElements/usePostDataElement';
+import ShowFieldsBasedValueType from '../components/row/ShowFieldsBasedValueType';
+import { type FieldFeedbackProps } from '../../../types/table/MarksFieldsFeedback';
 
 interface RenderHeaderProps {
     rowsData: any[]
@@ -42,7 +42,19 @@ const useStyles = makeStyles((theme: Theme) =>
 function RenderRows({ headerData, rowsData }: RenderHeaderProps): React.ReactElement {
     const classes = useStyles()
     const [allEvents] = useRecoilState(EventsState);
-    const { saveMarks, saved, error } = usePostDataElement()
+    const [selectedTerm] = useRecoilState(TermMarksState);
+    const { saveMarks } = usePostDataElement()
+    const [showFeedBack, setShowFeedBack] = useState<FieldFeedbackProps>({
+        dataElement: '',
+        feedbackType: ''
+    })
+
+    useEffect(() => {
+        setShowFeedBack({
+            dataElement: '',
+            feedbackType: ''
+        })
+    }, [selectedTerm])
 
     if (rowsData.length === 0) {
         return (
@@ -69,7 +81,14 @@ function RenderRows({ headerData, rowsData }: RenderHeaderProps): React.ReactEle
                             className={classNames(classes.cell, classes.bodyCell)}
                         >
                             <div>
-                                {showFieldsBasedValueType(column, row[column.id], allEvents[index], saveMarks, saved, error)}
+                                <ShowFieldsBasedValueType
+                                    column={column}
+                                    currentEvent={allEvents[index]}
+                                    saveMarks={saveMarks}
+                                    value={row[column.id]}
+                                    setShowFeedBack={setShowFeedBack}
+                                    showFeedBack={showFeedBack}
+                                />
                             </div>
                         </RowCell>
                     ));
@@ -88,4 +107,3 @@ function RenderRows({ headerData, rowsData }: RenderHeaderProps): React.ReactEle
 }
 
 export default RenderRows
-

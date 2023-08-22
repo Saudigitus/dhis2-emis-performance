@@ -1,5 +1,4 @@
 import { useDataMutation } from "@dhis2/app-runtime"
-import useShowAlerts from '../commons/useShowAlert';
 
 const POST_DATA_ELEMENT: any = {
     resource: "events",
@@ -9,20 +8,7 @@ const POST_DATA_ELEMENT: any = {
 }
 
 export default function usePostDataElement() {
-    const { hide, show } = useShowAlerts()
-
-    const [create, { loading, data, error }] = useDataMutation(POST_DATA_ELEMENT, {
-        onComplete: (response) => {
-            show({ message: "Enrollment saved successfully", type: { success: true } })
-        },
-        onError: (error) => {
-            show({
-                message: `Could not save the enrollment details: ${error.message}`,
-                type: { critical: true }
-            });
-            setTimeout(hide, 5000);
-        }
-    });
+    const [create, { loading, data, error }] = useDataMutation(POST_DATA_ELEMENT);
 
     return {
         loading,
