@@ -44,11 +44,6 @@ function RenderRows({ headerData, rowsData }: RenderHeaderProps): React.ReactEle
     const [allEvents] = useRecoilState(EventsState);
     const { saveMarks, saved, error } = usePostDataElement()
 
-    const openTeiInCaptureApp = (event: object) => {
-        const { trackedEntity, enrollment, orgUnit, program } = event;
-        window.open(`https://emis.dhis2.org/dev/dhis-web-capture/index.html#/enrollment?enrollmentId=${enrollment}&orgUnitId=${orgUnit}&programId=${program}&teiId=${trackedEntity}`, '_blank')
-    }
-
     if (rowsData.length === 0) {
         return (
             <RowTable
@@ -82,7 +77,6 @@ function RenderRows({ headerData, rowsData }: RenderHeaderProps): React.ReactEle
                         <RowTable
                             key={index}
                             className={classNames(classes.row, classes.dataRow)}
-                            onClick={() => openTeiInCaptureApp(allEvents[index])}
                         >
                             {cells}
                         </RowTable>
