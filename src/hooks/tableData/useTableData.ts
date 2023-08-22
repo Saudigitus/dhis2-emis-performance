@@ -107,13 +107,14 @@ export function useTableData() {
 
     async function getData(page: number, pageSize: number) {
         setLoading(true)
-        const eventsResults: EventQueryResults = await engine.query(EVENT_QUERY({
+
+        const registrationEventsResults: EventQueryResults = await engine.query(EVENT_QUERY({
             ouMode: "SELECTED",
             page,
             pageSize,
             program: dataStoreState?.find(section => section.key === "student")?.performance?.program as unknown as string,
             order: "createdAt:desc",
-            programStage: selectedTerm?.id || dataStoreState?.find(section => section.key === "student")?.performance.programStages[0].programStage,
+            programStage: dataStoreState?.find(section => section.key === "student")?.registration.programStage,
             filter: headerFieldsState?.dataElements,
             filterAttributes: headerFieldsState?.attributes,
             orgUnit: school
@@ -125,8 +126,29 @@ export function useTableData() {
             setTimeout(hide, 5000);
         })
 
-        const trackedEntityToFetch = eventsResults?.results?.instances.map((x: { trackedEntity: string }) => x.trackedEntity).toString().replaceAll(",", ";")
+        const eventsResults: EventQueryResults = await engine.query(EVENT_QUERY({
+            ouMode: "SELECTED",
+            page,
+            pageSize,
+            program: dataStoreState?.find(section => section.key === "student")?.performance?.program as unknown as string,
+            order: "createdAt:desc",
+            programStage: selectedTerm?.id || dataStoreState?.find(section => section.key === "student")?.performance.programStages[0].programStage,
+            orgUnit: school
+        })).catch((error) => {
+            show({
+                message: `${("Could not get data")}: ${error.message}`,
+                type: { critical: true }
+            });
+            setTimeout(hide, 5000);
+        })
 
+        const trackedEntityToFetch = registrationEventsResults?.results?.instances.map((x: { trackedEntity: string }) => x.trackedEntity).toString().replaceAll(",", ";")
+
+        const marksEventsResults = eventsResults.results.instances.filter(event => {
+            return registrationEventsResults.results.instances.some(item => item.trackedEntity === event.trackedEntity);
+        });
+
+        console.log(marksEventsResults, "marksEventsResults");
         const teiResults: TeiQueryResults = trackedEntityToFetch?.length > 0
             ? await engine.query(TEI_QUERY({
                 ouMode: "SELECTED",
@@ -144,9 +166,9 @@ export function useTableData() {
             })
             : { results: { instances: [] } }
 
-        setAllEvents(eventsResults?.results?.instances)
+        setAllEvents(marksEventsResults)
         setTableData(formatResponseRows({
-            eventsInstances: eventsResults?.results?.instances,
+            eventsInstances: marksEventsResults,
             teiInstances: teiResults?.results?.instances
         }));
 

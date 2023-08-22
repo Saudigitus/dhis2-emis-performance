@@ -48,5 +48,5 @@ export default function ShowFieldsBasedValueType({ column, value, currentEvent, 
             />
         )
     }
-    return value;
+    return value || null;
 }
