@@ -148,7 +148,6 @@ export function useTableData() {
             return registrationEventsResults.results.instances.some(item => item.trackedEntity === event.trackedEntity);
         });
 
-        console.log(marksEventsResults, "marksEventsResults");
         const teiResults: TeiQueryResults = trackedEntityToFetch?.length > 0
             ? await engine.query(TEI_QUERY({
                 ouMode: "SELECTED",

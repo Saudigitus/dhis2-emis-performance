@@ -29,7 +29,7 @@ export default function ShowFieldsBasedValueType({ column, value, currentEvent, 
         })
     }
 
-    if (column.type === VariablesTypes.DataElement) {
+    if (column.type === VariablesTypes.Performance) {
         return (
             <Form
                 onSubmit={() => { }}

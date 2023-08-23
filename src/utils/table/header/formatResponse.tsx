@@ -48,7 +48,7 @@ export function formatResponse(data: ProgramConfig, programStageId: string): Cus
                         error: false,
                         content: '',
                         key: programStageDataElement.dataElement.id,
-                        type: VariablesTypes.DataElement
+                        type: VariablesTypes.Performance
                     }
                 }) as []
                 : []
