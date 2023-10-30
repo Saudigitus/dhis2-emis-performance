@@ -7,8 +7,8 @@ import { type CustomAttributeProps } from '../../../types/table/AttributeColumns
 import { useRecoilState } from 'recoil';
 import { EventsState, TermMarksState } from '../../../schema/termMarksSchema';
 import usePostDataElement from '../../../hooks/dataElements/usePostDataElement';
-import ShowFieldsBasedValueType from '../components/row/ShowFieldsBasedValueType';
 import { type FieldFeedbackProps } from '../../../types/table/MarksFieldsFeedback';
+import ShowFieldsBasedValueType from '../components/row/showFieldsBasedValueType';
 
 interface RenderHeaderProps {
     rowsData: any[]

@@ -4,16 +4,15 @@ import SimpleButton from "./SimpleButton";
 import { type SimpleButtonsProps } from "../../../types/Buttons/SimpleButtonsProps";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { ProgramConfigState } from "../../../schema/programSchema";
-import { DataStoreState } from "../../../schema/dataStoreSchema";
 import { TermMarksState } from "../../../schema/termMarksSchema";
+import { getSelectedKey } from "../../../utils/commons/dataStore/getSelectedKey";
 
 export default function SwitchButtonView(): React.ReactElement {
   const programConfig = useRecoilValue(ProgramConfigState)
-  const dataStoreConfig = useRecoilValue(DataStoreState)
   const [selectedTerm, setSelectedTerm] = useRecoilState(TermMarksState);
+  const { getDataStoreData } = getSelectedKey()
 
-  //TODO: @ajhmohammed, please remove this code to the useDataStore hook
-  const items: SimpleButtonsProps[] = dataStoreConfig?.find(dta => dta.key === "student")?.performance?.programStages.map(x => {
+  const items: SimpleButtonsProps[] = getDataStoreData.performance.programStages.map(x => {
     return {
       id: x.programStage,
       label: programConfig?.programStages.find(pStage => pStage.id === x.programStage)?.displayName,

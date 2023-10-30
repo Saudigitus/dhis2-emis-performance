@@ -17,7 +17,14 @@ export default function SimpleButton(props: ButtonProps): React.ReactElement {
   return (
     <ButtonStrip>
       {items?.map((item) => (
-        <div key={item?.id} className={selectedTerm?.id === item?.id ? styles["active-button"] : styles.simpleButton} onClick={() => { setSelectedTerm(item); add("programStage", item.id) }}>
+        <div key={item?.id} className={selectedTerm?.id === item?.id
+          ? styles["active-button"]
+          : styles.simpleButton} onClick={() => {
+            if (selectedTerm?.id !== item?.id) {
+              setSelectedTerm(item);
+              add("programStage", item.id)
+            }
+          }}>
           <span className={styles.simpleButtonLabel}>{item?.label}</span>
         </div>
       ))}
