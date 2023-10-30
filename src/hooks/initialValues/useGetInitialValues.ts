@@ -1,23 +1,32 @@
-import { useRecoilValue, useRecoilState } from "recoil"
-import { TermMarksState } from "../../schema/termMarksSchema";
-import { DataStoreState } from "../../schema/dataStoreSchema";
-import { useEffect } from "react";
-import { useParams } from "../commons/useQueryParams";
-import { ProgramConfigState } from "../../schema/programSchema";
+import { useSetRecoilState } from "recoil"
+import { HeaderFieldsState } from "../../schema/headersSchema"
+import { useLocation } from "react-router-dom";
+import useDataElementsParamMapping from "../dataElements/useDataElementsParamMapping";
 
 export function useGetInitialValues() {
-    const [, setSelectedTerm] = useRecoilState(TermMarksState)
-    const dataStoreState = useRecoilValue(DataStoreState);
-    const programConfig = useRecoilValue(ProgramConfigState);
+    const location = useLocation()
+    const paramsMapping = useDataElementsParamMapping();
+    const setHeaderFields = useSetRecoilState(HeaderFieldsState)
+    const entries = location?.search?.split('?')?.[1]?.split('&')?.map((item) => item.split('='))
+    const dataElementsQuerybuilder = []
+    if (entries?.length > 0) {
+        for (const [key, value] of entries) {
+            const keys = Object.entries(paramsMapping)
+            for (const [dataElement, name] of keys) {
+                if (name.includes(key)) {
+                    dataElementsQuerybuilder.push(`${dataElement}:in:${value.replace("+", " ")}`)
+                }
+            }
+        }
+        if (dataElementsQuerybuilder.length > 0) {
+            setHeaderFields({
+                attributes: [],
+                dataElements: dataElementsQuerybuilder
+            })
+        }
+    }
 
-    const { add } = useParams()
-
-    useEffect(() => {
-        add("programStage", dataStoreState?.find(section => section.key === "student")?.performance.programStages[0].programStage);
-        setSelectedTerm({
-            id: dataStoreState?.find(section => section.key === "student")?.performance.programStages[0].programStage,
-            label: programConfig?.programStages.find(pStage => pStage.id === dataStoreState?.find(section => section.key === "student")?.performance.programStages[0].programStage)?.displayName,,
-            type: "programStage"
-        })
-    }, [])
+    return {
+        isSetSectionType: location?.search.includes("sectionType")
+    }
 }

@@ -1,38 +1,18 @@
+/* eslint-disable spaced-comment */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 
 import { useRecoilState, useRecoilValue } from "recoil";
-import { DataStoreState } from "../../schema/dataStoreSchema";
 import { useState } from "react";
 import { useDataEngine } from "@dhis2/app-runtime";
-import { formatResponseRows } from "../../utils/table/rows/formatResponseRows";
+import { formatResponseRows, formatResponseRowsMarks } from "../../utils/table/rows/formatResponseRows";
 import { useParams } from "../commons/useQueryParams";
 import { HeaderFieldsState } from "../../schema/headersSchema";
 import useShowAlerts from "../commons/useShowAlert";
 import { EventsState, TermMarksState } from "../../schema/termMarksSchema";
+import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
+import { type TableDataProps, type EventQueryProps, type TeiQueryProps, type MarksQueryResults, type EventQueryResults, type TeiQueryResults } from "../../types/table/TableData";
 
-type TableDataProps = Record<string, string>;
-
-interface EventQueryProps {
-    page: number
-    pageSize: number
-    ouMode: string
-    program: string
-    order: string
-    programStage: string
-    orgUnit: string
-    filter?: string[]
-    filterAttributes?: string[]
-}
-
-interface TeiQueryProps {
-    program: string
-    pageSize: number
-    ouMode: string
-    trackedEntity: string
-    orgUnit: string
-    order: string
-}
-
-const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, filter, orgUnit, filterAttributes }: EventQueryProps) => ({
+const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, filter, orgUnit, filterAttributes, trackedEntity, programStatus }: EventQueryProps) => ({
     results: {
         resource: "tracker/events",
         params: {
@@ -41,9 +21,11 @@ const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, fil
             pageSize,
             ouMode,
             program,
+            programStatus,
             programStage,
             orgUnit,
             filter,
+            trackedEntity,
             filterAttributes,
             fields: "*"
         }
@@ -65,56 +47,77 @@ const TEI_QUERY = ({ ouMode, pageSize, program, trackedEntity, orgUnit, order }:
     }
 })
 
-interface dataValuesProps {
-    dataElement: string
-    value: string
-}
-
-interface attributesProps {
-    attribute: string
-    value: string
-}
-
-interface EventQueryResults {
-    results: {
-        instances: [{
-            trackedEntity: string
-            dataValues: dataValuesProps[]
-        }]
-    }
-}
-
-interface TeiQueryResults {
-    results: {
-        instances: [{
-            trackedEntity: string
-            attributes: attributesProps[]
-        }]
-    }
-}
-
 export function useTableData() {
     const engine = useDataEngine();
-    const dataStoreState = useRecoilValue(DataStoreState);
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const [selectedTerm] = useRecoilState(TermMarksState)
     const { urlParamiters } = useParams()
     const [loading, setLoading] = useState<boolean>(false)
     const [tableData, setTableData] = useState<TableDataProps[]>([])
+    //O immutable pega os attributos e os dataElements do registration
+    const [immutableTeiData, setImmutableTeiData] = useState<any[]>([])
     const { hide, show } = useShowAlerts()
+    const [allTeis, setAllTeis] = useState<any[]>([])
+    const { getDataStoreData } = getSelectedKey()
     const [, setAllEvents] = useRecoilState(EventsState);
     const school = urlParamiters().school as unknown as string
 
+    const getMarks = async () => {
+        setLoading(true)
+        setAllEvents([])
+        let localData: any = []
+        localData = [...immutableTeiData]
+        const marskEvents: MarksQueryResults = {
+            results: {
+                instances: []
+            }
+        }
+        // Get the events from the programStage marks for the each student
+        for (const tei of allTeis) {
+            const marksResults: MarksQueryResults = await engine.query(EVENT_QUERY({
+                ouMode: "SELECTED",
+                programStatus: "ACTIVE",
+                program: getDataStoreData?.program,
+                order: "createdAt:desc",
+                programStage: selectedTerm?.id,
+                orgUnit: school,
+                trackedEntity: tei
+            })).catch((error) => {
+                show({
+                    message: `${("Could not get data")}: ${error.message}`,
+                    type: { critical: true }
+                });
+                setTimeout(hide, 5000);
+            })
+            marskEvents.results.instances.push(...marksResults?.results?.instances)
+        }
+
+        for (let i = 0; i < localData.length; i++) {
+            const marksDetails = marskEvents?.results?.instances?.find((event: any) => event.trackedEntity === localData[i]?.trackedEntity);
+            if (marksDetails !== undefined) {
+                localData[i] = { ...localData[i], ...formatResponseRowsMarks({ marksInstance: marksDetails }) }
+            }
+        }
+
+        for (const row of localData) {
+            setAllEvents((prev) => [...prev, marskEvents.results.instances.find((event: any) => event.trackedEntity === row.trackedEntity)])
+        }
+        setTableData(localData);
+        setLoading(false)
+    }
+
     async function getData(page: number, pageSize: number) {
         setLoading(true)
-
-        const registrationEventsResults: EventQueryResults = await engine.query(EVENT_QUERY({
+        setAllEvents([])
+        setImmutableTeiData([])
+        const events: EventQueryResults = await engine.query(EVENT_QUERY({
             ouMode: "SELECTED",
             page,
             pageSize,
-            program: dataStoreState?.find(section => section.key === "student")?.performance?.program as unknown as string,
+            programStatus: "ACTIVE",
+            program: getDataStoreData?.program,
             order: "createdAt:desc",
-            programStage: dataStoreState?.find(section => section.key === "student")?.registration.programStage,
+            programStage: getDataStoreData?.registration?.programStage,
             filter: headerFieldsState?.dataElements,
             filterAttributes: headerFieldsState?.attributes,
             orgUnit: school
@@ -126,34 +129,16 @@ export function useTableData() {
             setTimeout(hide, 5000);
         })
 
-        const eventsResults: EventQueryResults = await engine.query(EVENT_QUERY({
-            ouMode: "SELECTED",
-            page,
-            pageSize,
-            program: dataStoreState?.find(section => section.key === "student")?.performance?.program as unknown as string,
-            order: "createdAt:desc",
-            programStage: selectedTerm?.id || dataStoreState?.find(section => section.key === "student")?.performance.programStages[0].programStage,
-            orgUnit: school
-        })).catch((error) => {
-            show({
-                message: `${("Could not get data")}: ${error.message}`,
-                type: { critical: true }
-            });
-            setTimeout(hide, 5000);
-        })
-
-        const trackedEntityToFetch = registrationEventsResults?.results?.instances.map((x: { trackedEntity: string }) => x.trackedEntity).toString().replaceAll(",", ";")
-
-        const marksEventsResults = eventsResults.results.instances.filter(event => {
-            return registrationEventsResults.results.instances.some(item => item.trackedEntity === event.trackedEntity);
-        });
+        const allTeis = events?.results?.instances.map((x: { trackedEntity: string }) => x.trackedEntity)
+        setAllTeis(allTeis)
+        const trackedEntityToFetch = events?.results?.instances.map((x: { trackedEntity: string }) => x.trackedEntity).toString().replaceAll(",", ";")
 
         const teiResults: TeiQueryResults = trackedEntityToFetch?.length > 0
             ? await engine.query(TEI_QUERY({
                 ouMode: "SELECTED",
                 order: "created:desc",
                 pageSize,
-                program: dataStoreState?.program as unknown as string,
+                program: getDataStoreData?.program,
                 orgUnit: school,
                 trackedEntity: trackedEntityToFetch
             })).catch((error) => {
@@ -165,18 +150,52 @@ export function useTableData() {
             })
             : { results: { instances: [] } }
 
-        setAllEvents(marksEventsResults)
-        setTableData(formatResponseRows({
-            eventsInstances: marksEventsResults,
-            teiInstances: teiResults?.results?.instances
-        }));
+        const marskEvents: MarksQueryResults = {
+            results: {
+                instances: []
+            }
+        }
 
+        if (selectedTerm?.id) {
+            for (const tei of allTeis) {
+                const marksResults: MarksQueryResults = await engine.query(EVENT_QUERY({
+                    ouMode: "SELECTED",
+                    programStatus: "ACTIVE",
+                    program: getDataStoreData?.program,
+                    order: "createdAt:desc",
+                    programStage: selectedTerm?.id,
+                    orgUnit: school,
+                    trackedEntity: tei
+                })).catch((error) => {
+                    show({
+                        message: `${("Could not get data")}: ${error.message}`,
+                        type: { critical: true }
+                    });
+                    setTimeout(hide, 5000);
+                })
+                marskEvents.results.instances.push(...marksResults?.results?.instances)
+            }
+        }
+
+        const localData = formatResponseRows({
+            eventsInstances: events?.results?.instances,
+            teiInstances: teiResults?.results?.instances,
+            marksInstances: marskEvents?.results?.instances,
+            setImmutableTeiData
+        })
+
+        for (const row of localData) {
+            setAllEvents((prev) => [...prev, marskEvents.results.instances.find((event: any) => event.trackedEntity === row.trackedEntity)])
+        }
+
+        setTableData(localData);
         setLoading(false)
     }
 
     return {
         getData,
         tableData,
-        loading
+        loading,
+        getMarks
     }
 }

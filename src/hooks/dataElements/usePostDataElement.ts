@@ -14,7 +14,7 @@ export default function usePostDataElement() {
     const [create, { loading, data, error }] = useDataMutation(POST_DATA_ELEMENT, {
         onError: (error) => {
             show({
-                message: `Could not save the final result details: ${error.details.message}`,
+                message: `Could not save the marks: ${error.details.message}`,
                 type: { critical: true }
             });
             setTimeout(hide, 5000);

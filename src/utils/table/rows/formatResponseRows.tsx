@@ -17,17 +17,35 @@ interface formatResponseRowsProps {
         trackedEntity: string
         attributes: attributesProps[]
     }]
+    marksInstances: [{
+        trackedEntity: string
+        dataValues: dataValuesProps[]
+    }]
+    setImmutableTeiData: (immutableTeiData: any) => void
+}
+
+interface formatResponseRowsMarksProps {
+    marksInstance: {
+        trackedEntity: string
+        dataValues: dataValuesProps[]
+    }
 }
 
 type RowsProps = Record<string, string | number | boolean | any>;
 
-export function formatResponseRows({ eventsInstances, teiInstances }: formatResponseRowsProps): RowsProps[] {
+export function formatResponseRows({ eventsInstances, teiInstances, marksInstances, setImmutableTeiData }: formatResponseRowsProps): RowsProps[] {
     const allRows: RowsProps[] = []
-    for (const event of eventsInstances || []) {
+    for (const event of eventsInstances) {
         const teiDetails = teiInstances.find(tei => tei.trackedEntity === event.trackedEntity)
-        allRows.push({ ...dataValues(event.dataValues), ...(attributes((teiDetails?.attributes) ?? [])) })
+        const marksDetails = marksInstances.find(mark => mark.trackedEntity === event.trackedEntity)
+        setImmutableTeiData((prevState: any) => [...prevState, { ...dataValues(event.dataValues), ...(attributes((teiDetails?.attributes) ?? [])), trackedEntity: event.trackedEntity }])
+        allRows.push({ ...dataValues(event.dataValues), ...(marksDetails !== undefined ? { ...dataValues(marksDetails.dataValues) } : {}), ...(attributes((teiDetails?.attributes) ?? [])), trackedEntity: event.trackedEntity })
     }
     return allRows;
+}
+
+export function formatResponseRowsMarks({ marksInstance }: formatResponseRowsMarksProps): RowsProps[] {
+    return dataValues(marksInstance?.dataValues ?? [])
 }
 
 function dataValues(data: dataValuesProps[]): RowsProps {

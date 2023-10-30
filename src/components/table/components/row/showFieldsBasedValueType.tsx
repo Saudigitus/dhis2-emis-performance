@@ -9,6 +9,7 @@ export default function ShowFieldsBasedValueType({ column, value, currentEvent, 
     const onSubmit = (event: any) => {
         void saveMarks({
             data: {
+
                 event: currentEvent?.event,
                 orgUnit: currentEvent?.orgUnit,
                 dataValues: [{
