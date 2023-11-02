@@ -32,6 +32,10 @@
     padding: 2px 30px 2px 20px;
 }
 
+.tableCell input {
+    max-width: 120px !important;
+}
+
 .tableCellBody {
     border-bottom-width: 1px;
     border-bottom-style: solid;

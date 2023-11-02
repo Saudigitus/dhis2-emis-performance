@@ -1,10 +1,14 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import i18n from '@dhis2/d2-i18n';
 import classNames from 'classnames';
 import { makeStyles, type Theme, createStyles } from '@material-ui/core/styles';
 import { RowCell, RowTable } from '../components';
-import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption';
 import { type CustomAttributeProps } from '../../../types/table/AttributeColumns';
+import { useRecoilState } from 'recoil';
+import { EventsState, TermMarksState } from '../../../schema/termMarksSchema';
+import usePostDataElement from '../../../hooks/dataElements/usePostDataElement';
+import { type FieldFeedbackProps } from '../../../types/table/MarksFieldsFeedback';
+import ShowFieldsBasedValueType from '../components/row/showFieldsBasedValueType';
 
 interface RenderHeaderProps {
     rowsData: any[]
@@ -37,6 +41,20 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function RenderRows({ headerData, rowsData }: RenderHeaderProps): React.ReactElement {
     const classes = useStyles()
+    const [allEvents] = useRecoilState(EventsState);
+    const [selectedTerm] = useRecoilState(TermMarksState);
+    const { saveMarks } = usePostDataElement()
+    const [showFeedBack, setShowFeedBack] = useState<FieldFeedbackProps>({
+        dataElement: '',
+        feedbackType: ''
+    })
+
+    useEffect(() => {
+        setShowFeedBack({
+            dataElement: '',
+            feedbackType: ''
+        })
+    }, [selectedTerm])
 
     if (rowsData.length === 0) {
         return (
@@ -63,7 +81,14 @@ function RenderRows({ headerData, rowsData }: RenderHeaderProps): React.ReactEle
                             className={classNames(classes.cell, classes.bodyCell)}
                         >
                             <div>
-                                {getDisplayName({ attribute: column.id, headers: headerData, value: row[column.id] })}
+                                <ShowFieldsBasedValueType
+                                    column={column}
+                                    currentEvent={allEvents[index]}
+                                    saveMarks={saveMarks}
+                                    value={row[column.id]}
+                                    setShowFeedBack={setShowFeedBack}
+                                    showFeedBack={showFeedBack}
+                                />
                             </div>
                         </RowCell>
                     ));
