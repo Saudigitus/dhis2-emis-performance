@@ -6,13 +6,21 @@ import info from "../../../assets/images/headbar/info.svg"
 import { SimpleSearch } from '../../search'
 import classNames from 'classnames'
 import { componentMapping } from '../../../utils'
+import { useParams } from '../../../hooks'
+import { useRecoilState } from 'recoil'
+import { OuQueryString } from '../../../schema/headerSearchInputSchema'
 
 export default function HeaderItem(props: HeadBarTypes): React.ReactElement {
-    const { label, value, placeholder, component, dataElementId, id } = props;
+    const { label, value, placeholder, component, dataElementId, id, selected } = props;
+    const { remove } = useParams()
     const Component = (component != null) ? componentMapping[component] : null;
     const [openDropDown, setOpenDropDown] = useState<boolean>(false);
-    const onToggle = () => { setOpenDropDown(!openDropDown) }
+    const [, setStringQuery] = useRecoilState(OuQueryString);
 
+    const onToggle = () => {
+        setStringQuery(undefined)
+        setOpenDropDown(!openDropDown)
+    }
     return (
         <DropdownButton
             open={openDropDown}
