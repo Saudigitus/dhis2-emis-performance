@@ -27,4 +27,10 @@ interface FormatResponseRowsMarksProps {
 
 type RowsDataProps = Record<string, string | number | boolean | any>;
 
-export type { FormatResponseRowsProps, FormatResponseRowsMarksProps, RowsDataProps}
+interface defaultProps {
+    attribute: string
+    value: string
+    headers: CustomAttributeProps[]
+}
+
+export type { FormatResponseRowsProps, FormatResponseRowsMarksProps, RowsDataProps, defaultProps}
