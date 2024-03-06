@@ -55,5 +55,6 @@ interface ShowFieldsBasedValueTypeProps {
     saveMarks: any
     showFeedBack: FieldFeedbackProps
     setShowFeedBack: any
+    headers: CustomAttributeProps[]
 }
 export type { TableComponentProps, HeaderCellProps, RowProps, RenderHeaderProps, TableSortProps, TableDataProps, ShowFieldsBasedValueTypeProps }

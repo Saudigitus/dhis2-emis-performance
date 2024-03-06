@@ -84,6 +84,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                     value={row[column.id]}
                                     setShowFeedBack={setShowFeedBack}
                                     showFeedBack={showFeedBack}
+                                    headers={headerData}
                                 />
                             </div>
                         </RowCell>
