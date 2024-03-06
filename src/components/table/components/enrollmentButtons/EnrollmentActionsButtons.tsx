@@ -4,19 +4,16 @@ import ModalComponent from '../../../modal/Modal';
 import ModalContentComponent from '../../../modal/ModalContent';
 import ImportContent from '../../../modal/ImportContent';
 import DropdownButtonComponent from '../../../buttons/DropdownButton';
-import { type FlyoutOptionsProps } from '../../../../types/buttons/FlyoutOptions';
-import { useParams } from '../../../../hooks/commons/useQueryParams';
 import Tooltip from '@material-ui/core/Tooltip';
+import { FlyoutOptionsProps } from '../../../../types/buttons/FlyoutOptionsProps';
+import { useParams } from '../../../../hooks';
 
 function EnrollmentActionsButtons() {
-  const [open, setOpen] = useState<boolean>(false);
-  const [openImport, setOpenImport] = useState<boolean>(false);
-  const { useQuery } = useParams();
-  const orgUnit = useQuery().get("school")
+  const { urlParamiters } = useParams();
+  const { school: orgUnit } = urlParamiters();
 
-  const enrollmentOptions: FlyoutOptionsProps[] = [
-    { label: "Import students", divider: true, onClick: () => { setOpenImport(true); } },
-    { label: "Export empty template", divider: false, onClick: () => { alert("Export empty template"); } },
+  const dropdownOptions: FlyoutOptionsProps[] = [
+    { label: "Import studentss", divider: true, onClick: () => { alert("Import students"); } },
     { label: "Export template with data", divider: false, onClick: () => { alert("Export template with data"); } }
   ];
 
@@ -25,24 +22,14 @@ function EnrollmentActionsButtons() {
       <ButtonStrip>
         <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
           <span>
-            <Button disabled={orgUnit == null} onClick={() => { setOpen(true); }} icon={<IconAddCircle24 />}>Enrol single student</Button>
-          </span>
-        </Tooltip>
-
-        <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
-          <span>
             <DropdownButtonComponent
-              disabled={orgUnit == null}
-              name="Bulk enrollment"
+              name="Bulk Performance"
               icon={<IconUserGroup16 />}
-              options={enrollmentOptions}
+              options={dropdownOptions}
             />
           </span>
         </Tooltip>
       </ButtonStrip>
-
-      {open && <ModalComponent title="Single Student Enrollment" open={open} setOpen={setOpen}><ModalContentComponent setOpen={setOpen} /></ModalComponent>}
-      {openImport && <ModalComponent title="Import Students" open={openImport} setOpen={setOpenImport}><ImportContent setOpen={setOpen} /></ModalComponent>}
     </div>
   )
 }

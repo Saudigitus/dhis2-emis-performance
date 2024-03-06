@@ -3,7 +3,7 @@
 .MainHeaderContainer {
     height: auto;
     width: 100%;
-    background-color: var(--secondary-colort);
+    background-color: var(--secondary-colort-white);
     border-bottom: 1px solid #D0CCCC;
     display: flex;
     flex-wrap: wrap;

@@ -8,8 +8,8 @@ import {
 } from '@dhis2/ui'
 import React from 'react'
 import style from "./fields.module.css";
-import { formatToString } from './formatters'
-import { type GenericFieldsProps } from '../../../types/fields/GenericFieldsTypes';
+import { FormFieldsProps } from '../../../types/form/GenericFieldsTypes';
+import { formatToString } from '../../../utils/commons/formatToString';
 
 const { Field } = ReactFinalForm
 
@@ -23,7 +23,7 @@ const VALIDATOR = composeValidators(
     createNumberRange(lowerbound, upperbound)
 )
 
-function InputNumber(props: GenericFieldsProps) {
+function InputNumber(props: FormFieldsProps) {
     return (
         <Field
             {...props}

@@ -1,6 +1,6 @@
 import { Attribute } from "../../../types/generated/models";
 import { type ProgramConfig } from "../../../types/programConfig/ProgramConfig";
-import { VariablesTypes, type CustomAttributeProps } from "../../../types/table/AttributeColumns";
+import { VariablesTypes, type CustomAttributeProps } from "../../../types/variables/AttributeColumns";
 import { useMemo } from "react";
 
 export function formatResponse(data: ProgramConfig, programStageId: string): CustomAttributeProps[] {

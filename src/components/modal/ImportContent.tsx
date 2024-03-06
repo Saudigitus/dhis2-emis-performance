@@ -7,12 +7,9 @@ import {
     ButtonStrip,
     Divider
   } from "@dhis2/ui";
+import { ModalContentProps } from "../../types/modal/ModalProps";
 
-interface ContentProps {
-    setOpen: (value: boolean) => void
-  }
-
-function ImportContent({ setOpen }: ContentProps): React.ReactElement {
+function ImportContent({ setOpen }: ModalContentProps): React.ReactElement {
   const modalActions = [
     { label: "Cancel", disabled: false, loading: false, onClick: () => { setOpen(false) } },
     { label: "Import", primary: true, disabled: false, loading: false, onClick: () => { setOpen(false) } }

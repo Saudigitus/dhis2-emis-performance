@@ -8,13 +8,11 @@ import { Paper } from '@material-ui/core';
 import WithBorder from '../../template/WithBorder';
 import WithPadding from '../../template/WithPadding';
 import WorkingLits from '../components/filters/workingList/WorkingLits';
-import { useHeader } from '../../../hooks/tableHeader/useHeader';
-import { useTableData } from '../../../hooks/tableData/useTableData';
-import { useParams } from '../../../hooks/commons/useQueryParams';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { HeaderFieldsState } from '../../../schema/headersSchema';
-import { teiRefetch } from '../../../hooks/tei/usePostTei';
 import { TermMarksState } from '../../../schema/termMarksSchema';
+import { useHeader, useParams, useTableData } from '../../../hooks';
+import { TeiRefetch } from '../../../schema/refecthTeiSchema';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -33,7 +31,7 @@ function Table() {
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
-    const [refetch] = useRecoilState(teiRefetch)
+    const [refetch] = useRecoilState(TeiRefetch)
     const termMarksState = useRecoilValue(TermMarksState)
 
     useEffect(() => {
