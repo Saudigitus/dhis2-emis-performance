@@ -1,8 +1,5 @@
-import React, { useState } from 'react'
-import { IconUserGroup16, IconAddCircle24, Button, ButtonStrip } from "@dhis2/ui";
-import ModalComponent from '../../../modal/Modal';
-import ModalContentComponent from '../../../modal/ModalContent';
-import ImportContent from '../../../modal/ImportContent';
+import React from 'react'
+import { IconUserGroup16, ButtonStrip } from "@dhis2/ui";
 import DropdownButtonComponent from '../../../buttons/DropdownButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import { FlyoutOptionsProps } from '../../../../types/buttons/FlyoutOptionsProps';

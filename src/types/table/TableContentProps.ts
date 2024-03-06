@@ -1,4 +1,5 @@
 import { CustomAttributeProps } from "../variables/AttributeColumns"
+import { FieldFeedbackProps } from "./MarksFieldsFeedback"
 
 interface TableProps {
     head: any
@@ -47,5 +48,12 @@ interface TableSortProps {
 
 type TableDataProps = Record<string, string>;
 
-
-export type { TableComponentProps, HeaderCellProps, RowProps, RenderHeaderProps, TableSortProps, TableDataProps }
+interface ShowFieldsBasedValueTypeProps {
+    column: CustomAttributeProps
+    value: string
+    currentEvent: any
+    saveMarks: any
+    showFeedBack: FieldFeedbackProps
+    setShowFeedBack: any
+}
+export type { TableComponentProps, HeaderCellProps, RowProps, RenderHeaderProps, TableSortProps, TableDataProps, ShowFieldsBasedValueTypeProps }

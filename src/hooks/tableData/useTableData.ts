@@ -1,6 +1,3 @@
-/* eslint-disable spaced-comment */
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
-
 import { useRecoilState, useRecoilValue } from "recoil";
 import { useState } from "react";
 import { useDataEngine } from "@dhis2/app-runtime";
