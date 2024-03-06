@@ -1,11 +1,13 @@
 import React from 'react'
-import { VariablesTypes, type CustomAttributeProps } from '../../../../types/variables/AttributeColumns';
+import { VariablesTypes } from '../../../../types/variables/AttributeColumns';
 import { Form } from 'react-final-form';
 import GenericFields from '../../../genericFields/GenericFields';
 import styles from "./row.module.css"
-import { type FieldFeedbackProps } from '../../../../types/table/MarksFieldsFeedback';
+import { ShowFieldsBasedValueTypeProps } from '../../../../types/table/TableContentProps';
 
-export default function ShowFieldsBasedValueType({ column, value, currentEvent, saveMarks, showFeedBack, setShowFeedBack }: { column: CustomAttributeProps, value: string, currentEvent: object, saveMarks: any, showFeedBack: FieldFeedbackProps, setShowFeedBack: any }) {
+export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueTypeProps) {
+    const { column, value, currentEvent, saveMarks, showFeedBack, setShowFeedBack } = props;
+    
     const onSubmit = (event: any) => {
         void saveMarks({
             data: {

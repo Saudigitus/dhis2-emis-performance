@@ -1,4 +1,3 @@
-import { IconButton } from '@material-ui/core';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import React from 'react'
 import Select from 'react-select';

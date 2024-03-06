@@ -1,9 +1,8 @@
 import React, { useMemo } from 'react'
-import { RowTable, SortLabel } from '../components'
+import { RowTable } from '../components'
 import classNames from 'classnames';
 import { makeStyles, createStyles, type Theme } from '@material-ui/core/styles';
 import HeaderCell from '../components/head/HeaderCell';
-import { type CustomAttributeProps } from '../../../types/variables/AttributeColumns';
 import { RenderHeaderProps } from '../../../types/table/TableContentProps';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -41,18 +40,16 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function RenderHeader(props: RenderHeaderProps): React.ReactElement {
-    const { rowsHeader, order, orderBy, createSortHandler } = props
+    const { rowsHeader } = props
     const classes = useStyles()
 
     const headerCells = useMemo(() => {
-        return rowsHeader?.filter(x => x.visible)?.map((column, index) => (
+        return rowsHeader?.filter(x => x.visible)?.map((column) => (
             <HeaderCell
                 key={column.id}
                 className={classNames(classes.cell, classes.headerCell)}
             >
-                {/* TODO: the sortLabel must be optional 👇 */}
-
-                {column.header}
+-                {column.header}
             </HeaderCell>
         ))
     }, [rowsHeader]);

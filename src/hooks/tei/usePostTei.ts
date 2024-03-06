@@ -1,6 +1,6 @@
 import { useDataMutation } from "@dhis2/app-runtime"
 import useShowAlerts from '../commons/useShowAlert';
-import { atom, useRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { TeiRefetch } from "../../schema/refecthTeiSchema";
 
 const POST_TEI: any = {

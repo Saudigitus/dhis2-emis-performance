@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
 import WithBorder from '../../template/WithBorder';
 import WithPadding from '../../template/WithPadding';
-import WorkingLits from '../components/filters/workingList/WorkingLits';
+import WorkingLists from '../components/filters/workingList/WorkingLists';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { HeaderFieldsState } from '../../../schema/headersSchema';
 import { TermMarksState } from '../../../schema/termMarksSchema';
@@ -58,7 +58,7 @@ function Table() {
                     <CircularLoader />
                 </CenteredContent>
             }
-            <WorkingLits />
+            <WorkingLists />
             <WithBorder type='bottom' />
             <WithPadding >
                 <WithBorder type='all' >

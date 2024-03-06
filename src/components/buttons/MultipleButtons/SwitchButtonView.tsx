@@ -1,11 +1,8 @@
 import React from "react";
 import SimpleDropdownButton from "./SimpleDropdownButton";
 import SimpleButton from "./SimpleButton";
-import { SimpleButtonsType } from "../../../types/buttons/SimpleButtonsProps";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { ProgramConfigState } from "../../../schema/programSchema";
+import { useRecoilState } from "recoil";
 import { TermMarksState } from "../../../schema/termMarksSchema";
-import { getSelectedKey } from "../../../utils";
 import { useGetProgramStageTerms } from "../../../hooks";
 
 export default function SwitchButtonView(): React.ReactElement {

@@ -3,7 +3,6 @@ import i18n from '@dhis2/d2-i18n';
 import classNames from 'classnames';
 import { makeStyles, type Theme, createStyles } from '@material-ui/core/styles';
 import { RowCell, RowTable } from '../components';
-import { type CustomAttributeProps } from '../../../types/variables/AttributeColumns';
 import { useRecoilState } from 'recoil';
 import { EventsState, TermMarksState } from '../../../schema/termMarksSchema';
 import { type FieldFeedbackProps } from '../../../types/table/MarksFieldsFeedback';

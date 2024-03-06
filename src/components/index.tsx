@@ -2,7 +2,6 @@ import Badge from "./badge/Badge"
 import SummaryCard from "./card/SummaryCard";
 import Table from "./table/render/Table"
 import { SideBar, MainHeader } from "./layout/index"
-import SimpleButtons from "./buttons/Button";
 import { OrgUnitTree } from "./orgUnitTree/index"
 import { SimpleSearch } from "./search/index"
 import DropdownButtonComponent from "./buttons/DropdownButton";
@@ -16,17 +15,15 @@ import { Item, MenuItemContainer } from "./menuItem/index"
 import Subtitle from "./text/subtitle";
 import SwitchButtonView from "./buttons/MultipleButtons/SwitchButtonView";
 import GroupForm from "./form/GroupForm";
-import TEIGenericForm from "./teiComponent/TEIForm";
-import EventGenericForm from "./eventComponent/EventForm";
 import DragDropList from "./dragDrop/DragDropList";
 import InfoPage from "./info/InfoPage";
 import { DateFilterManager, SelectBoxes, TextFilter, TrueOnly } from "./table/components/filters/fields/";
 
 export {
     Badge, SummaryCard, SideBar, MainHeader, Table, DropdownButtonComponent,
-    FlyoutMenuComponent, SimpleButtons, WithPadding, WithBorder,
+    FlyoutMenuComponent, WithPadding, WithBorder,
     ModalComponent, ModalContentComponent, OrgUnitTree,
     SimpleSearch, Title, Subtitle, Item, MenuItemContainer, SwitchButtonView,
-    GroupForm, TEIGenericForm, EventGenericForm, DragDropList, InfoPage, DateFilterManager,
+    GroupForm, DragDropList, InfoPage, DateFilterManager,
     SelectBoxes, TextFilter, TrueOnly
 }

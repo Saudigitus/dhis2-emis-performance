@@ -1,29 +1,17 @@
 import classNames from 'classnames';
 import React from 'react'
-import defaultClasses from '../table.module.css';
+import styles from '../table.module.css';
+import { HeaderCellProps } from '../../../../types/table/TableContentProps';
 
-type tableProps = {
-    head: any,
-    footer: any,
-}
-
-type RowCellProps = {
-    children?: React.ReactNode,
-    className?: string,
-    passOnProps?: object,
-    table?: tableProps,
-    colspan?: number,
-}
-
-function RowCell(props: RowCellProps): React.ReactElement {
+function RowCell(props: HeaderCellProps): React.ReactElement {
     const { children, className, passOnProps, table, colspan } = props;
 
     const classes = classNames(
-        defaultClasses.tableCell,
+        styles.tableCell,
         {
-            [defaultClasses.tableCellBody]: !table,
-            [defaultClasses.tableCellHeader]: table && table.head,
-            [defaultClasses.tableCellFooter]: table && table.footer,
+            [styles.tableCellBody]: !table,
+            [styles.tableCellHeader]: table && table.head,
+            [styles.tableCellFooter]: table && table.footer,
         },
         className,
     );

@@ -8,9 +8,7 @@ import { useRecoilState } from 'recoil';
 import { HeaderFieldsState } from '../../../../../schema/headersSchema';
 import { convertArrayToObject } from '../../../../../utils';
 import styles from './ContentFilter.module.css'
-import { ContentFilterProps } from '../../../../../types/table/ContentFiltersProps';
-
-type FiltersValuesProps = Record<string, any | { endDate: string } | { startDate: string }>;
+import { ContentFilterProps, FiltersValuesProps } from '../../../../../types/table/ContentFiltersProps';
 
 function ContentFilter(props: ContentFilterProps) {
     const { headers = [] } = props;

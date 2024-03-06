@@ -59,7 +59,7 @@ function GenericFields({ attribute, disabled, valueType }: GenericFieldsComponen
       return <SingleSelectField {...attribute} disabled={disabled || attribute.disabled} />;
 
     default:
-      return <span>ValueType not mapped</span>;
+      return <span>Value type not mapped</span>;
   }
 }
 

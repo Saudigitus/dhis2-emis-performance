@@ -18,11 +18,6 @@ function ConfigTableColumns(props: ConfigTableColumnsProps) {
         setopen(true)
     }
 
-    // const handleSaveColumns = (columns) => {
-    //     // this.props.onSave(columns);
-    //     closeDialog();
-    // }
-
     return (
         <div className={styles['config-table__columns']}>
             <Tooltip
@@ -41,7 +36,6 @@ function ConfigTableColumns(props: ConfigTableColumnsProps) {
             <DialogConfigColumns
                 open={open}
                 onClose={closeDialog}
-                // onSave={handleSaveColumns}
                 updateVariables={updateVariables}
                 headers={headers}
             />
