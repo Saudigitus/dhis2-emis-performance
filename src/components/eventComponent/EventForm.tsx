@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, ButtonStrip, CenteredContent, CircularLoader } from "@dhis2/ui";
 import { GroupForm, WithPadding } from "../../components";
 import { Form } from "react-final-form";
-import { useGetDataElements } from "../../hooks/events/useGetDataElements";
+import { useGetDataElements } from "../../hooks";
 
 interface EventFormProps {
   programStageId: string

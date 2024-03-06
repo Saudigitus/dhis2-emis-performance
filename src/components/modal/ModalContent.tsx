@@ -2,32 +2,24 @@ import React, { useState, useEffect, useRef } from "react";
 import { ModalActions, Button, ButtonStrip, CircularLoader, CenteredContent } from "@dhis2/ui";
 import WithPadding from "../template/WithPadding";
 import { Form } from "react-final-form";
-import { formFields } from "../../utils/constants/enrollmentForm/enrollmentForm";
-import useGetEnrollmentForm from "../../hooks/form/useGetEnrollmentForm";
 import GroupForm from "../form/GroupForm";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { ProgramConfigState } from "../../schema/programSchema";
-import { useParams } from "../../hooks/commons/useQueryParams";
-import usePostTei from "../../hooks/tei/usePostTei";
 import { format } from "date-fns";
-import { useGetPatternCode } from "../../hooks/tei/useGetPatternCode";
-import { useGetAttributes } from "../../hooks/programs/useGetAttributes";
-import { teiPostBody } from "../../utils/tei/formatPostBody";
 import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
-interface ContentProps {
-  setOpen: (value: boolean) => void
-}
+import { ModalContentProps } from "../../types/modal/ModalProps";
+import { useGetAttributes, useGetFormattedForm, useGetPatternCode, useParams, usePostTei } from "../../hooks";
+import { formFields, teiPostBody } from "../../utils";
 
-function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
+function ModalContentComponent({ setOpen }: ModalContentProps): React.ReactElement {
   const getProgram = useRecoilValue(ProgramConfigState);
-  const { useQuery } = useParams();
+  const { urlParamiters } = useParams();
+  const { school: orgUnit, schoolName: orgUnitName } = urlParamiters();
   const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
-  const orgUnit = useQuery().get("school");
-  const orgUnitName = useQuery().get("schoolName");
-  const { enrollmentsData } = useGetEnrollmentForm();
+  const { formattedFormFields } = useGetFormattedForm();
   const [, setClicked] = useRecoilState<boolean>(onSubmitClicked);
-  const [values, setValues] = useState<object>({})
-  const [fieldsWitValue, setFieldsWitValues] = useState<any[]>([enrollmentsData])
+  const [values, setValues] = useState<any>({})
+  const [fieldsWitValue, setFieldsWitValues] = useState<any[]>([formattedFormFields])
   const { postTei, loading, data } = usePostTei()
   const [clickedButton, setClickedButton] = useState<string>("");
   const [initialValues] = useState<object>({
@@ -67,7 +59,7 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
     { id: "saveandcontinue", type: "submit", label: "Save and close", primary: true, disabled: loading, onClick: () => { setClickedButton("saveandcontinue"); setClicked(true) } }
   ];
 
-  if (enrollmentsData.length < 1 || loadingCodes) {
+  if (formattedFormFields.length < 1 || loadingCodes) {
     return (
       <CenteredContent>
         <CircularLoader />
@@ -76,7 +68,7 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
   }
 
   function onChange(e: any): void {
-    const sections = enrollmentsData;
+    const sections = formattedFormFields;
     for (const [key, value] of Object.entries(e)) {
       for (let i = 0; i < sections.length; i++) {
         if (sections[i].find((element: any) => element.id === key) !== null && sections[i].find((element: any) => element.id === key) !== undefined) {
@@ -99,7 +91,7 @@ function ModalContentComponent({ setOpen }: ContentProps): React.ReactElement {
             onChange={onChange(values)}
           >
             {
-              formFields(enrollmentsData).map((field: any, index: number) => (
+              formFields(formattedFormFields).map((field: any, index: number) => (
                 <GroupForm
                   name={field.section}
                   description={field.description}

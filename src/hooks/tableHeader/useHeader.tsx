@@ -1,8 +1,8 @@
 import { useRecoilValue } from "recoil";
 import { useState } from "react";
 import { ProgramConfigState } from "../../schema/programSchema";
-import { formatResponse } from "../../utils/table/header/formatResponse";
 import { TermMarksState } from "../../schema/termMarksSchema";
+import { formatResponse } from "../../utils";
 
 export function useHeader() {
     const programConfigState = useRecoilValue(ProgramConfigState);

@@ -2,15 +2,10 @@ import React, { useState } from "react";
 import styles from "../button.module.css";
 import { Menu, MenuItem, Button } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
-import { type SimpleButtonsProps } from "../../../types/Buttons/SimpleButtonsProps";
+import { SimpleButtonsComponentProps, SimpleButtonsType } from "../../../types/buttons/SimpleButtonsProps";
+import classNames from "classnames";
 
-interface ButtonProps {
-  items: SimpleButtonsProps[]
-  selectedTerm: any
-  setSelectedTerm: (arg: any) => void
-}
-
-export default function SimpleDropdownButton(props: ButtonProps): React.ReactElement {
+export default function SimpleDropdownButton(props: SimpleButtonsComponentProps): React.ReactElement {
   const { items, selectedTerm, setSelectedTerm } = props;
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -21,6 +16,11 @@ export default function SimpleDropdownButton(props: ButtonProps): React.ReactEle
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleSelectTerm = (item: SimpleButtonsType) => {
+    setSelectedTerm(item); 
+    setAnchorEl(null);
+  }
 
   return (
     <>
@@ -47,9 +47,8 @@ export default function SimpleDropdownButton(props: ButtonProps): React.ReactEle
         {items.map((item, i) => (
           <MenuItem
             key={i}
-            className={selectedTerm.id === item.id && styles.activeMenuItem}
-            style={{ minWidth: 127 }}
-            onClick={() => { setSelectedTerm(item); setAnchorEl(null); }}
+            className={classNames(styles.simpleMenuItem, selectedTerm.id === item.id && styles.activeMenuItem)}
+            onClick={() => handleSelectTerm(item)}
           >
             {item.label}
           </MenuItem>

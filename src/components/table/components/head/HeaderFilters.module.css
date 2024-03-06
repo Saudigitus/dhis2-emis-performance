@@ -1,0 +1,9 @@
+.filterContainer {
+    display: flex !important;
+    justify-content: space-between !important;
+}
+
+.filterLeftContainer {
+    display: flex !important;
+    align-items: center !important;
+}

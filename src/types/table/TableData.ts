@@ -1,3 +1,6 @@
+import { attributesProps } from "../api/WithRegistrationProps";
+import { dataValuesProps } from "../api/WithoutRegistrationProps";
+
 export type TableDataProps = Record<string, string>;
 
 export interface EventQueryProps {
@@ -21,16 +24,6 @@ export interface TeiQueryProps {
     trackedEntity: string
     orgUnit: string
     order: string
-}
-
-export interface dataValuesProps {
-    dataElement: string
-    value: string
-}
-
-export interface attributesProps {
-    attribute: string
-    value: string
 }
 
 export interface EventQueryResults {

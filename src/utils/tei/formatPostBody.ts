@@ -1,4 +1,4 @@
-import { type formType } from "../../types/form/initialFormTypes";
+import { type formType } from "../../types/form/InitialFormType";
 import { reducer } from "../commons/formatDistinctValue";
 import { performanceProgramStages } from "../constants/enrollmentForm/performanceProgramStages";
 

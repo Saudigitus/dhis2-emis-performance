@@ -1,5 +1,5 @@
 import React from 'react'
-import { VariablesTypes, type CustomAttributeProps } from '../../../../types/table/AttributeColumns';
+import { VariablesTypes, type CustomAttributeProps } from '../../../../types/variables/AttributeColumns';
 import { Form } from 'react-final-form';
 import GenericFields from '../../../genericFields/GenericFields';
 import styles from "./row.module.css"

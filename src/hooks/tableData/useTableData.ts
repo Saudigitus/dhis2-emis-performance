@@ -4,45 +4,29 @@
 import { useRecoilState, useRecoilValue } from "recoil";
 import { useState } from "react";
 import { useDataEngine } from "@dhis2/app-runtime";
-import { formatResponseRows, formatResponseRowsMarks } from "../../utils/table/rows/formatResponseRows";
 import { useParams } from "../commons/useQueryParams";
 import { HeaderFieldsState } from "../../schema/headersSchema";
 import useShowAlerts from "../commons/useShowAlert";
 import { EventsState, TermMarksState } from "../../schema/termMarksSchema";
-import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
 import { type TableDataProps, type EventQueryProps, type TeiQueryProps, type MarksQueryResults, type EventQueryResults, type TeiQueryResults } from "../../types/table/TableData";
+import { formatResponseRowsMarks, formatResponseRows, getDataStoreKeys } from "../../utils";
 
-const EVENT_QUERY = ({ ouMode, page, pageSize, program, order, programStage, filter, orgUnit, filterAttributes, trackedEntity, programStatus }: EventQueryProps) => ({
+const EVENT_QUERY = (queryProps: EventQueryProps) => ({
     results: {
         resource: "tracker/events",
         params: {
-            order,
-            page,
-            pageSize,
-            ouMode,
-            program,
-            programStatus,
-            programStage,
-            orgUnit,
-            filter,
-            trackedEntity,
-            filterAttributes,
-            fields: "*"
+            fields: "*",
+            ...queryProps
         }
     }
 })
 
-const TEI_QUERY = ({ ouMode, pageSize, program, trackedEntity, orgUnit, order }: TeiQueryProps) => ({
+const TEI_QUERY = (queryProps: TeiQueryProps) => ({
     results: {
         resource: "tracker/trackedEntities",
         params: {
-            program,
-            order,
-            ouMode,
-            pageSize,
-            trackedEntity,
-            orgUnit,
-            fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,status,orgUnit,enrolledAt]"
+            fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,status,orgUnit,enrolledAt]",
+            ...queryProps
         }
     }
 })
@@ -54,13 +38,12 @@ export function useTableData() {
     const { urlParamiters } = useParams()
     const [loading, setLoading] = useState<boolean>(false)
     const [tableData, setTableData] = useState<TableDataProps[]>([])
-    //O immutable pega os attributos e os dataElements do registration
-    const [immutableTeiData, setImmutableTeiData] = useState<any[]>([])
+    const [immutableTeiData, setImmutableTeiData] = useState<any[]>([]) // this variable receives the attributes and dataElements of the registragion programStage
     const { hide, show } = useShowAlerts()
     const [allTeis, setAllTeis] = useState<any[]>([])
-    const { getDataStoreData } = getSelectedKey()
+    const { program, registration } = getDataStoreKeys()
     const [, setAllEvents] = useRecoilState(EventsState);
-    const school = urlParamiters().school as unknown as string
+    const { school } = urlParamiters()
 
     const getMarks = async () => {
         setLoading(true)
@@ -77,10 +60,10 @@ export function useTableData() {
             const marksResults: MarksQueryResults = await engine.query(EVENT_QUERY({
                 ouMode: "SELECTED",
                 programStatus: "ACTIVE",
-                program: getDataStoreData?.program,
+                program: program,
                 order: "createdAt:desc",
                 programStage: selectedTerm?.id,
-                orgUnit: school,
+                orgUnit: school as unknown as string,
                 trackedEntity: tei
             })).catch((error) => {
                 show({
@@ -88,7 +71,7 @@ export function useTableData() {
                     type: { critical: true }
                 });
                 setTimeout(hide, 5000);
-            })
+            }) as unknown as MarksQueryResults;
             marskEvents.results.instances.push(...marksResults?.results?.instances)
         }
 
@@ -115,19 +98,19 @@ export function useTableData() {
             page,
             pageSize,
             programStatus: "ACTIVE",
-            program: getDataStoreData?.program,
+            program: program,
             order: "createdAt:desc",
-            programStage: getDataStoreData?.registration?.programStage,
+            programStage: registration?.programStage,
             filter: headerFieldsState?.dataElements,
             filterAttributes: headerFieldsState?.attributes,
-            orgUnit: school
+            orgUnit: school as unknown as string
         })).catch((error) => {
             show({
                 message: `${("Could not get data")}: ${error.message}`,
                 type: { critical: true }
             });
             setTimeout(hide, 5000);
-        })
+        }) as unknown as EventQueryResults;
 
         const allTeis = events?.results?.instances.map((x: { trackedEntity: string }) => x.trackedEntity)
         setAllTeis(allTeis)
@@ -138,8 +121,8 @@ export function useTableData() {
                 ouMode: "SELECTED",
                 order: "created:desc",
                 pageSize,
-                program: getDataStoreData?.program,
-                orgUnit: school,
+                program: program,
+                orgUnit: school as unknown as string,
                 trackedEntity: trackedEntityToFetch
             })).catch((error) => {
                 show({
@@ -147,8 +130,8 @@ export function useTableData() {
                     type: { critical: true }
                 });
                 setTimeout(hide, 5000);
-            })
-            : { results: { instances: [] } }
+            }) as unknown as TeiQueryResults
+            : { results: { instances: [] } } as unknown as TeiQueryResults;
 
         const marskEvents: MarksQueryResults = {
             results: {
@@ -161,10 +144,10 @@ export function useTableData() {
                 const marksResults: MarksQueryResults = await engine.query(EVENT_QUERY({
                     ouMode: "SELECTED",
                     programStatus: "ACTIVE",
-                    program: getDataStoreData?.program,
+                    program: program,
                     order: "createdAt:desc",
                     programStage: selectedTerm?.id,
-                    orgUnit: school,
+                    orgUnit: school as unknown as string,
                     trackedEntity: tei
                 })).catch((error) => {
                     show({
@@ -172,7 +155,7 @@ export function useTableData() {
                         type: { critical: true }
                     });
                     setTimeout(hide, 5000);
-                })
+                }) as unknown as MarksQueryResults;
                 marskEvents.results.instances.push(...marksResults?.results?.instances)
             }
         }

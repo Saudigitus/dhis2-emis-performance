@@ -1,15 +1,6 @@
 import { SingleSelectField, SingleSelectOption } from '@dhis2/ui'
 import React from 'react'
-
-interface OptionsProps {
-    value: string
-    label: string
-}
-
-interface SingleSelectProps {
-    disabled: boolean
-    options: OptionsProps[]
-}
+import { SingleSelectProps } from '../../../types/form/GenericFieldsTypes'
 
 function SingleSelect(props: SingleSelectProps) {
     return (
@@ -17,7 +8,6 @@ function SingleSelect(props: SingleSelectProps) {
             <SingleSelectField
                 className="select"
                 {...props}
-
             >
                 {props?.options?.map(x =>
                     <SingleSelectOption key={x.value} label={x.label} value={x.value} />

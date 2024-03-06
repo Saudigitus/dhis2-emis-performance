@@ -3,6 +3,8 @@ import "./App.module.css"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-select/dist/react-select.css";
 import { Router } from "../components/routes"
+import "../assets/style/colors.css"
+import "../assets/style/font.css"
 import "../assets/style/globalStyle.css"
 import { RecoilRoot } from 'recoil';
 import { DataStoreProvider } from "@dhis2/app-service-datastore";

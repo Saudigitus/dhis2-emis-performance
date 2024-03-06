@@ -3,11 +3,8 @@ import i18n from '@dhis2/d2-i18n';
 import { IconSettings24 } from '@dhis2/ui';
 import { IconButton, Tooltip } from '@material-ui/core';
 import DialogConfigColumns from './DialogConfigColumns';
-
-interface ConfigTableColumnsProps {
-    headers: any[]
-    updateVariables: (list: any[]) => void
-}
+import { ConfigTableColumnsProps } from '../../../../types/table/ConfigColumnsProps';
+import styles from "./configTableColumns.module.css"
 
 function ConfigTableColumns(props: ConfigTableColumnsProps) {
     const { headers, updateVariables } = props;
@@ -27,7 +24,7 @@ function ConfigTableColumns(props: ConfigTableColumnsProps) {
     // }
 
     return (
-        <React.Fragment>
+        <div className={styles['config-table__columns']}>
             <Tooltip
                 disableFocusListener
                 disableTouchListener
@@ -48,7 +45,7 @@ function ConfigTableColumns(props: ConfigTableColumnsProps) {
                 updateVariables={updateVariables}
                 headers={headers}
             />
-        </React.Fragment>
+        </div>
     )
 }
 

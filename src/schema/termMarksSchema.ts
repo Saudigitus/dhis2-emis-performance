@@ -1,18 +1,8 @@
 import { atom } from "recoil"
-import { z } from "zod"
+import { TermMarksConfig } from "../types/terms/TermMarksConfig"
 
-export const termMarksSchema = z.object({
-    id: z.string(),
-    label: z.string().optional(),
-    type: z.string()
-})
 
-export const eventsSchema = z.array(z.object({}))
-
-export type TermMarksSchema = z.infer<typeof termMarksSchema>
-export type EventsSchema = z.infer<typeof eventsSchema>
-
-export const TermMarksState = atom<TermMarksSchema>({
+export const TermMarksState = atom<TermMarksConfig>({
     key: "termMarks-state",
     default: {
         id: "",
@@ -21,7 +11,7 @@ export const TermMarksState = atom<TermMarksSchema>({
     }
 })
 
-export const EventsState = atom<EventsSchema>({
+export const EventsState = atom<any[]>({
     key: "events-state",
     default: []
 })

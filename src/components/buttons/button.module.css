@@ -50,6 +50,10 @@
     margin-left: 20px;
 }
 
+.simpleMenuItem{
+    min-width: 127px !important;
+}
+
 .activeMenuItem{
     background-color: #F0F0F0 !important;
 }

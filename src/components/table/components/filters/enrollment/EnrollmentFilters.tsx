@@ -1,12 +1,13 @@
 import React from 'react'
 import ContentFilter from './ContentFilter';
-import { useHeader } from '../../../../../hooks/tableHeader/useHeader';
-import { VariablesTypes } from '../../../../../types/table/AttributeColumns';
+import { VariablesTypes } from '../../../../../types/variables/AttributeColumns';
+import styles from './EnrollmentFilter.module.css'
+import { useHeader } from '../../../../../hooks';
 
 function EnrollmentFilters(): React.ReactElement {
     const { columns } = useHeader()
     return (
-        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", marginBottom: 10, marginTop: 10, marginLeft: 10 }}>
+        <div className={styles.container}>
             <ContentFilter headers={columns?.filter(column => column?.type !== VariablesTypes?.Performance)} />
         </div>
     )

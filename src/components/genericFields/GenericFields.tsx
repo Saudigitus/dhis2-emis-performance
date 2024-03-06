@@ -6,16 +6,11 @@ import InputText from "./fields/InputText.js";
 import SingleSelectField from "./fields/SingleSelect.js";
 import SwitchInput from "./fields/SwitchInput.js";
 import InputArea from "./fields/InputArea.js";
-import { type CustomAttributeProps } from "../../types/table/AttributeColumns.js";
 import { Attribute } from "../../types/generated/models.js";
+import { GenericFieldsComponentProps } from "../../types/form/GenericFieldsTypes.js";
+import { CustomAttributeProps } from "../../types/variables/AttributeColumns.js";
 
-interface GenericFieldsProps {
-  attribute: CustomAttributeProps
-  disabled: boolean
-  valueType: CustomAttributeProps["valueType"]
-}
-
-function GenericFields({ attribute, disabled, valueType }: GenericFieldsProps) {
+function GenericFields({ attribute, disabled, valueType }: GenericFieldsComponentProps) {
   switch (valueType) {
     case Attribute.valueType.BOOLEAN as unknown as CustomAttributeProps["valueType"]:
       return (
