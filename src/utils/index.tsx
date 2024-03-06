@@ -12,6 +12,7 @@ import { sideBarData } from "./constants/sideBar/sideBarData";
 import { formatResponseEvents } from "./events/formatResponseEvents";
 import { convertArrayToObject } from "./table/filter/formatArrayToObject";
 import { formatResponse } from "./table/header/formatResponse";
+import { disableNextPage } from "./table/pagination/pagination";
 import { rowsPerPages } from "./constants/pagination/pagination";
 import { formatResponseRows, formatResponseRowsMarks } from "./table/rows/formatResponseRows";
 import { getDisplayName } from "./table/rows/getDisplayNameByOption";
@@ -19,7 +20,7 @@ import { teiPostBody } from "./tei/formatPostBody";
 import { formatResponseTEI } from "./tei/formatResponseAttributes";
 
 export { getSelectedKey, getDataStoreKeys, componentMapping, reducer, formatToString, paramsMapping, cardsData, formFields, performanceProgramStages, headBarData, 
-sideBarData, formatResponseEvents, convertArrayToObject, formatResponse, rowsPerPages, formatResponseRows, formatResponseRowsMarks, getDisplayName, teiPostBody, formatResponseTEI }
+sideBarData, formatResponseEvents, convertArrayToObject, formatResponse, disableNextPage, rowsPerPages, formatResponseRows, formatResponseRowsMarks, getDisplayName, teiPostBody, formatResponseTEI }
 
 
 

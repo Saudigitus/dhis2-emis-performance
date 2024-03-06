@@ -1,7 +1,7 @@
 import { useRecoilValue } from "recoil";
 import { SimpleButtonsType } from "../../types/buttons/SimpleButtonsProps";
-import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys";
 import { ProgramConfigState } from "../../schema/programSchema";
+import { getDataStoreKeys } from "../../utils";
 
 const useGetProgramStageTerms = () => {
   const programConfig = useRecoilValue(ProgramConfigState)

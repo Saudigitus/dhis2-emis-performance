@@ -3,11 +3,10 @@ import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import React from 'react'
 import Select from 'react-select';
 import styles from '../table.module.css';
-import { disableNextPage } from '../../../../utils/table/pagination/pagination';
-import { rowsPerPages } from '../../../../utils/constants/pagination/pagination';
 import { TextPagination } from './components/TextPagination';
 import { IconButtonPagination } from './components/IconButtonPagination';
 import { PaginationProps } from '../../../../types/table/PaginationProps';
+import { disableNextPage, rowsPerPages } from '../../../../utils';
 
 function Pagination(props: PaginationProps): React.ReactElement {
     const { page, rowsPerPage, onPageChange, onRowsPerPageChange, loading, totalPerPage } = props;

@@ -2,18 +2,18 @@ import React from 'react'
 import style from "../Layout.module.css"
 import { MainHeader, SideBar } from '../../components'
 import InfoPage from '../../components/info/InfoPage';
-import { getSelectedKey } from '../../utils/commons/dataStore/getSelectedKey';
 import { CenteredContent, CircularLoader } from "@dhis2/ui"
 import { useGetInitialValues, useGetProgramConfig, useParams } from '../../hooks';
 import { LayoutProps } from '../../types/layout/LayoutProps';
+import { getDataStoreKeys } from '../../utils';
 
 export default function FullLayout(props: LayoutProps) {
     const { children } = props;
-    const { useQuery } = useParams();
-    const school = useQuery().get("school");
+    const { urlParamiters } = useParams();
+    const { school } = urlParamiters();
     const { isSetSectionType } = useGetInitialValues()
-    const { getDataStoreData } = getSelectedKey()
-    const { loading } = useGetProgramConfig(getDataStoreData.program);
+    const { program } = getDataStoreKeys()
+    const { loading } = useGetProgramConfig(program);
 
     if (!isSetSectionType) {
         return (

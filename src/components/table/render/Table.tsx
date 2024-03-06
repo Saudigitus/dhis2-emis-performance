@@ -24,10 +24,8 @@ function Table() {
     const classes = usetStyles()
     const { columns } = useHeader()
     const { getData, loading, tableData, getMarks } = useTableData()
-    const { useQuery } = useParams();
-    const school = useQuery().get('school');
-    const grade = useQuery().get('grade');
-    const section = useQuery().get('class');
+    const { urlParamiters } = useParams();
+    const { school, grade, class: section } = urlParamiters();
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)

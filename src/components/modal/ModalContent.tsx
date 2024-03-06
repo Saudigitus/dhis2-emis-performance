@@ -2,22 +2,20 @@ import React, { useState, useEffect, useRef } from "react";
 import { ModalActions, Button, ButtonStrip, CircularLoader, CenteredContent } from "@dhis2/ui";
 import WithPadding from "../template/WithPadding";
 import { Form } from "react-final-form";
-import { formFields } from "../../utils/constants/enrollmentForm/enrollmentForm";
 import GroupForm from "../form/GroupForm";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { ProgramConfigState } from "../../schema/programSchema";
 import { format } from "date-fns";
-import { teiPostBody } from "../../utils/tei/formatPostBody";
 import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
 import { ModalContentProps } from "../../types/modal/ModalProps";
 import { useGetAttributes, useGetFormattedForm, useGetPatternCode, useParams, usePostTei } from "../../hooks";
+import { formFields, teiPostBody } from "../../utils";
 
 function ModalContentComponent({ setOpen }: ModalContentProps): React.ReactElement {
   const getProgram = useRecoilValue(ProgramConfigState);
-  const { useQuery } = useParams();
+  const { urlParamiters } = useParams();
+  const { school: orgUnit, schoolName: orgUnitName } = urlParamiters();
   const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
-  const orgUnit = useQuery().get("school");
-  const orgUnitName = useQuery().get("schoolName");
   const { formattedFormFields } = useGetFormattedForm();
   const [, setClicked] = useRecoilState<boolean>(onSubmitClicked);
   const [values, setValues] = useState<any>({})

@@ -6,7 +6,7 @@ import SelectButton from "../selectButton/SelectButton";
 import { format } from 'date-fns';
 import { useRecoilState } from 'recoil';
 import { HeaderFieldsState } from '../../../../../schema/headersSchema';
-import { convertArrayToObject } from '../../../../../utils/table/filter/formatArrayToObject';
+import { convertArrayToObject } from '../../../../../utils';
 import styles from './ContentFilter.module.css'
 import { ContentFilterProps } from '../../../../../types/table/ContentFiltersProps';
 

@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useRecoilValue } from 'recoil';
 import { ProgramConfigState } from '../../schema/programSchema';
-import { formatResponseEvents } from '../../utils/events/formatResponseEvents';
-import { formatResponseTEI } from '../../utils/tei/formatResponseAttributes';
-import { getSelectedKey } from '../../utils/commons/dataStore/getSelectedKey';
+import { formatResponseEvents, formatResponseTEI, getSelectedKey } from '../../utils';
 
 export default function useGetFormattedForm() {
     const [formattedFormFields, setFormattedFormFields] = useState<any[]>([])
