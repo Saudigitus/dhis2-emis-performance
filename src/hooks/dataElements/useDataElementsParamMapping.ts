@@ -4,8 +4,8 @@ const useDataElementsParamMapping = () => {
     const { registration } = getDataStoreKeys();
     return {
         [registration?.academicYear]: "academicYear",
-        "RhABRLO2Fae": "class",
-        "kNNoif9gASf": "grade"
+        [registration?.section]: "class",
+        [registration?.grade]: "grade"
     }
 }
 export default useDataElementsParamMapping;
