@@ -8,7 +8,9 @@ function headBarData(selectedOptions: SelectedOptionsTypes, getDataStoreData: da
             label: "School",
             value: selectedOptions?.schoolName ?? "Select a school",
             placeholder: "Search for organisation unit",
-            component: "orgUnitTree"
+            component: "orgUnitTree",
+            selected: Boolean(selectedOptions?.schoolName),
+        
         },
         {
             id: "981ed8a3",
@@ -16,7 +18,9 @@ function headBarData(selectedOptions: SelectedOptionsTypes, getDataStoreData: da
             value: selectedOptions?.grade ?? "Select a grade",
             placeholder: "Search for grade",
             dataElementId: getDataStoreData?.registration?.grade,
-            component: "menuItemContainer"
+            component: "menuItemContainer",
+            selected: Boolean(selectedOptions?.grade),
+        
         },
         {
             id: "7ce5c7f3",
@@ -24,7 +28,9 @@ function headBarData(selectedOptions: SelectedOptionsTypes, getDataStoreData: da
             value: selectedOptions?.class ?? "Select a class",
             placeholder: "Search for class",
             dataElementId: getDataStoreData?.registration?.section,
-            component: "menuItemContainer"
+            component: "menuItemContainer",
+            selected: Boolean(selectedOptions?.class),
+        
         },
         {
             id: "j2e9b216",
@@ -32,7 +38,9 @@ function headBarData(selectedOptions: SelectedOptionsTypes, getDataStoreData: da
             value: selectedOptions?.academicYear ?? "Select academic year",
             placeholder: "Search for academic year",
             dataElementId: getDataStoreData?.registration?.academicYear,
-            component: "menuItemContainer"
+            component: "menuItemContainer",
+            selected: Boolean(selectedOptions?.academicYear),
+       
         }
     ]
 }
