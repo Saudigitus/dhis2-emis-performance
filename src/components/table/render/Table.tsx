@@ -24,7 +24,7 @@ function Table() {
     const classes = usetStyles()
     const { columns } = useHeader()
     const { getData, loading, tableData, getMarks } = useTableData()
-    const { urlParamiters } = useParams();
+    const { urlParamiters, useQuery } = useParams();
     const { school, grade, class: section } = urlParamiters();
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const [page, setpage] = useState(1)
@@ -34,7 +34,7 @@ function Table() {
 
     useEffect(() => {
         void getData(page, pageSize)
-    }, [school, headerFieldsState, grade, section, page, pageSize, refetch])
+    }, [useQuery(), school, headerFieldsState, grade, section, page, pageSize, refetch])
 
     useEffect(() => {
         if (termMarksState.id !== null && termMarksState.id !== undefined && termMarksState.id !== '') {
