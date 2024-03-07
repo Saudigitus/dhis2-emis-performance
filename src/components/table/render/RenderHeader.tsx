@@ -49,7 +49,7 @@ function RenderHeader(props: RenderHeaderProps): React.ReactElement {
                 key={column.id}
                 className={classNames(classes.cell, classes.headerCell)}
             >
--                {column.header}
+                {column.header}
             </HeaderCell>
         ))
     }, [rowsHeader]);
