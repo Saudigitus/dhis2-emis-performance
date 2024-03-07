@@ -3,11 +3,11 @@ import { type ProgramConfig } from "../../../types/programConfig/ProgramConfig";
 import { VariablesTypes, type CustomAttributeProps } from "../../../types/variables/AttributeColumns";
 import { useMemo } from "react";
 
-export function formatResponse(data: ProgramConfig, programStageId: string): CustomAttributeProps[] {
+export function formatResponse(data: ProgramConfig, programStageId: string, tableColumns: CustomAttributeProps[] = []): CustomAttributeProps[] {
     const headerResponse = useMemo(() => {
         const originalData = ((data?.programStages?.find(programStge => programStge.id === programStageId)) ?? {} as unknown as ProgramConfig["programStages"][0])
 
-        return data?.programTrackedEntityAttributes?.map((item) => {
+        return (tableColumns?.length > 0) ? tableColumns :  data?.programTrackedEntityAttributes?.map((item) => {
             return {
                 id: item.trackedEntityAttribute.id,
                 displayName: item.trackedEntityAttribute.displayName,
@@ -50,7 +50,7 @@ export function formatResponse(data: ProgramConfig, programStageId: string): Cus
                 }) as []
                 : []
         )
-    }, [data, programStageId]);
+    }, [data, programStageId, tableColumns]);
 
     return headerResponse;
 }

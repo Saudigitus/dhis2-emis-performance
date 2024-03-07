@@ -7,7 +7,7 @@ import { ConfigTableColumnsProps } from '../../../../types/table/ConfigColumnsPr
 import styles from "./configTableColumns.module.css"
 
 function ConfigTableColumns(props: ConfigTableColumnsProps) {
-    const { headers, updateVariables } = props;
+    const { headers, updateVariables, filteredHeaders } = props;
     const [open, setopen] = useState(false)
 
     const closeDialog = () => {
@@ -38,6 +38,7 @@ function ConfigTableColumns(props: ConfigTableColumnsProps) {
                 onClose={closeDialog}
                 updateVariables={updateVariables}
                 headers={headers}
+                filteredHeaders={filteredHeaders}
             />
         </div>
     )

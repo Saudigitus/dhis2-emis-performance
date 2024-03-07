@@ -1,6 +1,7 @@
 interface ConfigTableColumnsProps {
     headers: any[]
     updateVariables: (list: any[]) => void
+    filteredHeaders: any[]
 }
 
 interface DialogSelectColumnsProps {
@@ -8,6 +9,7 @@ interface DialogSelectColumnsProps {
     onClose: () => void
     headers: any[]
     updateVariables: (list: any[]) => void
+    filteredHeaders: any[]
 }
 
 interface DragDropItemsProps {
