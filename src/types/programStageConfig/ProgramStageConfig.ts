@@ -1,26 +1,25 @@
-export interface ProgramStageConfig {
+import { OptionsProps } from "../variables/AttributeColumns"
+
+interface programStageDataElements {
+    displayInReports: boolean
+    compulsory: boolean
+    dataElement: {
+        displayInReports: boolean | undefined
+        displayName: string
+        id: string
+        valueType: string
+        optionSet: {
+            id: string
+            options: OptionsProps[]
+        }
+    }
+}
+interface ProgramStageConfig {
     autoGenerateEvent: boolean
     displayName: string
     id: string
     executionDateLabel?: string
-    programStageDataElements: [
-        {
-            displayInReports: boolean
-            compulsory: boolean
-            dataElement: {
-                displayInReports: boolean | undefined
-                displayName: string
-                id: string
-                valueType: string
-                optionSet: {
-                    id: string
-                    options: {
-                        [x: string]: any
-                        value: string
-                        label: string
-                    }
-                }
-            }
-        }
-    ]
+    programStageDataElements: programStageDataElements[]
 }
+
+export type { ProgramStageConfig, programStageDataElements }

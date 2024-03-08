@@ -1,16 +1,13 @@
 import React from 'react'
 import { CenteredContent, CircularLoader } from "@dhis2/ui";
-import { useDataStore } from '../hooks/appwrapper/useDataStore'
 import { useGetProgramRules } from '../hooks/programRules/useGetProgramRules';
 import { useGetProgramRulesVariables } from '../hooks/programRules/useGetProgramRulesVariables';
 import { useGetOptionGroups } from '../hooks/optionGroup/useGetOptionGroups';
 import { useOrgUnitsGroups } from '../hooks/orgUnitsGroup/useOrgUnitsGroups';
+import { useDataStore } from '../hooks';
+import { AppConfigurationsProps } from '../types/app/AppConfigurationsProps';
 
-interface Props {
-    children: React.ReactNode
-}
-
-export default function AppWrapper(props: Props) {
+export default function AppWrapper(props: AppConfigurationsProps) {
     const { error, loading } = useDataStore()
     const { loadingPRules } = useGetProgramRules();
     const { loadingPRulesVariables } = useGetProgramRulesVariables();

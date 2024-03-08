@@ -1,9 +1,7 @@
-@import "../../../assets/style/colors.css";
-
 .MainHeaderContainer {
     height: auto;
     width: 100%;
-    background-color: var(--secondary-colort);
+    background-color: var(--secondary-colort-white);
     border-bottom: 1px solid #D0CCCC;
     display: flex;
     flex-wrap: wrap;
@@ -53,6 +51,10 @@
     display: block;
 }
 
+.j2e9b216 div svg {
+    display: inherit;
+}
+
 .j2e9b216 svg {
     display: none;
 }
@@ -70,4 +72,17 @@
     color: #FF2002 !important;
     font-family: Roboto;
     font-weight: 700;
+}
+
+.headerResetItemValue {
+    margin-right:8px;
+}
+
+.headerResetItemValue svg{ 
+    font-size: 1.1rem;
+    color: rgb(160, 173, 186);
+}
+
+.headerResetItemValue svg:hover{ 
+    color: rgb(116, 118, 119);
 }

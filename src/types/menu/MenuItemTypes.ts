@@ -1,8 +1,9 @@
-interface MenuItemsProps {
+
+interface MenuItemsProps { 
     menuItems: MenuItemTypes[]
     dataElementId: string
     onToggle: () => void
-}
+ }
 
 interface MenuItemTypes {
     label: string
@@ -16,6 +17,4 @@ interface MenuItemContainerProps {
 
 type ComponentMapping = Record<string, React.ComponentType<any>>;
 
-type ParamsMapping = Record<string, string>;
-
-export type { MenuItemTypes, ComponentMapping, ParamsMapping, MenuItemsProps, MenuItemContainerProps }
+export type { MenuItemTypes, ComponentMapping, MenuItemsProps, MenuItemContainerProps }

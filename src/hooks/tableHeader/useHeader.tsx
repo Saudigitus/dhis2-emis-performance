@@ -1,17 +1,15 @@
 import { useRecoilValue } from "recoil";
-import { useState } from "react";
 import { ProgramConfigState } from "../../schema/programSchema";
-import { formatResponse } from "../../utils/table/header/formatResponse";
 import { TermMarksState } from "../../schema/termMarksSchema";
+import { formatResponse } from "../../utils";
+import { TableColumnState } from "../../schema/columnSchema";
 
 export function useHeader() {
+    const tableColumns = useRecoilValue(TableColumnState)
     const programConfigState = useRecoilValue(ProgramConfigState);
-    const [columnHeader, setcolumnHeader] = useState()
     const termMarksState = useRecoilValue(TermMarksState)
 
     return {
-        columns: formatResponse(programConfigState, termMarksState?.id),
-        columnHeader,
-        setcolumnHeader
+        columns: formatResponse(programConfigState, termMarksState?.id, tableColumns)
     }
 }

@@ -7,14 +7,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
 import WithBorder from '../../template/WithBorder';
 import WithPadding from '../../template/WithPadding';
-import WorkingLits from '../components/filters/workingList/WorkingLits';
-import { useHeader } from '../../../hooks/tableHeader/useHeader';
-import { useTableData } from '../../../hooks/tableData/useTableData';
-import { useParams } from '../../../hooks/commons/useQueryParams';
+import WorkingLists from '../components/filters/workingList/WorkingLists';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { HeaderFieldsState } from '../../../schema/headersSchema';
-import { teiRefetch } from '../../../hooks/tei/usePostTei';
 import { TermMarksState } from '../../../schema/termMarksSchema';
+import { useHeader, useParams, useTableData } from '../../../hooks';
+import { TeiRefetch } from '../../../schema/refecthTeiSchema';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -27,18 +25,15 @@ function Table() {
     const { columns } = useHeader()
     const { getData, loading, tableData, getMarks } = useTableData()
     const { useQuery } = useParams();
-    const school = useQuery().get('school');
-    const grade = useQuery().get('grade');
-    const section = useQuery().get('class');
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
-    const [refetch] = useRecoilState(teiRefetch)
+    const [refetch] = useRecoilState(TeiRefetch)
     const termMarksState = useRecoilValue(TermMarksState)
 
     useEffect(() => {
         void getData(page, pageSize)
-    }, [school, headerFieldsState, grade, section, page, pageSize, refetch])
+    }, [useQuery(), headerFieldsState, page, pageSize, refetch])
 
     useEffect(() => {
         if (termMarksState.id !== null && termMarksState.id !== undefined && termMarksState.id !== '') {
@@ -62,7 +57,7 @@ function Table() {
                     <CircularLoader />
                 </CenteredContent>
             }
-            <WorkingLits />
+            <WorkingLists />
             <WithBorder type='bottom' />
             <WithPadding >
                 <WithBorder type='all' >

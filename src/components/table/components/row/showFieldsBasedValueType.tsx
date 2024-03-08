@@ -1,11 +1,15 @@
 import React from 'react'
-import { VariablesTypes, type CustomAttributeProps } from '../../../../types/table/AttributeColumns';
+import { CustomAttributeProps, VariablesTypes } from '../../../../types/variables/AttributeColumns';
 import { Form } from 'react-final-form';
 import GenericFields from '../../../genericFields/GenericFields';
 import styles from "./row.module.css"
-import { type FieldFeedbackProps } from '../../../../types/table/MarksFieldsFeedback';
+import { ShowFieldsBasedValueTypeProps } from '../../../../types/table/TableContentProps';
+import { getDisplayName } from '../../../../utils';
+import { Attribute } from '../../../../types/generated/models';
 
-export default function ShowFieldsBasedValueType({ column, value, currentEvent, saveMarks, showFeedBack, setShowFeedBack }: { column: CustomAttributeProps, value: string, currentEvent: object, saveMarks: any, showFeedBack: FieldFeedbackProps, setShowFeedBack: any }) {
+export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueTypeProps) {
+    const { column, value, currentEvent, saveMarks, showFeedBack, setShowFeedBack, headers } = props;
+
     const onSubmit = (event: any) => {
         void saveMarks({
             data: {
@@ -47,6 +51,14 @@ export default function ShowFieldsBasedValueType({ column, value, currentEvent, 
                     </form>
                 )}
             />
+        )
+    }
+
+    if (column.valueType === Attribute.valueType.LIST as unknown as CustomAttributeProps["valueType"] && (column.type === VariablesTypes.Attribute || column.type === VariablesTypes.DataElement)) {
+        return (
+            <span>
+                {getDisplayName({attribute: column.id, value, headers})}
+            </span> 
         )
     }
     return value || null;

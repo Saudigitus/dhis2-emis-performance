@@ -1,40 +1,9 @@
-interface dataValuesProps {
-    dataElement: string
-    value: string
-}
+import { attributesProps } from "../../../types/api/WithRegistrationProps"
+import { dataValuesProps } from "../../../types/api/WithoutRegistrationProps"
+import { FormatResponseRowsMarksProps, FormatResponseRowsProps, RowsDataProps } from "../../../types/utils/FormatRowsDataProps"
 
-interface attributesProps {
-    attribute: string
-    value: string
-}
-
-interface formatResponseRowsProps {
-    eventsInstances: [{
-        trackedEntity: string
-        dataValues: dataValuesProps[]
-    }]
-    teiInstances: [{
-        trackedEntity: string
-        attributes: attributesProps[]
-    }]
-    marksInstances: [{
-        trackedEntity: string
-        dataValues: dataValuesProps[]
-    }]
-    setImmutableTeiData: (immutableTeiData: any) => void
-}
-
-interface formatResponseRowsMarksProps {
-    marksInstance: {
-        trackedEntity: string
-        dataValues: dataValuesProps[]
-    }
-}
-
-type RowsProps = Record<string, string | number | boolean | any>;
-
-export function formatResponseRows({ eventsInstances, teiInstances, marksInstances, setImmutableTeiData }: formatResponseRowsProps): RowsProps[] {
-    const allRows: RowsProps[] = []
+export function formatResponseRows({ eventsInstances, teiInstances, marksInstances, setImmutableTeiData }: FormatResponseRowsProps): RowsDataProps[] {
+    const allRows: RowsDataProps[] = []
     for (const event of eventsInstances) {
         const teiDetails = teiInstances.find(tei => tei.trackedEntity === event.trackedEntity)
         const marksDetails = marksInstances.find(mark => mark.trackedEntity === event.trackedEntity)
@@ -44,20 +13,20 @@ export function formatResponseRows({ eventsInstances, teiInstances, marksInstanc
     return allRows;
 }
 
-export function formatResponseRowsMarks({ marksInstance }: formatResponseRowsMarksProps): RowsProps[] {
+export function formatResponseRowsMarks({ marksInstance }: FormatResponseRowsMarksProps): RowsDataProps {
     return dataValues(marksInstance?.dataValues ?? [])
 }
 
-function dataValues(data: dataValuesProps[]): RowsProps {
-    const localData: RowsProps = {}
+function dataValues(data: dataValuesProps[]): RowsDataProps {
+    const localData: RowsDataProps = {}
     for (const dataElement of data) {
         localData[dataElement.dataElement] = dataElement.value
     }
     return localData
 }
 
-function attributes(data: attributesProps[]): RowsProps {
-    const localData: RowsProps = {}
+function attributes(data: attributesProps[]): RowsDataProps {
+    const localData: RowsDataProps = {}
     for (const attribute of data) {
         localData[attribute.attribute] = attribute.value
     }

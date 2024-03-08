@@ -1,12 +1,19 @@
 import React from 'react'
-import { MenuItem } from "@dhis2/ui"
-import { type MenuItemTypes } from '../../types/menu/MenuItemTypes'
-import { useParams } from '../../hooks/commons/useQueryParams';
-import { useRecoilState } from 'recoil';
+import { MenuItem, Help } from "@dhis2/ui"
+import { MenuItemsProps } from '../../types/menu/MenuItemTypes'
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { HeaderFieldsState } from '../../schema/headersSchema';
-import useDataElementsParamMapping from '../../hooks/dataElements/useDataElementsParamMapping';
+import { useDataElementsParamMapping, useParams } from '../../hooks';
+import { OuQueryString } from '../../schema/headerSearchInputSchema';
 
-export default function Item({ menuItems, dataElementId, onToggle }: { menuItems: MenuItemTypes[], dataElementId: string, onToggle: () => void }): React.ReactElement {
+export default function Item(props: MenuItemsProps): React.ReactElement {
+    const {  menuItems, dataElementId, onToggle } = props;
+    
+    const stringQuery = useRecoilValue(OuQueryString);
+    const filteredMenuItems = stringQuery
+    ? menuItems.filter(item => item.label.toLowerCase().includes(stringQuery.toLowerCase()))
+    : menuItems;
+
     const { add } = useParams();
     const [headerFields, setHeaderFields] = useRecoilState(HeaderFieldsState)
     const paramsMapping = useDataElementsParamMapping();
@@ -27,11 +34,17 @@ export default function Item({ menuItems, dataElementId, onToggle }: { menuItems
         setHeaderFields({ attributes, dataElements });
         onToggle()
     }
+    
+    if ((stringQuery && !filteredMenuItems.length) || !menuItems.length) {
+        return <Help>
+            No items found
+        </Help>
+    }
 
     return (
         <>
             {
-                menuItems?.map(menuItem => (
+                filteredMenuItems?.map(menuItem => (
                     < MenuItem onClick={() => { onChange(menuItem) }} key={menuItem.value} label={menuItem.label} />
                 ))
             }

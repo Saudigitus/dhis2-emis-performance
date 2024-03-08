@@ -1,4 +1,4 @@
-import { type CustomAttributeProps } from "../table/AttributeColumns"
+import { type CustomAttributeProps } from "../variables/AttributeColumns"
 
 interface GenericFieldsProps {
     disabled: boolean

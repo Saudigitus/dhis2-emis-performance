@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import Item from './Item';
 import { useRecoilValue } from 'recoil';
 import { ProgramConfigState } from '../../schema/programSchema';
-import { formatResponse } from '../../utils/table/header/formatResponse';
+import { formatResponse, getDataStoreKeys } from '../../utils';
 import { getSelectedKey } from '../../utils/commons/dataStore/getSelectedKey';
 import { MenuItemContainerProps } from '../../types/menu/MenuItemTypes';
 import { CustomDhis2RulesEngine } from '../../hooks/programRules/rules-engine/RulesEngine';
@@ -16,12 +16,13 @@ function MenuItemContainer(props: MenuItemContainerProps): React.ReactElement {
     const grade = useQuery().get("grade");
     const { getDataStoreData } = getSelectedKey()
     const programConfigState = useRecoilValue(ProgramConfigState);
+    const { registration } = getDataStoreKeys();
 
     const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
-        variables: formatResponse(programConfigState, getDataStoreData)?.filter(element => element.id === dataElementId).map((x) => { return { ...x, name: x.id } }),
-        values: { orgUnit, [getDataStoreData.registration.grade]: grade },
+        variables: formatResponse(programConfigState, registration?.programStage)?.filter(element => element.id === dataElementId).map((x) => { return { ...x, name: x.id } }),
+        values: { orgUnit, [getDataStoreData.registration.grade as string]: grade },
         type: "programStage",
-        formatKeyValueType: formatKeyValueTypeHeader(formatResponse(programConfigState, getDataStoreData)?.filter(element => element.id === dataElementId)) || []
+        formatKeyValueType: formatKeyValueTypeHeader(formatResponse(programConfigState, registration?.programStage)?.filter(element => element.id === dataElementId)) || []
     })
 
     useEffect(() => {

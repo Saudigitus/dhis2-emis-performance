@@ -1,6 +1,5 @@
 import { getSelectedKey } from "./getSelectedKey";
 
-
 export const getDataStoreKeys =() => {
     const { attendance, key, performance, program, registration, "final-result": finalResult, 'socio-economics': socioEconomics, transfer, trackedEntityType, lastUpdate, defaults, filters } = getSelectedKey().getDataStoreData;
     

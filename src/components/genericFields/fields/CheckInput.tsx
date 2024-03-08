@@ -1,10 +1,6 @@
-import { ReactFinalForm, CheckboxFieldFF, hasValue } from "@dhis2/ui";
+import { ReactFinalForm, CheckboxFieldFF, hasValue, Label } from "@dhis2/ui";
 import React from "react";
-
-interface CheckFieldProps {
-  disabled: boolean
-  required: string | boolean
-}
+import { CheckFieldProps } from "../../../types/form/GenericFieldsTypes";
 
 const { Field } = ReactFinalForm;
 
@@ -18,6 +14,7 @@ function CheckInput(props: CheckFieldProps) {
         validate={Boolean(props.required) && hasValue}
         disabled={props.disabled}
       />
+      <Label className="mt-1">Yes</Label>
     </div>
   );
 }

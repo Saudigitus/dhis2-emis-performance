@@ -4,14 +4,36 @@ import { DropdownButton, FlyoutMenu } from "@dhis2/ui"
 import { type HeadBarTypes } from '../../../types/headBar/HeadBarTypes'
 import info from "../../../assets/images/headbar/info.svg"
 import { SimpleSearch } from '../../search'
-import { componentMapping } from '../../../utils/commons/componentMapping'
 import classNames from 'classnames'
+import { componentMapping } from '../../../utils'
+import { useDataElementsParamMapping, useParams } from '../../../hooks'
+import { useRecoilState } from 'recoil'
+import { OuQueryString } from '../../../schema/headerSearchInputSchema'
+import HeaderResetItemValue from './HeaderResetItemValue'
 
-export default function HeaderItem({ label, value, placeholder, component, dataElementId, id }: HeadBarTypes): React.ReactElement {
+export default function HeaderItem(props: HeadBarTypes): React.ReactElement {
+    const { label, value, placeholder, component, dataElementId, id, selected } = props;
+    const { remove } = useParams()
     const Component = (component != null) ? componentMapping[component] : null;
     const [openDropDown, setOpenDropDown] = useState<boolean>(false);
-    const onToggle = () => { setOpenDropDown(!openDropDown) }
+    const [, setStringQuery] = useRecoilState(OuQueryString);
 
+    const onToggle = () => {
+        setStringQuery(undefined)
+        setOpenDropDown(!openDropDown)
+    }
+
+    const paramsMapping = useDataElementsParamMapping()
+
+    const onReset = () => {
+        if(dataElementId)
+            remove(paramsMapping[dataElementId as unknown as keyof typeof paramsMapping])
+        else
+            if(id === "c540ac7c") {
+                remove("school");
+                remove("schoolName");
+            }
+    }
     return (
         <DropdownButton
             open={openDropDown}
@@ -26,6 +48,7 @@ export default function HeaderItem({ label, value, placeholder, component, dataE
             }
         >
             <h5>{label} <span>{value}</span></h5>
+            {selected && <HeaderResetItemValue onReset={onReset}/> }
             <img src={info} />
         </DropdownButton >
     )
