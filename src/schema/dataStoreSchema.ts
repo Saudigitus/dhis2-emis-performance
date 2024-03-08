@@ -10,12 +10,12 @@ interface attendance {
     }]
 }
 
-interface programStages {
+interface simpleProgramStage {
     programStage: string
 }
 
 interface performance {
-    programStages: programStages[]
+    programStages: simpleProgramStage[]
 }
 
 interface registration {
@@ -31,6 +31,16 @@ interface transfer {
     status: string
 }
 
+interface defaults {
+    currentAcademicYear: string
+}
+
+interface filterItem {
+    code: string
+    dataElement: string
+    order: number
+}
+
 export interface dataStoreRecord {
     attendance: attendance
     key: string
@@ -39,10 +49,13 @@ export interface dataStoreRecord {
     performance: performance
     program: string
     registration: registration
-    ["socio-economics"]: programStages
+    ["socio-economics"]: simpleProgramStage
     transfer: transfer
-    ["final-result"]: programStages
-
+    ["final-result"]: simpleProgramStage
+    defaults: defaults
+    filters: {
+        dataElements: filterItem[]
+    }
 }
 
 export const DataStoreState = atom<dataStoreRecord[]>({

@@ -1,6 +1,10 @@
 import React from 'react'
 import { CenteredContent, CircularLoader } from "@dhis2/ui";
 import { useDataStore } from '../hooks/appwrapper/useDataStore'
+import { useGetProgramRules } from '../hooks/programRules/useGetProgramRules';
+import { useGetProgramRulesVariables } from '../hooks/programRules/useGetProgramRulesVariables';
+import { useGetOptionGroups } from '../hooks/optionGroup/useGetOptionGroups';
+import { useOrgUnitsGroups } from '../hooks/orgUnitsGroup/useOrgUnitsGroups';
 
 interface Props {
     children: React.ReactNode
@@ -8,8 +12,12 @@ interface Props {
 
 export default function AppWrapper(props: Props) {
     const { error, loading } = useDataStore()
+    const { loadingPRules } = useGetProgramRules();
+    const { loadingPRulesVariables } = useGetProgramRulesVariables();
+    const { loadingOptionGroups } = useGetOptionGroups();
+    const { loadingOrgUnitsGroups } = useOrgUnitsGroups()
 
-    if (loading) {
+    if (loading || loadingPRules || loadingPRulesVariables || loadingOptionGroups || loadingOrgUnitsGroups) {
         return (
             <CenteredContent>
                 <CircularLoader />
