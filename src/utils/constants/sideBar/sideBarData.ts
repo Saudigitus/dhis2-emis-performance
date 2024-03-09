@@ -5,6 +5,7 @@ import listAdd from "../../../assets/images/sidebar/listAdd.svg"
 import logOut from "../../../assets/images/sidebar/log-out.svg"
 import userGroup from "../../../assets/images/sidebar/user-group.svg"
 import { type SideBarItemProps } from "../../../types/sideBar/SideBarTypes"
+import home from "../../../assets/images/sidebar/home.svg"
 import { subItemRoute } from "./subItemRoute"
 import { filterItem } from "../../../types/dataStore/DataStoreConfig"
 
@@ -12,7 +13,7 @@ function sideBarData(locationParms : string, filterDataElements: filterItem[]): 
 
     return [
         {
-            title: "Students",
+            title: "Student",
             subItems: [
                 {
                     icon: listAdd,
@@ -90,6 +91,20 @@ function sideBarData(locationParms : string, filterDataElements: filterItem[]): 
                     appName: "SEMIS-Staff-Transfer",
                     route: `staff-transfer?${subItemRoute(locationParms.slice(1), 'staff', filterDataElements, true)}`, 
                     pathName: "/staff-transfer"
+                }
+            ]
+        },
+        {
+            title: "Home",
+            subItems: [
+                {
+                    icon: home,
+                    label: "Home",
+                    showBadge: false,
+                    disabled: false,
+                    appName: "SEMIS",
+                    route: `home`,
+                    pathName: "/home"
                 }
             ]
         }
