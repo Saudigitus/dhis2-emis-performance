@@ -15,6 +15,7 @@ interface FormatResponseRowsProps {
         trackedEntity: string
         dataValues: dataValuesProps[]
     }]
+    programStage: string | null
     setImmutableTeiData: (immutableTeiData: any) => void
 }
 
@@ -22,7 +23,7 @@ interface FormatResponseRowsMarksProps {
     marksInstance: {
         trackedEntity: string
         dataValues: dataValuesProps[]
-    }
+    },
 }
 
 type RowsDataProps = Record<string, string | number | boolean | any>;
@@ -33,4 +34,4 @@ interface defaultProps {
     headers: CustomAttributeProps[]
 }
 
-export type { FormatResponseRowsProps, FormatResponseRowsMarksProps, RowsDataProps, defaultProps}
+export type { FormatResponseRowsProps, FormatResponseRowsMarksProps, RowsDataProps, defaultProps }

@@ -40,7 +40,7 @@ export function useTableData() {
     const [allTeis, setAllTeis] = useState<any[]>([])
     const { program, registration } = getDataStoreKeys()
     const [, setAllEvents] = useRecoilState(EventsState);
-    const { school } = urlParamiters()
+    const { school, programStage } = urlParamiters()
 
     const getMarks = async () => {
         setLoading(true)
@@ -52,6 +52,7 @@ export function useTableData() {
                 instances: []
             }
         }
+
         // Get the events from the programStage marks for the each student
         for (const tei of allTeis) {
             const marksResults: MarksQueryResults = await engine.query(EVENT_QUERY({
@@ -90,6 +91,7 @@ export function useTableData() {
         setLoading(true)
         setAllEvents([])
         setImmutableTeiData([])
+
         const events: EventQueryResults = await engine.query(EVENT_QUERY({
             ouMode: "SELECTED",
             page,
@@ -161,7 +163,8 @@ export function useTableData() {
             eventsInstances: events?.results?.instances,
             teiInstances: teiResults?.results?.instances,
             marksInstances: marskEvents?.results?.instances,
-            setImmutableTeiData
+            setImmutableTeiData,
+            programStage
         })
 
         for (const row of localData) {

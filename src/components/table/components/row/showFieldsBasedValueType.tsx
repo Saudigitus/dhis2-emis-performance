@@ -9,6 +9,7 @@ import { Attribute } from '../../../../types/generated/models';
 
 export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueTypeProps) {
     const { column, value, currentEvent, saveMarks, showFeedBack, setShowFeedBack, headers } = props;
+    let dataElement = column.id.split('_')[0]
 
     const onSubmit = (event: any) => {
         void saveMarks({
@@ -17,7 +18,7 @@ export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueType
                 event: currentEvent?.event,
                 orgUnit: currentEvent?.orgUnit,
                 dataValues: [{
-                    dataElement: column.id,
+                    dataElement: dataElement,
                     value: event.target.value
                 }],
                 program: currentEvent?.program,
@@ -25,10 +26,10 @@ export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueType
                 trackedEntity: currentEvent?.trackedEntity,
                 programStage: currentEvent?.programStage,
             },
-            id: `${currentEvent?.event}/${column.id}`
+            id: `${currentEvent?.event}/${dataElement}`
         }).then(() => {
             setShowFeedBack({
-                dataElement: `${currentEvent?.event}/${column.id}`,
+                dataElement: `${currentEvent?.event}/${dataElement}`,
                 feedbackType: 'success'
             })
         })
@@ -42,7 +43,7 @@ export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueType
                 render={({ form }) => (
                     <form onClick={(event) => { event.stopPropagation() }}
                         onBlur={(event) => { onSubmit(event) }}
-                        className={showFeedBack.dataElement === `${currentEvent?.event}/${column.id}` && styles[showFeedBack.feedbackType]}>
+                        className={showFeedBack.dataElement === `${currentEvent?.event}/${dataElement}` && styles[showFeedBack.feedbackType]}>
                         <GenericFields
                             attribute={column}
                             disabled={false}
@@ -57,8 +58,8 @@ export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueType
     if (column.valueType === Attribute.valueType.LIST as unknown as CustomAttributeProps["valueType"] && (column.type === VariablesTypes.Attribute || column.type === VariablesTypes.DataElement)) {
         return (
             <span>
-                {getDisplayName({attribute: column.id, value, headers})}
-            </span> 
+                {getDisplayName({ attribute: column.id, value, headers })}
+            </span>
         )
     }
     return value || null;
