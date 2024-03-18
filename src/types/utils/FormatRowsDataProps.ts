@@ -24,6 +24,7 @@ interface FormatResponseRowsMarksProps {
         trackedEntity: string
         dataValues: dataValuesProps[]
     },
+    programStage?: string
 }
 
 type RowsDataProps = Record<string, string | number | boolean | any>;

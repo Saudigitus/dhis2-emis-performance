@@ -40,13 +40,32 @@ export function useTableData() {
     const [allTeis, setAllTeis] = useState<any[]>([])
     const { program, registration } = getDataStoreKeys()
     const [, setAllEvents] = useRecoilState(EventsState);
-    const { school, programStage } = urlParamiters()
+    const { school } = urlParamiters()
+
+    const fetchMarks = async (tei: string) => {
+        return await engine.query(EVENT_QUERY({
+            ouMode: "SELECTED",
+            programStatus: "ACTIVE",
+            program: program,
+            order: "createdAt:desc",
+            programStage: selectedTerm?.id,
+            orgUnit: school as unknown as string,
+            trackedEntity: tei
+        })).catch((error) => {
+            show({
+                message: `${("Could not get data")}: ${error.message}`,
+                type: { critical: true }
+            });
+            setTimeout(hide, 5000);
+        }) as unknown as MarksQueryResults;
+    }
 
     const getMarks = async () => {
         setLoading(true)
         setAllEvents([])
         let localData: any = []
         localData = [...immutableTeiData]
+
         const marskEvents: MarksQueryResults = {
             results: {
                 instances: []
@@ -55,28 +74,14 @@ export function useTableData() {
 
         // Get the events from the programStage marks for the each student
         for (const tei of allTeis) {
-            const marksResults: MarksQueryResults = await engine.query(EVENT_QUERY({
-                ouMode: "SELECTED",
-                programStatus: "ACTIVE",
-                program: program,
-                order: "createdAt:desc",
-                programStage: selectedTerm?.id,
-                orgUnit: school as unknown as string,
-                trackedEntity: tei
-            })).catch((error) => {
-                show({
-                    message: `${("Could not get data")}: ${error.message}`,
-                    type: { critical: true }
-                });
-                setTimeout(hide, 5000);
-            }) as unknown as MarksQueryResults;
+            const marksResults: MarksQueryResults = await fetchMarks(tei)
             marskEvents.results.instances.push(...marksResults?.results?.instances)
         }
 
         for (let i = 0; i < localData.length; i++) {
             const marksDetails = marskEvents?.results?.instances?.find((event: any) => event.trackedEntity === localData[i]?.trackedEntity);
             if (marksDetails !== undefined) {
-                localData[i] = { ...localData[i], ...formatResponseRowsMarks({ marksInstance: marksDetails }) }
+                localData[i] = { ...localData[i], ...formatResponseRowsMarks({ marksInstance: marksDetails, programStage: selectedTerm?.id }) }
             }
         }
 
@@ -140,21 +145,7 @@ export function useTableData() {
 
         if (selectedTerm?.id) {
             for (const tei of allTeis) {
-                const marksResults: MarksQueryResults = await engine.query(EVENT_QUERY({
-                    ouMode: "SELECTED",
-                    programStatus: "ACTIVE",
-                    program: program,
-                    order: "createdAt:desc",
-                    programStage: selectedTerm?.id,
-                    orgUnit: school as unknown as string,
-                    trackedEntity: tei
-                })).catch((error) => {
-                    show({
-                        message: `${("Could not get data")}: ${error.message}`,
-                        type: { critical: true }
-                    });
-                    setTimeout(hide, 5000);
-                }) as unknown as MarksQueryResults;
+                const marksResults: MarksQueryResults = await fetchMarks(tei)
                 marskEvents.results.instances.push(...marksResults?.results?.instances)
             }
         }
@@ -164,7 +155,7 @@ export function useTableData() {
             teiInstances: teiResults?.results?.instances,
             marksInstances: marskEvents?.results?.instances,
             setImmutableTeiData,
-            programStage
+            programStage: selectedTerm?.id
         })
 
         for (const row of localData) {

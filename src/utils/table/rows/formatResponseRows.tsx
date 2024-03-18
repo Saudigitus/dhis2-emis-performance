@@ -13,8 +13,8 @@ export function formatResponseRows({ eventsInstances, teiInstances, marksInstanc
     return allRows;
 }
 
-export function formatResponseRowsMarks({ marksInstance }: FormatResponseRowsMarksProps): RowsDataProps {
-    return dataValues(marksInstance?.dataValues ?? [])
+export function formatResponseRowsMarks({ marksInstance, programStage }: FormatResponseRowsMarksProps): RowsDataProps {
+    return dataValues(marksInstance?.dataValues ?? [], programStage)
 }
 
 function dataValues(data: dataValuesProps[], programStage?: string | null): RowsDataProps {
