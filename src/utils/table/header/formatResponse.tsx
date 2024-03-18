@@ -7,7 +7,7 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
     const headerResponse = useMemo(() => {
         const originalData = ((data?.programStages?.find(programStge => programStge.id === programStageId)) ?? {} as unknown as ProgramConfig["programStages"][0])
 
-        return (tableColumns?.length > 0) ? tableColumns :  data?.programTrackedEntityAttributes?.map((item) => {
+        return (tableColumns?.length > 0) ? tableColumns : data?.programTrackedEntityAttributes?.map((item) => {
             return {
                 id: item.trackedEntityAttribute.id,
                 displayName: item.trackedEntityAttribute.displayName,
@@ -30,7 +30,7 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
             Object.keys(originalData).length > 0
                 ? originalData?.programStageDataElements?.map((programStageDataElement) => {
                     return {
-                        id: programStageDataElement.dataElement.id,
+                        id:  programStageDataElement.dataElement.id +"_"+ programStageId,
                         displayName: programStageDataElement.dataElement.displayName,
                         header: programStageDataElement.dataElement.displayName,
                         required: programStageDataElement.compulsory,
@@ -44,7 +44,7 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
                         searchable: false,
                         error: false,
                         content: '',
-                        key: programStageDataElement.dataElement.id,
+                        key: programStageDataElement.dataElement.id +"_"+ programStageId,
                         type: VariablesTypes.Performance
                     }
                 }) as []
