@@ -8,13 +8,12 @@ import { getDisplayName } from '../../../../utils';
 import { Attribute } from '../../../../types/generated/models';
 
 export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueTypeProps) {
-    const { column, value, currentEvent, saveMarks, showFeedBack, setShowFeedBack, headers } = props;
+    const { column, value, currentEvent, saveMarks, showFeedBack, setShowFeedBack, headers, loader } = props;
     let dataElement = column.id.split('_')[0]
 
     const onSubmit = (event: any) => {
         void saveMarks({
             data: {
-
                 event: currentEvent?.event,
                 orgUnit: currentEvent?.orgUnit,
                 dataValues: [{
@@ -46,7 +45,7 @@ export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueType
                         className={showFeedBack.dataElement === `${currentEvent?.event}/${dataElement}` && styles[showFeedBack.feedbackType]}>
                         <GenericFields
                             attribute={column}
-                            disabled={false}
+                            disabled={loader as unknown as boolean}
                             valueType={column.valueType}
                         />
                     </form>

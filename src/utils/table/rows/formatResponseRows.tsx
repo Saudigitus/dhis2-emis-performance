@@ -6,9 +6,9 @@ export function formatResponseRows({ eventsInstances, teiInstances, marksInstanc
     const allRows: RowsDataProps[] = []
     for (const event of eventsInstances) {
         const teiDetails = teiInstances.find(tei => tei.trackedEntity === event.trackedEntity)
-        const marksDetails = marksInstances.find(mark => mark.trackedEntity === event.trackedEntity)
-        setImmutableTeiData((prevState: any) => [...prevState, { ...dataValues(event.dataValues), ...(attributes((teiDetails?.attributes) ?? [])), trackedEntity: event.trackedEntity }])
-        allRows.push({ ...dataValues(event.dataValues), ...(marksDetails !== undefined ? { ...dataValues(marksDetails.dataValues, programStage) } : {}), ...(attributes((teiDetails?.attributes) ?? [])), trackedEntity: event.trackedEntity })
+        const marksDetails = marksInstances.find(mark =>( mark.trackedEntity === event.trackedEntity) && ( mark?.enrollment === event?.enrollment))
+        setImmutableTeiData((prevState: any) => [...prevState, { ...dataValues(event.dataValues), ...(attributes((teiDetails?.attributes) ?? [])), trackedEntity: event.trackedEntity, enrollment: event?.enrollment }])
+        allRows.push({ ...dataValues(event.dataValues), ...(marksDetails !== undefined ? { ...dataValues(marksDetails.dataValues, programStage) } : {}), ...(attributes((teiDetails?.attributes) ?? [])), trackedEntity: event.trackedEntity, enrollment: event?.enrollment })
     }
     return allRows;
 }

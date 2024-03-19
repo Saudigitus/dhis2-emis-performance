@@ -32,12 +32,12 @@ function Table() {
     const termMarksState = useRecoilValue(TermMarksState)
 
     useEffect(() => {
-        void getData(page, pageSize)
+        void getData(page, pageSize, termMarksState)
     }, [useQuery(), headerFieldsState, page, pageSize, refetch])
 
     useEffect(() => {
         if (termMarksState.id !== null && termMarksState.id !== undefined && termMarksState.id !== '') {
-            void getMarks()
+            void getMarks(termMarksState)
         }
     }, [termMarksState])
 
@@ -74,6 +74,7 @@ function Table() {
                                     rowsHeader={columns}
                                 />
                                 <RenderRows
+                                    loader={loading}
                                     headerData={columns}
                                     rowsData={tableData}
                                 />

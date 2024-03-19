@@ -2,8 +2,8 @@ import React from 'react'
 import { IconUserGroup16, ButtonStrip } from "@dhis2/ui";
 import DropdownButtonComponent from '../../../buttons/DropdownButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import { FlyoutOptionsProps } from '../../../../types/buttons/FlyoutOptionsProps';
 import { useParams } from '../../../../hooks';
+import { FlyoutOptionsProps } from '../../../../types/Buttons/FlyoutOptionsProps';
 
 function EnrollmentActionsButtons() {
   const { urlParamiters } = useParams();
@@ -18,7 +18,7 @@ function EnrollmentActionsButtons() {
     <div>
       <ButtonStrip>
         <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
-          <span>
+          <span className='bulk-performance__hide'>
             <DropdownButtonComponent
               name="Bulk Performance"
               icon={<IconUserGroup16 />}

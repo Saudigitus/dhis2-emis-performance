@@ -7,6 +7,7 @@ import useShowAlerts from "../commons/useShowAlert";
 import { EventsState, TermMarksState } from "../../schema/termMarksSchema";
 import { type TableDataProps, type EventQueryProps, type TeiQueryProps, type MarksQueryResults, type EventQueryResults, type TeiQueryResults } from "../../types/table/TableData";
 import { formatResponseRowsMarks, formatResponseRows, getDataStoreKeys } from "../../utils";
+import { TermMarksConfig } from "../../types/terms/TermMarksConfig";
 
 const EVENT_QUERY = (queryProps: EventQueryProps) => ({
     results: {
@@ -31,7 +32,6 @@ const TEI_QUERY = (queryProps: TeiQueryProps) => ({
 export function useTableData() {
     const engine = useDataEngine();
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
-    const [selectedTerm] = useRecoilState(TermMarksState)
     const { urlParamiters } = useParams()
     const [loading, setLoading] = useState<boolean>(false)
     const [tableData, setTableData] = useState<TableDataProps[]>([])
@@ -42,13 +42,13 @@ export function useTableData() {
     const [, setAllEvents] = useRecoilState(EventsState);
     const { school } = urlParamiters()
 
-    const fetchMarks = async (tei: string) => {
+    const fetchMarks = async (tei: string,selectedTermId:string) => {
         return await engine.query(EVENT_QUERY({
             ouMode: "SELECTED",
-            programStatus: "ACTIVE",
+            // programStatus: "ACTIVE",
             program: program,
             order: "createdAt:desc",
-            programStage: selectedTerm?.id,
+            programStage: selectedTermId,
             orgUnit: school as unknown as string,
             trackedEntity: tei
         })).catch((error) => {
@@ -60,7 +60,7 @@ export function useTableData() {
         }) as unknown as MarksQueryResults;
     }
 
-    const getMarks = async () => {
+    const getMarks = async (selectedTerm: TermMarksConfig) => {
         setLoading(true)
         setAllEvents([])
         let localData: any = []
@@ -74,25 +74,26 @@ export function useTableData() {
 
         // Get the events from the programStage marks for the each student
         for (const tei of allTeis) {
-            const marksResults: MarksQueryResults = await fetchMarks(tei)
+            const marksResults: MarksQueryResults = await fetchMarks(tei,selectedTerm.id)
             marskEvents.results.instances.push(...marksResults?.results?.instances)
         }
 
         for (let i = 0; i < localData.length; i++) {
-            const marksDetails = marskEvents?.results?.instances?.find((event: any) => event.trackedEntity === localData[i]?.trackedEntity);
+            const marksDetails = marskEvents?.results?.instances?.find((event: any) => (event.trackedEntity === localData[i]?.trackedEntity) && (event?.enrollment === localData[i]?.enrollment));
             if (marksDetails !== undefined) {
                 localData[i] = { ...localData[i], ...formatResponseRowsMarks({ marksInstance: marksDetails, programStage: selectedTerm?.id }) }
             }
         }
 
         for (const row of localData) {
-            setAllEvents((prev) => [...prev, marskEvents.results.instances.find((event: any) => event.trackedEntity === row.trackedEntity)])
+            setAllEvents((prev) => [...prev, marskEvents.results.instances.find((event: any) => (event.trackedEntity === row.trackedEntity) && (event.enrollment === row.enrollment))])
         }
+
         setTableData(localData);
         setLoading(false)
     }
 
-    async function getData(page: number, pageSize: number) {
+    async function getData(page: number, pageSize: number, selectedTerm: TermMarksConfig) {
         setLoading(true)
         setAllEvents([])
         setImmutableTeiData([])
@@ -101,7 +102,7 @@ export function useTableData() {
             ouMode: "SELECTED",
             page,
             pageSize,
-            programStatus: "ACTIVE",
+            // programStatus: "ACTIVE",
             program: program,
             order: "createdAt:desc",
             programStage: registration?.programStage,
@@ -122,11 +123,11 @@ export function useTableData() {
 
         const teiResults: TeiQueryResults = trackedEntityToFetch?.length > 0
             ? await engine.query(TEI_QUERY({
-                ouMode: "SELECTED",
-                order: "created:desc",
-                pageSize,
+                // ouMode: "SELECTED",
+                // order: "created:desc",
+                // pageSize,
                 program: program,
-                orgUnit: school as unknown as string,
+                // orgUnit: school as unknown as string,
                 trackedEntity: trackedEntityToFetch
             })).catch((error) => {
                 show({
@@ -143,9 +144,9 @@ export function useTableData() {
             }
         }
 
-        if (selectedTerm?.id) {
+        if (selectedTerm.id !== null && selectedTerm.id !== undefined && selectedTerm.id !== '') {
             for (const tei of allTeis) {
-                const marksResults: MarksQueryResults = await fetchMarks(tei)
+                const marksResults: MarksQueryResults = await fetchMarks(tei,selectedTerm.id)
                 marskEvents.results.instances.push(...marksResults?.results?.instances)
             }
         }
@@ -159,7 +160,7 @@ export function useTableData() {
         })
 
         for (const row of localData) {
-            setAllEvents((prev) => [...prev, marskEvents.results.instances.find((event: any) => event.trackedEntity === row.trackedEntity)])
+            setAllEvents((prev) => [...prev, marskEvents.results.instances.find((event: any) => (event.trackedEntity === row.trackedEntity) && (event.enrollment === row.enrollment))])
         }
 
         setTableData(localData);

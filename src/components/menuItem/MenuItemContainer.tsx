@@ -10,6 +10,7 @@ import { formatKeyValueTypeHeader } from '../../utils/programRules/formatKeyValu
 import { useParams } from '../../hooks/commons/useQueryParams';
 
 function MenuItemContainer(props: MenuItemContainerProps): React.ReactElement {
+    console.log(props,"props")
     const { dataElementId, onToggle } = props;
     const { useQuery } = useParams();
     const orgUnit = useQuery().get("school");
@@ -19,17 +20,17 @@ function MenuItemContainer(props: MenuItemContainerProps): React.ReactElement {
     const { registration } = getDataStoreKeys();
 
     const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
-        variables: formatResponse(programConfigState, registration?.programStage)?.filter(element => element.id === dataElementId).map((x) => { return { ...x, name: x.id } }),
+        variables: formatResponse(programConfigState, registration?.programStage)?.filter(element => element.rawId === dataElementId).map((x) => { return { ...x, name: x.rawId } }),
         values: { orgUnit, [getDataStoreData.registration.grade as string]: grade },
         type: "programStage",
-        formatKeyValueType: formatKeyValueTypeHeader(formatResponse(programConfigState, registration?.programStage)?.filter(element => element.id === dataElementId)) || []
+        formatKeyValueType: formatKeyValueTypeHeader(formatResponse(programConfigState, registration?.programStage)?.filter(element => element.rawId === dataElementId)) || []
     })
 
     useEffect(() => {
         runRulesEngine()
     }, [orgUnit])
 
-    const options = updatedVariables?.find(element => element.id === dataElementId)?.options.optionSet.options ?? []
+    const options = updatedVariables?.find(element => element.rawId === dataElementId)?.options.optionSet.options ?? []
 
     return (
         <Item onToggle={onToggle} dataElementId={dataElementId} menuItems={options} />

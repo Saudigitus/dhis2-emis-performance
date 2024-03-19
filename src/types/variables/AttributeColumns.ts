@@ -8,6 +8,7 @@ export enum VariablesTypes {
 
 export interface CustomAttributeProps {
     id: string
+    rawId?:string
     displayName: string
     header: string
     required: boolean

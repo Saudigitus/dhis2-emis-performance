@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function RenderRows(props: RenderHeaderProps): React.ReactElement {
-    const { rowsData, headerData } = props
+    const { rowsData, headerData, loader } = props
     const classes = useStyles()
     const [allEvents] = useRecoilState(EventsState);
     const [selectedTerm] = useRecoilState(TermMarksState);
@@ -78,6 +78,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                         >
                             <div>
                                 <ShowFieldsBasedValueType
+                                    loader={loader}
                                     column={column}
                                     currentEvent={allEvents[index]}
                                     saveMarks={saveMarks}

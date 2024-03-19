@@ -29,6 +29,7 @@ interface RowProps {
 }
 
 interface RenderHeaderProps {
+    loader?:boolean
     rowsHeader?: CustomAttributeProps[]
     orderBy?: string
     order?: "asc" | "desc"
@@ -50,6 +51,7 @@ type TableDataProps = Record<string, string>;
 
 interface ShowFieldsBasedValueTypeProps {
     column: CustomAttributeProps
+    loader?:boolean
     value: string
     currentEvent: any
     saveMarks: any
