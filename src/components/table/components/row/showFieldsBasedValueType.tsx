@@ -6,10 +6,15 @@ import styles from "./row.module.css"
 import { ShowFieldsBasedValueTypeProps } from '../../../../types/table/TableContentProps';
 import { getDisplayName } from '../../../../utils';
 import { Attribute } from '../../../../types/generated/models';
+import { formatKeyValueTypeHeader } from '../../../../utils/programRules/formatKeyValueType';
+import { GetImageUrl } from '../../../../utils/table/rows/getImageUrl';
+import { IconButton } from '@material-ui/core';
+import CropOriginal from '@material-ui/icons/CropOriginal';
 
 export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueTypeProps) {
-    const { column, value, currentEvent, saveMarks, showFeedBack, setShowFeedBack, headers, loader } = props;
+    const { column, value, currentEvent, saveMarks, showFeedBack, setShowFeedBack, headers, loader, trackedEntity } = props;
     let dataElement = column.id.split('_')[0]
+    const { imageUrl } = GetImageUrl()
 
     const onSubmit = (event: any) => {
         void saveMarks({
@@ -54,10 +59,19 @@ export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueType
         )
     }
 
-    if (column.valueType === Attribute.valueType.LIST as unknown as CustomAttributeProps["valueType"] && (column.type === VariablesTypes.Attribute || column.type === VariablesTypes.DataElement)) {
+    console.log(formatKeyValueTypeHeader(headers)[column.id], column.id, column.type, VariablesTypes.Performance)
+
+    if (column.valueType === Attribute.valueType.IMAGE as unknown as CustomAttributeProps["valueType"]
+        || column.valueType === Attribute.valueType.LIST as unknown as CustomAttributeProps["valueType"]
+        && (column.type === VariablesTypes.Attribute || column.type === VariablesTypes.DataElement)) {
         return (
             <span>
-                {getDisplayName({ attribute: column.id, value, headers })}
+                {
+                    formatKeyValueTypeHeader(headers)[column.id] === Attribute.valueType.IMAGE ?
+                        <a href={imageUrl({ attribute: column.id, trackedEntity })} target='_blank'>{value && <IconButton> <CropOriginal /></IconButton>}</a>
+                        :
+                        getDisplayName({ attribute: column.id, value, headers })
+                }
             </span>
         )
     }

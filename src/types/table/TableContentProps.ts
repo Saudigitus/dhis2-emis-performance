@@ -29,7 +29,7 @@ interface RowProps {
 }
 
 interface RenderHeaderProps {
-    loader?:boolean
+    loader?: boolean
     rowsHeader?: CustomAttributeProps[]
     orderBy?: string
     order?: "asc" | "desc"
@@ -51,12 +51,13 @@ type TableDataProps = Record<string, string>;
 
 interface ShowFieldsBasedValueTypeProps {
     column: CustomAttributeProps
-    loader?:boolean
+    loader?: boolean
     value: string
     currentEvent: any
     saveMarks: any
     showFeedBack: FieldFeedbackProps
     setShowFeedBack: any
     headers: CustomAttributeProps[]
+    trackedEntity: string
 }
 export type { TableComponentProps, HeaderCellProps, RowProps, RenderHeaderProps, TableSortProps, TableDataProps, ShowFieldsBasedValueTypeProps }
