@@ -83,6 +83,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                     currentEvent={allEvents[index]}
                                     saveMarks={saveMarks}
                                     value={row[column.id]}
+                                    trackedEntity={row.trackedEntity}
                                     setShowFeedBack={setShowFeedBack}
                                     showFeedBack={showFeedBack}
                                     headers={headerData}
