@@ -59,8 +59,6 @@ export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueType
         )
     }
 
-    console.log(formatKeyValueTypeHeader(headers)[column.id], column.id, column.type, VariablesTypes.Performance)
-
     if (column.valueType === Attribute.valueType.IMAGE as unknown as CustomAttributeProps["valueType"]
         || column.valueType === Attribute.valueType.LIST as unknown as CustomAttributeProps["valueType"]
         && (column.type === VariablesTypes.Attribute || column.type === VariablesTypes.DataElement)) {
