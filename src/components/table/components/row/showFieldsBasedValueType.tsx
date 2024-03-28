@@ -12,18 +12,18 @@ import { IconButton } from '@material-ui/core';
 import CropOriginal from '@material-ui/icons/CropOriginal';
 
 export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueTypeProps) {
-    const { column, value, currentEvent, saveMarks, showFeedBack, setShowFeedBack, headers, loader, trackedEntity } = props;
+    const { column, value, currentEvent, saveMarks, showFeedBack, setShowFeedBack, headers, loader, trackedEntity, prevValues, setPrevValues } = props;
     let dataElement = column.id.split('_')[0]
     const { imageUrl } = GetImageUrl()
 
-    const onSubmit = (event: any) => {
+    function save(newMark: any) {
         void saveMarks({
             data: {
                 event: currentEvent?.event,
                 orgUnit: currentEvent?.orgUnit,
                 dataValues: [{
                     dataElement: dataElement,
-                    value: event.target.value
+                    value: newMark
                 }],
                 program: currentEvent?.program,
                 status: currentEvent?.status,
@@ -39,14 +39,21 @@ export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueType
         })
     }
 
+    const onSubmit = (event: any, pristine: boolean) => {
+        if (event.target.value && !pristine && prevValues[column.id] !== event.target.value) {
+            setPrevValues((prevValues: any) => ({ ...prevValues, [column.id]: event.target.value }))
+            save(event.target.value)
+        }
+    }
+
     if (column.type === VariablesTypes.Performance) {
         return (
             <Form
                 onSubmit={() => { }}
                 initialValues={{ [column.name]: value }}
-                render={({ form }) => (
+                render={({ pristine }) => (
                     <form onClick={(event) => { event.stopPropagation() }}
-                        onBlur={(event) => { onSubmit(event) }}
+                        onBlur={(event) => { onSubmit(event, pristine) }}
                         className={showFeedBack.dataElement === `${currentEvent?.event}/${dataElement}` && styles[showFeedBack.feedbackType]}>
                         <GenericFields
                             attribute={column}
