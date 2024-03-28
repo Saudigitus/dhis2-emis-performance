@@ -14,7 +14,6 @@ import { TermMarksState } from '../../../../schema/termMarksSchema';
 function DialogSelectColumns(props: DialogSelectColumnsProps) {
     const { open, onClose, headers = [], updateVariables, filteredHeaders } = props;
     const [columnsList, setcolumnsList] = useState<CustomAttributeProps[]>([])
-    const termMarksState = useRecoilValue(TermMarksState)
 
     useEffect(() => {
         if (filteredHeaders?.length == 0) setcolumnsList([])

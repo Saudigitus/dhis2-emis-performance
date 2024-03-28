@@ -32,8 +32,17 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
             : []
     }
 
+    function getHeaders() {
+        let performanceHeaders = getProgramStageDataElement()
+        let containsAllPerformance = performanceHeaders.every((performanceHeader: any) => tableColumns.find(customizedHeaders => customizedHeaders.id == performanceHeader.id));
+
+        if (containsAllPerformance) return tableColumns
+        else return tableColumns.concat(getProgramStageDataElement())
+    }
+
     const headerResponse = useMemo(() => {
-        return (tableColumns?.length > 0) ? tableColumns.concat(getProgramStageDataElement()) : data?.programTrackedEntityAttributes?.map((item) => {
+
+        return (tableColumns?.length > 0) ? getHeaders() : data?.programTrackedEntityAttributes?.map((item) => {
             return {
                 id: item.trackedEntityAttribute.id,
                 rawId: item.trackedEntityAttribute.id,
