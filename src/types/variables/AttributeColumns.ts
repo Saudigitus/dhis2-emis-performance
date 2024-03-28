@@ -25,6 +25,12 @@ export interface CustomAttributeProps {
             options: OptionsProps[]
         }
     }
+    initialOptions: {
+        optionSet: {
+            id: string
+            options: OptionsProps[]
+        }
+    }
     pattern?: string
     searchable?: boolean
     error?: boolean

@@ -12,6 +12,7 @@ export function formatResponseTEI(attributes: ProgramConfig) {
                 labelName: trackedEntityAttribute?.trackedEntityAttribute?.displayName,
                 valueType: ((trackedEntityAttribute?.trackedEntityAttribute?.optionSet) != null) ? Attribute.valueType.LIST as unknown as CustomAttributeProps["valueType"] : trackedEntityAttribute?.trackedEntityAttribute?.valueType as unknown as CustomAttributeProps["valueType"],
                 options: { optionSet: trackedEntityAttribute?.trackedEntityAttribute.optionSet },
+                initialOptions: { optionSet: trackedEntityAttribute?.trackedEntityAttribute?.optionSet },
                 visible: true,
                 disabled: trackedEntityAttribute?.trackedEntityAttribute?.generated,
                 pattern: trackedEntityAttribute?.trackedEntityAttribute?.pattern,
