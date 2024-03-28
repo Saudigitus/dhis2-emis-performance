@@ -4,10 +4,45 @@ import { VariablesTypes, type CustomAttributeProps } from "../../../types/variab
 import { useMemo } from "react";
 
 export function formatResponse(data: ProgramConfig, programStageId: string, tableColumns: CustomAttributeProps[] = []): CustomAttributeProps[] {
-    const headerResponse = useMemo(() => {
-        const originalData = ((data?.programStages?.find(programStge => programStge.id === programStageId)) ?? {} as unknown as ProgramConfig["programStages"][0])
+    const originalData = ((data?.programStages?.find(programStge => programStge.id === programStageId)) ?? {} as unknown as ProgramConfig["programStages"][0])
 
-        return (tableColumns?.length > 0) ? tableColumns : data?.programTrackedEntityAttributes?.map((item) => {
+    function getProgramStageDataElement(): [] {
+        return Object.keys(originalData).length > 0
+            ? originalData?.programStageDataElements?.map((programStageDataElement) => {
+                return {
+                    id: programStageDataElement.dataElement.id + "_" + programStageId,
+                    rawId: programStageDataElement.dataElement.id,
+                    displayName: programStageDataElement.dataElement.displayName,
+                    header: programStageDataElement.dataElement.displayName,
+                    required: programStageDataElement.compulsory,
+                    name: programStageDataElement.dataElement.displayName,
+                    labelName: programStageDataElement.dataElement.displayName,
+                    valueType: programStageDataElement.dataElement.optionSet?.options?.length > 0 ? Attribute.valueType.LIST as unknown as CustomAttributeProps["valueType"] : programStageDataElement.dataElement.valueType as unknown as CustomAttributeProps["valueType"],
+                    options: { optionSet: programStageDataElement.dataElement.optionSet },
+                    visible: programStageDataElement.displayInReports,
+                    disabled: false,
+                    pattern: '',
+                    searchable: false,
+                    error: false,
+                    content: '',
+                    key: programStageDataElement.dataElement.id + "_" + programStageId,
+                    type: VariablesTypes.Performance
+                }
+            }) as []
+            : []
+    }
+
+    function getHeaders() {
+        let performanceHeaders = getProgramStageDataElement()
+        let containsAllPerformance = performanceHeaders.every((performanceHeader: any) => tableColumns.find(customizedHeaders => customizedHeaders.id == performanceHeader.id));
+
+        if (containsAllPerformance) return tableColumns
+        else return tableColumns.concat(getProgramStageDataElement())
+    }
+
+    const headerResponse = useMemo(() => {
+
+        return (tableColumns?.length > 0) ? getHeaders() : data?.programTrackedEntityAttributes?.map((item) => {
             return {
                 id: item.trackedEntityAttribute.id,
                 rawId: item.trackedEntityAttribute.id,
@@ -27,31 +62,7 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
                 key: item.trackedEntityAttribute.id,
                 type: VariablesTypes.Attribute
             }
-        }).concat(
-            Object.keys(originalData).length > 0
-                ? originalData?.programStageDataElements?.map((programStageDataElement) => {
-                    return {
-                        id: programStageDataElement.dataElement.id + "_" + programStageId,
-                        rawId: programStageDataElement.dataElement.id,
-                        displayName: programStageDataElement.dataElement.displayName,
-                        header: programStageDataElement.dataElement.displayName,
-                        required: programStageDataElement.compulsory,
-                        name: programStageDataElement.dataElement.displayName,
-                        labelName: programStageDataElement.dataElement.displayName,
-                        valueType: programStageDataElement.dataElement.optionSet?.options?.length > 0 ? Attribute.valueType.LIST as unknown as CustomAttributeProps["valueType"] : programStageDataElement.dataElement.valueType as unknown as CustomAttributeProps["valueType"],
-                        options: { optionSet: programStageDataElement.dataElement.optionSet },
-                        visible: programStageDataElement.displayInReports,
-                        disabled: false,
-                        pattern: '',
-                        searchable: false,
-                        error: false,
-                        content: '',
-                        key: programStageDataElement.dataElement.id + "_" + programStageId,
-                        type: VariablesTypes.Performance
-                    }
-                }) as []
-                : []
-        )
+        }).concat(getProgramStageDataElement())
     }, [data, programStageId, tableColumns]);
 
     return headerResponse;
