@@ -59,5 +59,7 @@ interface ShowFieldsBasedValueTypeProps {
     setShowFeedBack: any
     headers: CustomAttributeProps[]
     trackedEntity: string
+    setPrevValues: (a: Object) => void
+    prevValues: any
 }
 export type { TableComponentProps, HeaderCellProps, RowProps, RenderHeaderProps, TableSortProps, TableDataProps, ShowFieldsBasedValueTypeProps }

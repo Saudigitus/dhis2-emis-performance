@@ -40,6 +40,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
     const [allEvents] = useRecoilState(EventsState);
     const [selectedTerm] = useRecoilState(TermMarksState);
     const { saveMarks } = usePostDataElement()
+    const [prevValues, setPrevValues] = useState<Object>({})
     const [showFeedBack, setShowFeedBack] = useState<FieldFeedbackProps>({
         dataElement: '',
         feedbackType: ''
@@ -87,6 +88,8 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                     setShowFeedBack={setShowFeedBack}
                                     showFeedBack={showFeedBack}
                                     headers={headerData}
+                                    prevValues={prevValues}
+                                    setPrevValues={setPrevValues}
                                 />
                             </div>
                         </RowCell>
