@@ -13,7 +13,7 @@ import HeaderResetItemValue from './HeaderResetItemValue'
 import { getSelectedKey } from '../../../utils/commons/dataStore/getSelectedKey'
 
 export default function HeaderItem(props: HeadBarTypes): React.ReactElement {
-    const { label, value, placeholder, component, dataElementId, id, selected } = props;
+    const { label, value, placeholder, component, dataElementId, id, selected, disabled } = props;
     const { remove } = useParams()
     const Component = (component != null) ? componentMapping[component] : null;
     const [openDropDown, setOpenDropDown] = useState<boolean>(false);
@@ -36,9 +36,10 @@ export default function HeaderItem(props: HeadBarTypes): React.ReactElement {
                 remove("schoolName");
             }
     }
-    
+
     return (
         <DropdownButton
+            disabled={disabled}
             open={openDropDown}
             onClick={onToggle}
             className={classNames(style.HeaderItemContainer, style[id])}

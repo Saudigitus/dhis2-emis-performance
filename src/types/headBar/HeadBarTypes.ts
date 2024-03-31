@@ -5,7 +5,8 @@ interface HeadBarTypes {
     placeholder: string
     component?: string
     dataElementId?: string
-    selected?:boolean
+    selected?: boolean
+    disabled?: boolean
 }
 
 interface SelectedOptionsTypes {
