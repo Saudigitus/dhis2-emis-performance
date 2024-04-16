@@ -118,6 +118,7 @@ function SelectButton(props: SelectButtonProps) {
                                         value={value}
                                         onQuerySubmit={onQuerySubmit}
                                         disabled={disabled}
+                                        filled={filled}
                                         disabledReset={disabledReset}
                                     />
                                 </WithPadding>
