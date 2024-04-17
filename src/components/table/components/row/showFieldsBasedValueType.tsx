@@ -10,11 +10,14 @@ import { formatKeyValueTypeHeader } from '../../../../utils/programRules/formatK
 import { GetImageUrl } from '../../../../utils/table/rows/getImageUrl';
 import { IconButton } from '@material-ui/core';
 import CropOriginal from '@material-ui/icons/CropOriginal';
+import { useRecoilValue } from 'recoil';
+import { ProgramConfigState } from '../../../../schema/programSchema';
 
 export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueTypeProps) {
     const { column, value, currentEvent, saveMarks, showFeedBack, setShowFeedBack, headers, loader, trackedEntity, prevValues, setPrevValues } = props;
     let dataElement = column.id.split('_')[0]
     const { imageUrl } = GetImageUrl()
+    const programConfigState = useRecoilValue(ProgramConfigState);
 
     function save(newMark: any) {
         void saveMarks({
@@ -75,7 +78,8 @@ export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueType
                     formatKeyValueTypeHeader(headers)[column.id] === Attribute.valueType.IMAGE ?
                         <a href={imageUrl({ attribute: column.id, trackedEntity })} target='_blank'>{value && <IconButton> <CropOriginal /></IconButton>}</a>
                         :
-                        getDisplayName({ attribute: column.id, value, headers })
+                        // getDisplayName({ attribute: column.id, value, headers })
+                        getDisplayName({ metaData: column.id, value, program: programConfigState })
                 }
             </span>
         )
