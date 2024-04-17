@@ -51,6 +51,10 @@ function Table() {
     }, [loading])
 
     useEffect(() => {
+        setpage(1)
+    }, [headerFieldsState])
+
+    useEffect(() => {
         if (academicYear)
             void getData(page, pageSize, termMarksState)
     }, [useQuery(), headerFieldsState, page, pageSize, refetch])
