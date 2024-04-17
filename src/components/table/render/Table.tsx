@@ -8,11 +8,12 @@ import { Paper } from '@material-ui/core';
 import WithBorder from '../../template/WithBorder';
 import WithPadding from '../../template/WithPadding';
 import WorkingLists from '../components/filters/workingList/WorkingLists';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { HeaderFieldsState } from '../../../schema/headersSchema';
 import { TermMarksState } from '../../../schema/termMarksSchema';
 import { useHeader, useParams, useTableData } from '../../../hooks';
 import { TeiRefetch } from '../../../schema/refecthTeiSchema';
+import { TableDataLoadingState } from '../../../schema/tableDataLoadingSchema';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -41,13 +42,21 @@ function Table() {
     const [pageSize, setpageSize] = useState(10)
     const [refetch] = useRecoilState(TeiRefetch)
     const termMarksState = useRecoilValue(TermMarksState)
+    const { urlParamiters } = useParams()
+    const { academicYear } = urlParamiters()
+    const setLoading = useSetRecoilState(TableDataLoadingState)
 
     useEffect(() => {
-        void getData(page, pageSize, termMarksState)
+        setLoading(loading)
+    }, [loading])
+
+    useEffect(() => {
+        if (academicYear)
+            void getData(page, pageSize, termMarksState)
     }, [useQuery(), headerFieldsState, page, pageSize, refetch])
 
     useEffect(() => {
-        if (termMarksState.id !== null && termMarksState.id !== undefined && termMarksState.id !== '') {
+        if (termMarksState.id !== null && termMarksState.id !== undefined && termMarksState.id !== '' && academicYear) {
             void getMarks(termMarksState)
         }
     }, [termMarksState])
