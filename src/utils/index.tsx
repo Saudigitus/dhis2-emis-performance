@@ -14,12 +14,7 @@ import { formatResponseRows, formatResponseRowsMarks } from "./table/rows/format
 import { getDisplayName } from "./table/rows/getDisplayNameByOption";
 import { formatResponseTEI } from "./tei/formatResponseAttributes";
 
-export { getSelectedKey, getDataStoreKeys, componentMapping, reducer, formatToString, headBarData, 
-sideBarData, formatResponseEvents, convertArrayToObject, formatResponse, disableNextPage, rowsPerPages, formatResponseRows, formatResponseRowsMarks, getDisplayName, formatResponseTEI }
-
-
-
-
-
-
-
+export {
+getSelectedKey, getDataStoreKeys, componentMapping, reducer, formatToString, headBarData,
+sideBarData, formatResponseEvents, convertArrayToObject, formatResponse, disableNextPage, rowsPerPages, formatResponseRows, formatResponseRowsMarks, getDisplayName, formatResponseTEI
+}

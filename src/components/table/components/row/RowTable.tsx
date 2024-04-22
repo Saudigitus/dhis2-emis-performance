@@ -1,28 +1,40 @@
-import classNames from 'classnames';
 import React from 'react'
-import styles from '../table.module.css';
-import { RowProps } from '../../../../types/table/TableContentProps';
-
+import classNames from 'classnames';
+import defaultClasses from '../table.module.css';
+import Tooltip from "@material-ui/core/Tooltip";
+import useGetSectionTypeLabel from "../../../../hooks/commons/useGetSectionTypeLabel";
+import {type RowProps } from '../../../../types/table/TableContentProps';
 function RowTable(props: RowProps): React.ReactElement {
-    const { children, className, table, ...passOnProps } = props;
+    const {
+        children,
+        className,
+        table,
+        passOnProps,
+        inactive = false
+    } = props;
+    const {sectionName} = useGetSectionTypeLabel()
 
     const classes = classNames(
-        styles.tableRow,
+        defaultClasses.tableRow,
         {
-            [styles.tableRowBody]: table == null,
-            [styles.tableRowHeader]: table?.head,
-            [styles.tableRowFooter]: table?.footer
+            [defaultClasses.tableRowBody]: table == null,
+            [defaultClasses.tableRowHeader]: table?.head,
+            [defaultClasses.tableRowFooter]: table?.footer
         },
-        className
+        className,
+        inactive && defaultClasses.disabledRow
     );
 
     return (
-        <tr
-            className={classes}
-            {...passOnProps}
-        >
-            {children}
-        </tr>
+        <Tooltip arrow={true} disableHoverListener={!inactive}
+                 title={inactive && 'This ' + sectionName + '\'s enrollment is inactive'}>
+            <tr
+                className={classes}
+                {...passOnProps}
+            >
+                {children}
+            </tr>
+        </Tooltip>
     )
 }
 

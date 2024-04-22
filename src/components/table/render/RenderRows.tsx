@@ -7,8 +7,9 @@ import { useRecoilState } from 'recoil';
 import { EventsState, TermMarksState } from '../../../schema/termMarksSchema';
 import { type FieldFeedbackProps } from '../../../types/table/MarksFieldsFeedback';
 import ShowFieldsBasedValueType from '../components/row/showFieldsBasedValueType';
-import { RenderHeaderProps } from '../../../types/table/TableContentProps';
+import {type RenderHeaderProps } from '../../../types/table/TableContentProps';
 import { usePostDataElement } from '../../../hooks';
+import {checkCanceled} from "../../../utils/table/rows/checkCanceled";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -30,7 +31,8 @@ const useStyles = makeStyles((theme: Theme) =>
         bodyCell: {
             fontSize: theme.typography.pxToRem(13),
             color: theme.palette.text.primary
-        }
+        },
+        opacity: {opacity: 0.5}
     })
 );
 
@@ -72,6 +74,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
         <React.Fragment>
             {
                 rowsData?.map((row, index) => {
+                    console.log(row)
                     const cells = headerData?.filter(x => x.visible)?.map(column => (
                         <RowCell
                             key={column.id}
@@ -90,6 +93,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                     headers={headerData}
                                     prevValues={prevValues}
                                     setPrevValues={setPrevValues}
+                                    inactive={checkCanceled(row.status)}
                                 />
                             </div>
                         </RowCell>
@@ -97,7 +101,8 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                     return (
                         <RowTable
                             key={index}
-                            className={classNames(classes.row, classes.dataRow)}
+                            className={classNames(classes.row, classes.dataRow, checkCanceled(row.status) && classes.opacity)}
+                            inactive={checkCanceled(row.status)}
                         >
                             {cells}
                         </RowTable>

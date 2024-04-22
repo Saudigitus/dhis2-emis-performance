@@ -6,6 +6,12 @@ export enum VariablesTypes {
     Performance = "Performance"
 }
 
+export enum enrollmentStatus {
+    ACTIVE = 'ACTIVE',
+    COMPLETED = 'COMPLETED',
+    CANCELLED = 'CANCELLED'
+}
+
 export interface CustomAttributeProps {
     id: string
     rawId?:string
