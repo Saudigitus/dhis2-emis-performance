@@ -26,6 +26,7 @@ interface RowProps {
     passOnProps?: object
     table?: TableProps
     onClick?: () => void
+    inactive?: boolean
 }
 
 interface RenderHeaderProps {
@@ -61,5 +62,6 @@ interface ShowFieldsBasedValueTypeProps {
     trackedEntity: string
     setPrevValues: (a: Object) => void
     prevValues: any
+    inactive: boolean
 }
 export type { TableComponentProps, HeaderCellProps, RowProps, RenderHeaderProps, TableSortProps, TableDataProps, ShowFieldsBasedValueTypeProps }
