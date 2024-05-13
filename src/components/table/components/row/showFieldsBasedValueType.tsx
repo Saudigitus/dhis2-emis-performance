@@ -24,6 +24,7 @@ export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueType
             data: {
                 event: currentEvent?.event,
                 orgUnit: currentEvent?.orgUnit,
+                enrollment: currentEvent?.enrollment,
                 dataValues: [{
                     dataElement,
                     value: newMark

@@ -44,12 +44,12 @@ export function useTableData() {
 
     const fetchMarks = async (tei: string,selectedTermId:string) => {
         return await engine.query(EVENT_QUERY({
-            ouMode: "SELECTED",
+            //ouMode: "SELECTED",
             // programStatus: "ACTIVE",
             program: program,
             order: "createdAt:desc",
             programStage: selectedTermId,
-            orgUnit: school as unknown as string,
+            //orgUnit: school as unknown as string,
             trackedEntity: tei
         })).catch((error) => {
             show({
