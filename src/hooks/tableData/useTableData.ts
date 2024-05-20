@@ -1,5 +1,5 @@
-import { useRecoilState, useRecoilValue } from "recoil";
-import { useState } from "react";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import React, { useState } from "react";
 import { useDataEngine } from "@dhis2/app-runtime";
 import { useParams } from "../commons/useQueryParams";
 import { HeaderFieldsState } from "../../schema/headersSchema";
@@ -33,7 +33,7 @@ export function useTableData() {
     const engine = useDataEngine();
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const { urlParamiters } = useParams()
-    const [loading, setLoading] = useState<boolean>(false)
+    // const [loading, setLoading] = useState<boolean>(false)
     const [tableData, setTableData] = useState<TableDataProps[]>([])
     const [immutableTeiData, setImmutableTeiData] = useState<any[]>([]) // this variable receives the attributes and dataElements of the registragion programStage
     const { hide, show } = useShowAlerts()
@@ -41,6 +41,7 @@ export function useTableData() {
     const { program, registration } = getDataStoreKeys()
     const [, setAllEvents] = useRecoilState(EventsState);
     const { school } = urlParamiters()
+    const setLoading = useSetRecoilState<boolean>(TableDataLoadingState)
 
     const fetchMarks = async (tei: string,selectedTermId:string) => {
         return await engine.query(EVENT_QUERY({
@@ -170,7 +171,6 @@ export function useTableData() {
     return {
         getData,
         tableData,
-        loading,
         getMarks
     }
 }

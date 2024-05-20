@@ -35,9 +35,10 @@ const usetStyles = makeStyles({
 function Table() {
     const classes = usetStyles()
     const { columns } = useHeader()
-    const { getData, loading, tableData, getMarks } = useTableData()
+    const { getData, tableData, getMarks } = useTableData()
     const { useQuery } = useParams();
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
+    const loading = useRecoilValue(TableDataLoadingState)
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
     const [refetch] = useRecoilState(TeiRefetch)

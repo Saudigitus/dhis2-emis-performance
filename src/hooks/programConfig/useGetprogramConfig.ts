@@ -24,23 +24,13 @@ const PROGRAMQUERY: any = {
 }
 
 export function useGetProgramConfig() {
-    const { isSetSectionType, sectionType } = useGetInitialValues()
     const setProgramConfigState = useSetRecoilState(ProgramConfigState);
     const { hide, show } = useShowAlerts()
     const { getDataStoreData } = getSelectedKey()
     const program = getDataStoreData.program
     const [customLoading, setcustomLoading] = useState(false)
 
-    useEffect(() => {
-        if (isSetSectionType) {
-            setcustomLoading(true)
-            void refetch({
-                id: program
-            })
-        }
-    }, [sectionType, program])
-
-    const { loading, refetch } = useDataQuery<{ results: ProgramConfig }>(PROGRAMQUERY, {
+    const { loading } = useDataQuery<{ results: ProgramConfig }>(PROGRAMQUERY, {
         variables: { id: program },
         onError(error) {
             show({
@@ -53,8 +43,7 @@ export function useGetProgramConfig() {
         onComplete(response) {
             setProgramConfigState(response?.results);
             setcustomLoading(false)
-        },
-        lazy: true
+        }
     })
 
     return { loading: loading || customLoading }
