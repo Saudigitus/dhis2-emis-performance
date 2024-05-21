@@ -76,11 +76,6 @@ function Table() {
 
     return (
         <Paper>
-            {loading &&
-                <CenteredContent>
-                    <CircularLoader />
-                </CenteredContent>
-            }
             <div className={classes.workingListsContainer}>
                 <h4 className={classes.h4}>Performance</h4>
                 <WorkingLists />
@@ -92,21 +87,27 @@ function Table() {
                     <div
                         className={classes.tableContainer}
                     >
-                        <TableComponent>
-                            <>
-                                <RenderHeader
-                                    createSortHandler={() => { }}
-                                    order='asc'
-                                    orderBy='desc'
-                                    rowsHeader={columns}
-                                />
-                                <RenderRows
-                                    loader={loading}
-                                    headerData={columns}
-                                    rowsData={tableData}
-                                />
-                            </>
-                        </TableComponent>
+                        {loading ?
+                            <CenteredContent>
+                                <CircularLoader />
+                            </CenteredContent>
+                            :
+                            <TableComponent>
+                                <>
+                                    <RenderHeader
+                                        createSortHandler={() => { }}
+                                        order='asc'
+                                        orderBy='desc'
+                                        rowsHeader={columns}
+                                    />
+                                    <RenderRows
+                                        loader={loading}
+                                        headerData={columns}
+                                        rowsData={tableData}
+                                    />
+                                </>
+                            </TableComponent>
+                        }
                     </div>
                     <Pagination
                         loading={loading}
