@@ -43,7 +43,7 @@ function Table() {
     const [refetch] = useRecoilState(TeiRefetch)
     const termMarksState = useRecoilValue(TermMarksState)
     const { urlParamiters } = useParams()
-    const { academicYear } = urlParamiters()
+    const { academicYear, programStage, school, class: classSection, grade } = urlParamiters()
     const setLoading = useSetRecoilState(TableDataLoadingState)
 
     useEffect(() => {
@@ -56,14 +56,14 @@ function Table() {
 
     useEffect(() => {
         if (academicYear)
-            void getData(page, pageSize, termMarksState)
-    }, [useQuery(), headerFieldsState, page, pageSize, refetch])
+            void getData(page, pageSize, programStage as unknown as string)
+    }, [school, academicYear, classSection, grade, page, pageSize, refetch])
 
     useEffect(() => {
         if (termMarksState.id !== null && termMarksState.id !== undefined && termMarksState.id !== '' && academicYear) {
-            void getMarks(termMarksState)
+            void getMarks(termMarksState.id)
         }
-    }, [termMarksState])
+    }, [programStage])
 
     const onPageChange = (newPage: number) => {
         setpage(newPage)
@@ -88,7 +88,7 @@ function Table() {
                         className={classes.tableContainer}
                     >
                         {loading ?
-                            <CenteredContent>
+                            <CenteredContent className="p-4">
                                 <CircularLoader />
                             </CenteredContent>
                             :
