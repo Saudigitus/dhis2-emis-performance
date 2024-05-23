@@ -57,7 +57,7 @@ function Table() {
     useEffect(() => {
         if (academicYear)
             void getData(page, pageSize, programStage as unknown as string)
-    }, [school, academicYear, classSection, grade, page, pageSize, refetch])
+    }, [headerFieldsState, page, pageSize, refetch])
 
     useEffect(() => {
         if (termMarksState.id !== null && termMarksState.id !== undefined && termMarksState.id !== '' && academicYear) {
