@@ -7,10 +7,11 @@ import {
 } from "../../../types/utils/FormatRowsDataProps"
 
 export function formatResponseRows({eventsInstances, teiInstances, marksInstances, setImmutableTeiData, programStage}: FormatResponseRowsProps): RowsDataProps[] {
+      //console.log("marksInstances", marksInstances)
     const allRows: RowsDataProps[] = []
     for (const event of eventsInstances) {
         const teiDetails = teiInstances.find(tei => tei.trackedEntity === event.trackedEntity)
-      console.log(teiDetails)
+      //console.log(teiDetails)
         const marksDetails = marksInstances.find(mark => (mark.trackedEntity === event.trackedEntity) && (mark?.enrollment === event?.enrollment))
         setImmutableTeiData((prevState: any) => [...prevState, {
             ...dataValues(event.dataValues), ...(attributes((teiDetails?.attributes) ?? [])),
