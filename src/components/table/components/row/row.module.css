@@ -5,3 +5,9 @@
 .success input {
     border: rgb(23, 167, 66) solid;
 }
+
+.content {
+    color: var(--error-message-color);
+    font-size: 12px !important;
+    line-height: 14px;
+}

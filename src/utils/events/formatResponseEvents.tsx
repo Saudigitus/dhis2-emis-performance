@@ -15,6 +15,7 @@ export function formatResponseEvents(programStageObject: ProgramStageConfig): Cu
                 : programStageDataElement.dataElement?.valueType as unknown as  CustomAttributeProps["valueType"],
             options: { optionSet: programStageDataElement.dataElement?.optionSet },
             initialOptions: { optionSet: programStageDataElement.dataElement?.optionSet },
+            warning: false,
             disabled: false,
             pattern: "",
             visible: true,

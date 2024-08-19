@@ -103,9 +103,12 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
                         case "SHOWWARNING":
                             if (variable.name === programRule.variable) {
                                 if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType))) {
+                                    console.log(programRule.content);
                                     variable.content = programRule.content
+                                    variable.warning = true
                                 } else {
                                     variable.content = ""
+                                    variable.warning = false
                                 }
                             }
                             break;
@@ -144,7 +147,7 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
                                     if (foundOrgUnitGroup[0]?.organisationUnits.findIndex(x => x.value === values["orgUnit"]) > -1) {
                                         const options = getOptionGroups?.filter((op) => op.id === programRule.optionGroup)?.[0]?.options?.slice()?.sort(compareStringByLabel) || []
 
-                                        variable.options = { optionSet: { options: variable?.initialOptions?.optionSet?.options?.filter((obj: any) => !options.some(obj2 => obj2.value === obj.value)) } }
+                                        variable.options = { optionSet: { options: variable?.initialOptions?.optionSet?.options?.filter((obj1: { value: string }) => !options.some(obj2 => obj2.value === obj1.value)) } }
                                     }
                                 }
                             }
@@ -184,9 +187,15 @@ export function removeSpecialCharacters(text: string | undefined) {
 // replace condition with specific variable
 export function replaceConditionVariables(condition: string | undefined, variables: Record<string, string | undefined>) {
     let newcondition = condition;
-    for (const value of Object.keys(variables)) {
-        if (newcondition?.includes(value)) {
-            newcondition = newcondition.replaceAll(value, `'${variables[value]}'` || "''")
+
+    if (condition) {
+        const dataArray = condition.split(/[^a-zA-Z0-9_ ]+/)
+            .map(item => item.trim().replace(/^'(.*)'$/, '$1'))
+
+        for (const value of Object.keys(variables)) {
+            if (dataArray?.includes(value)) {
+                newcondition = newcondition?.replaceAll(value, `'${variables[value]}'` || "''")
+            }
         }
     }
     return newcondition;
@@ -202,7 +211,6 @@ export function replaceEspecifValue(values: Record<string, any>, variables: Reco
     // eslint-disable-next-line no-prototype-builtins
     if (values.hasOwnProperty(variables[variable])) {
         if (values[variables[variable]] != false) {
-
             return `'${values[variables[variable]]}'`;
         }
     }
@@ -219,11 +227,48 @@ function executeFunctionName(functionName: string | undefined, condition: string
             return eval(d2YearsBetween(condition, condition?.split(")")) ?? "");
 
         case "inOrgUnitGroup":
-            console.log(condition);
             return true
+
+        case "length":
+            return eval(compareLength(condition ?? ""))
+
+        case "substring":
+            let function_paramter = returnSubstring(condition?.split("d2:substring(").pop() ?? "")
+            const formated_function = condition?.replaceAll(condition?.split("d2:substring(").pop() as string, function_paramter).replaceAll("d2:substring", '').replaceAll("(", '')
+            return eval(formated_function as string)
+
         default:
             return eval(condition ?? "");
     }
+}
+
+function returnSubstring(value: string) {
+    const [stringToRepair, startStr, endStr] = value.replaceAll(")", "").split(",");
+    const start = Number(startStr);
+    const end = Number(endStr);
+
+    const repairedString = stringToRepair.substring(start, end)
+
+    if (!isNaN(Number.parseInt(repairedString)))
+        return Number.parseInt(repairedString) as unknown as string
+    else
+        return `'${repairedString}'`
+}
+
+//compare values in string
+function compareLength(condition: string) {
+    const results = [];
+    let newcondition = 'false'
+    for (const match of condition?.matchAll(/d2:length\('(.*?)'\)/g)) {
+        results.push(match[1]);
+
+    }
+
+    for (const result of results) {
+        newcondition = condition?.replace(`d2:length('${result}')`, `${result.length}`)
+    }
+
+    return newcondition
 }
 
 // get years between dates
@@ -245,16 +290,20 @@ function d2YearsBetween(origin: string | undefined, condition: string[] | undefi
 
 // replace varieble by value from condition
 export function existValue(condition: string | undefined, values: Record<string, any> = {}, formatKeyValueType: any) {
-    let localCondition = `'false'`;
+    let localCondition = `false`;
+    const dataArray = condition?.split(/[^a-zA-Z0-9_ ]+/)
+        .map(item => item.trim().replace(/^'(.*)'$/, '$1'))
+
     for (const value of Object.keys(values) || []) {
-        if (condition?.includes(value)) {
-            if (localCondition.includes(`'false'`)) {
-                localCondition = condition
+        if (dataArray?.includes(value)) {
+
+            if (localCondition.includes(`false`)) {
+                localCondition = condition as string
             }
 
             switch (formatKeyValueType[value]) {
                 case "BOOLEAN":
-                    localCondition = localCondition.replaceAll(value, `${values[value]}`.replace("false", "0").replace("true", "1"))
+                    localCondition = localCondition.replaceAll(value, `${values[value]}`.replaceAll("false", "0").replaceAll("true", "1"))
                     break;
 
                 case "NUMBER":
