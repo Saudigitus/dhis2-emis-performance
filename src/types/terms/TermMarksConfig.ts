@@ -1,5 +1,6 @@
 export interface TermMarksConfig {
     id: string
     label?: string
-    type: string
+    programStage:string, 
+    programIndicators: { id: string }[]
 }

@@ -10,6 +10,6 @@ export function useHeader() {
     const termMarksState = useRecoilValue(TermMarksState)
 
     return {
-        columns: formatResponse(programConfigState, termMarksState?.id, tableColumns)
+        columns: formatResponse(programConfigState, termMarksState?.programStage, tableColumns)
     }
 }

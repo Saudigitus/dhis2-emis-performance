@@ -5,7 +5,7 @@ import useShowAlerts from '../commons/useShowAlert';
 
 const DATASTORE_QUERY = ({
     config: {
-        resource: "dataStore/semis/values",
+        resource: "dataStore/xtendedStaff/values",
         params: {
             fields: "*"
         }

@@ -1,21 +1,26 @@
 import { useRecoilValue } from "recoil";
-import { SimpleButtonsType } from "../../types/buttons/SimpleButtonsProps";
 import { ProgramConfigState } from "../../schema/programSchema";
 import { getDataStoreKeys } from "../../utils";
+import { TabsState } from "../../schema/tabSchema";
 
 const useGetProgramStageTerms = () => {
   const programConfig = useRecoilValue(ProgramConfigState)
-  const { performance } = getDataStoreKeys()
+  const { assessment } = getDataStoreKeys()
+  const tabsState = useRecoilValue(TabsState)
 
-  const items: SimpleButtonsType[] = performance?.programStages.map(x => {
-        return {
-          id: x.programStage,
-          label: programConfig?.programStages.find(pStage => pStage.id === x.programStage)?.displayName,
-          type: "programStage"
-        }
-      }) ?? [];
+  const items: any[] = assessment.tabGroups?.find((x) => x.label == tabsState.value)?.tabs.map(x => {
+    return {
+      id: x.label,
+      label: x.label,
+      programStage: x.programStage,
+      programIndicators: x.programIndicators,
+      // type: "programStage"
+    }
+  })
+    ?? [];
 
-    
-    return { items }
+
+
+  return { items }
 }
 export default useGetProgramStageTerms

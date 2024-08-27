@@ -26,7 +26,7 @@ function RowTable(props: RowProps): React.ReactElement {
     );
 
     return (
-        <Tooltip arrow={true} disableHoverListener={!inactive}
+        <Tooltip arrow={true} disableHoverListener={!inactive} disableFocusListener={true}
                  title={inactive && 'This ' + sectionName + '\'s enrollment is inactive'}>
             <tr
                 className={classes}

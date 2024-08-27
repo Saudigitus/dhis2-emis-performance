@@ -47,7 +47,21 @@ interface filters {
     dataElements: filterItem[]
 }
 
+interface tabGroupItem {
+    label: string,
+    tabs: {
+        label: string
+        programStage?: string
+        programIndicators?: { id: string }[]
+    }[]
+}
+
+interface assessment {
+    tabGroups: tabGroupItem[]
+}
+
 interface dataStoreRecord {
+    assessment: assessment
     attendance: attendance
     key: string
     trackedEntityType: string
@@ -63,4 +77,4 @@ interface dataStoreRecord {
 }
 
 
-export type { dataStoreRecord, transfer, registration, performance, attendance, simpleProgramStage, filterItem}
+export type { dataStoreRecord, transfer, registration, performance, attendance, simpleProgramStage, filterItem, assessment }

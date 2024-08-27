@@ -4,14 +4,17 @@ import { ProgramConfig } from "../programConfig/ProgramConfig"
 
 interface FormatResponseRowsProps {
     eventsInstances: [{
+        enrollment: string
         trackedEntity: string
         dataValues: dataValuesProps[]
     }]
     teiInstances: [{
+        enrollments: any
         trackedEntity: string
         attributes: attributesProps[]
     }]
     marksInstances: [{
+        enrollment: string
         trackedEntity: string
         dataValues: dataValuesProps[]
     }]

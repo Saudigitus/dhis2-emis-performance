@@ -35,7 +35,7 @@ const usetStyles = makeStyles({
 function Table() {
     const classes = usetStyles()
     const { columns } = useHeader()
-    const { getData, loading, tableData, getMarks } = useTableData()
+    const { getData, loading, tableData } = useTableData()
     const { useQuery } = useParams();
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const [page, setpage] = useState(1)
@@ -56,14 +56,14 @@ function Table() {
 
     useEffect(() => {
         if (academicYear)
-            void getData(page, pageSize, programStage as unknown as string)
+            void getData(page, pageSize, termMarksState?.programStage, termMarksState?.programIndicators?.map((x) => x.id))
     }, [headerFieldsState, page, pageSize, refetch])
 
     useEffect(() => {
         if (termMarksState.id !== null && termMarksState.id !== undefined && termMarksState.id !== '' && academicYear) {
-            void getMarks(termMarksState.id)
+            // void getMarks(termMarksState.programStage)
         }
-    }, [programStage])
+    }, [termMarksState.programStage])
 
     const onPageChange = (newPage: number) => {
         setpage(newPage)

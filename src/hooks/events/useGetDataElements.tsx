@@ -1,5 +1,5 @@
 import { useDataQuery } from "@dhis2/app-runtime";
-import { GeTDataElementsProps, fieldsType } from "../../types/api/WithoutRegistrationProps";
+import { GetDataElementsProps, fieldsType } from "../../types/api/WithoutRegistrationProps";
 import { formatResponseEvents } from "../../utils";
 
 const DATA_ELEMENTS_QUERY = (id: string, type: keyof typeof fieldsType) => ({
@@ -12,7 +12,7 @@ const DATA_ELEMENTS_QUERY = (id: string, type: keyof typeof fieldsType) => ({
   }
 });
 
-function useGetDataElements(props: GeTDataElementsProps) {
+function useGetDataElements(props: GetDataElementsProps) {
     const { programStageId, type = "programStage" } = props
     const { data, loading, error } = useDataQuery<{ result: any }>(DATA_ELEMENTS_QUERY(programStageId, type));
 

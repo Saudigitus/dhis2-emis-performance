@@ -1,9 +1,9 @@
 import React from 'react'
-import { IconUserGroup16, ButtonStrip } from "@dhis2/ui";
+import { IconUserGroup16, ButtonStrip, Button } from "@dhis2/ui";
 import DropdownButtonComponent from '../../../buttons/DropdownButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useParams } from '../../../../hooks';
-import { FlyoutOptionsProps } from '../../../../types/Buttons/FlyoutOptionsProps';
+import { FlyoutOptionsProps } from '../../../../types/buttons/FlyoutOptionsProps';
 
 function EnrollmentActionsButtons() {
   const { urlParamiters } = useParams();

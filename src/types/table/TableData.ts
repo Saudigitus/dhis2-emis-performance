@@ -28,6 +28,7 @@ export interface TeiQueryProps {
 export interface EventQueryResults {
     results: {
         instances: [{
+            enrollment: string
             trackedEntity: string
             dataValues: dataValuesProps[]
         }]
@@ -39,9 +40,11 @@ export interface MarksQueryResults {
         instances: any
     }
 }
+
 export interface TeiQueryResults {
     results: {
         instances: [{
+            enrollments: any
             trackedEntity: string
             attributes: attributesProps[]
         }]

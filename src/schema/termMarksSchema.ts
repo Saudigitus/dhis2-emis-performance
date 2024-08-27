@@ -7,7 +7,8 @@ export const TermMarksState = atom<TermMarksConfig>({
     default: {
         id: "",
         label: "",
-        type: ""
+        programStage:"", 
+        programIndicators:[]
     }
 })
 

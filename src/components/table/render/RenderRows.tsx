@@ -48,7 +48,6 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
         feedbackType: ''
     })
 
-    console.log("allEvents", allEvents)
     useEffect(() => {
         setShowFeedBack({
             dataElement: '',
@@ -75,7 +74,6 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
         <React.Fragment>
             {
                 rowsData?.map((row, index) => {
-                    //console.log(row)
                     const cells = headerData?.filter(x => x.visible)?.map(column => (
                         <RowCell
                             key={column.id}

@@ -19,14 +19,13 @@ export default function SwitchButtonView(): React.ReactElement {
     }
 
     return (() => {
-      setSelectedTerm({ id: '', label: '', type: '' })
+      setSelectedTerm({ id: '', label: '', programStage: '', programIndicators:[] })
     })
   }, [programStage])
 
-
   return (
     <div>
-      {items?.length > 3
+      {items?.length > 4
         ? <SimpleDropdownButton items={items} selectedTerm={selectedTerm} setSelectedTerm={setSelectedTerm} />
         : <SimpleButton items={items} selectedTerm={selectedTerm} setSelectedTerm={setSelectedTerm} />}
     </div>

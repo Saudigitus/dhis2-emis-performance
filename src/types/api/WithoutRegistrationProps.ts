@@ -9,14 +9,14 @@ interface EventQueryProps {
     ouMode: string
     program: string
     order: string
-    programStatus: string
+    programStatus?: string
     programStage: string
     orgUnit: string
     filter?: string[]
     filterAttributes?: string[]
 }
 
-interface GeTDataElementsProps {
+interface GetDataElementsProps {
     programStageId: string
     type?: keyof typeof fieldsType
 }
@@ -29,10 +29,11 @@ interface dataValuesProps {
 interface EventQueryResults {
     results: {
         instances: [{
+            enrollment: string
             trackedEntity: string
             dataValues: dataValuesProps[]
         }]
     }
 }
 
-export type { EventQueryProps, GeTDataElementsProps, EventQueryResults, dataValuesProps }
+export type { EventQueryProps, GetDataElementsProps, EventQueryResults, dataValuesProps }
