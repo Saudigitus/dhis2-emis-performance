@@ -1,32 +1,90 @@
-import React from 'react'
-import { IconUserGroup16, ButtonStrip } from "@dhis2/ui";
-import DropdownButtonComponent from '../../../buttons/DropdownButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import { useParams } from '../../../../hooks';
-import { FlyoutOptionsProps } from '../../../../types/Buttons/FlyoutOptionsProps';
+import React, { useState } from "react"
+import { IconUserGroup16, ButtonStrip } from "@dhis2/ui"
+import DropdownButtonComponent from "../../../buttons/DropdownButton"
+import Tooltip from "@material-ui/core/Tooltip"
+import { useParams } from "../../../../hooks"
+import type { FlyoutOptionsProps } from "../../../../types/Buttons/FlyoutOptionsProps"
+import styles from "./enrollmentActionsButtons.module.css"
+import {
+  ModalComponent,
+  ModalContentComponent,
+  ImportContent
+} from "../../../../components"
+import ModalExportTemplateContent from "../../../modal/ModalExportTemplateContent"
 
 function EnrollmentActionsButtons() {
-  const { urlParamiters } = useParams();
-  const { school: orgUnit } = urlParamiters();
+  const { urlParamiters } = useParams()
+  const { school: orgUnit } = urlParamiters()
+  const [openExportEmptyTemplate, setOpenExportEmptyTemplate] =
+    useState<boolean>(false)
+  const [open, setOpen] = useState<boolean>(false)
+  const [openImport, setOpenImport] = useState<boolean>(false)
 
-  const dropdownOptions: FlyoutOptionsProps[] = [
-    { label: "Import studentss", divider: true, onClick: () => { alert("Import students"); } },
-    { label: "Export template with data", divider: false, onClick: () => { alert("Export template with data"); } }
-  ];
+  const enrollmentOptions: FlyoutOptionsProps[] = [
+    {
+      label: "Export students list",
+      divider: false,
+      onClick: () => {
+        setOpenExportEmptyTemplate(true)
+      }
+    }
+  ]
 
   return (
     <div>
       <ButtonStrip>
-        <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
-          <span className='bulk-performance__hide'>
+        <Tooltip
+          title={
+            orgUnit === null ? "Please select an organisation unit before" : ""
+          }
+        >
+          <span>
             <DropdownButtonComponent
-              name="Bulk Performance"
+              name={
+                (
+                  <span className={styles.work_buttons_text}>
+                    Bulk Performance
+                  </span>
+                ) as unknown as string
+              }
+              disabled={false}
+              // disabled={!grade || !currentClass}
               icon={<IconUserGroup16 />}
-              options={dropdownOptions}
+              options={enrollmentOptions}
             />
           </span>
         </Tooltip>
       </ButtonStrip>
+      {open && (
+        <ModalComponent
+          title="Bulk Student Final Result"
+          open={open}
+          setOpen={setOpen}
+        >
+          <ModalContentComponent setOpen={setOpen} />
+        </ModalComponent>
+      )}
+      {openImport && (
+        <ModalComponent
+          title="Import Students"
+          open={openImport}
+          setOpen={setOpenImport}
+        >
+          <ImportContent setOpen={setOpen} />
+        </ModalComponent>
+      )}
+      {openExportEmptyTemplate && (
+        <ModalComponent
+          title={`Data Import Template Export`}
+          open={openExportEmptyTemplate}
+          setOpen={setOpenExportEmptyTemplate}
+        >
+          <ModalExportTemplateContent
+            sectionName={""}
+            setOpen={setOpenExportEmptyTemplate}
+          />
+        </ModalComponent>
+      )}
     </div>
   )
 }

@@ -1,19 +1,31 @@
-import React from "react";
-import WithPadding from "../template/WithPadding";
-import Subtitle from "../text/subtitle";
-import {
-    ModalActions,
-    Button,
-    ButtonStrip,
-    Divider
-  } from "@dhis2/ui";
-import { ModalContentProps } from "../../types/modal/ModalProps";
+import React from "react"
+import WithPadding from "../template/WithPadding"
+import Subtitle from "../text/subtitle"
+import { ModalActions, Button, ButtonStrip, Divider } from "@dhis2/ui"
+import type { ModalContentProps } from "../../types/modal/ModalProps"
 
-function ModalContentComponent({ setOpen }: ModalContentProps): React.ReactElement {
+function ModalContentComponent({
+  setOpen
+}: ModalContentProps): React.ReactElement {
   const modalActions = [
-    { label: "Cancel", disabled: false, loading: false, onClick: () => { setOpen(false) } },
-    { label: "Import", primary: true, disabled: false, loading: false, onClick: () => { setOpen(false) } }
-  ];
+    {
+      label: "Cancel",
+      disabled: false,
+      loading: false,
+      onClick: () => {
+        setOpen(false)
+      }
+    },
+    {
+      label: "Import",
+      primary: true,
+      disabled: false,
+      loading: false,
+      onClick: () => {
+        setOpen(false)
+      }
+    }
+  ]
 
   return (
     <div>
@@ -25,17 +37,14 @@ function ModalContentComponent({ setOpen }: ModalContentProps): React.ReactEleme
       <ModalActions>
         <ButtonStrip end>
           {modalActions.map((action, i) => (
-            <Button
-              key={i}
-              {...action}
-            >
+            <Button key={i} {...action}>
               {action.loading ? "Loading..." : action.label}
             </Button>
           ))}
         </ButtonStrip>
       </ModalActions>
     </div>
-  );
+  )
 }
 
-export default ModalContentComponent;
+export default ModalContentComponent

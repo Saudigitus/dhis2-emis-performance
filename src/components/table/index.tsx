@@ -1,2 +1,3 @@
 import Table from "./render/Table"
-export { Table }
+import { ImportContent } from "../modal"
+export { Table, ImportContent }
