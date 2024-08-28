@@ -14,6 +14,8 @@ import { TermMarksState } from '../../../schema/termMarksSchema';
 import { useHeader, useParams, useTableData } from '../../../hooks';
 import { TeiRefetch } from '../../../schema/refecthTeiSchema';
 import { TableDataLoadingState } from '../../../schema/tableDataLoadingSchema';
+import { CustomDhis2RulesEngine } from '../../../hooks/programRules/rules-engine/RulesEngine';
+import { getSelectedKey } from '../../../utils';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -34,17 +36,29 @@ const usetStyles = makeStyles({
 
 function Table() {
     const classes = usetStyles()
-    const { columns } = useHeader()
+    const { columns = [] } = useHeader()
     const { getData, loading, tableData, getMarks } = useTableData()
-    const { useQuery } = useParams();
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
     const [refetch] = useRecoilState(TeiRefetch)
     const termMarksState = useRecoilValue(TermMarksState)
     const { urlParamiters } = useParams()
-    const { academicYear, programStage, school, class: classSection, grade } = urlParamiters()
+    const { academicYear, programStage, grade } = urlParamiters()
     const setLoading = useSetRecoilState(TableDataLoadingState)
+    const { getDataStoreData } = getSelectedKey()
+    const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
+        type: "programStage",
+        variables: columns.map((column: any) => { return { ...column, name: column.id.split("_")[0] } }),
+        formatKeyValueType: { [getDataStoreData.registration.grade as string]: "LIST" },
+        values: { [getDataStoreData.registration.grade as string]: grade, testi: "test" }
+    })
+
+    useEffect(() => {
+        if (grade) {
+            runRulesEngine()
+        }
+    }, [grade, columns])
 
     useEffect(() => {
         setLoading(loading)
@@ -98,11 +112,11 @@ function Table() {
                                         createSortHandler={() => { }}
                                         order='asc'
                                         orderBy='desc'
-                                        rowsHeader={columns}
+                                        rowsHeader={updatedVariables}
                                     />
                                     <RenderRows
                                         loader={loading}
-                                        headerData={columns}
+                                        headerData={updatedVariables}
                                         rowsData={tableData}
                                     />
                                 </>

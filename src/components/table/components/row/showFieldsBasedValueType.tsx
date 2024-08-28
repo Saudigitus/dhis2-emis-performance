@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { type CustomAttributeProps, VariablesTypes } from '../../../../types/variables/AttributeColumns';
 import { Form } from 'react-final-form';
 import GenericFields from '../../../genericFields/GenericFields';
@@ -12,12 +12,34 @@ import { IconButton } from '@material-ui/core';
 import CropOriginal from '@material-ui/icons/CropOriginal';
 import { useRecoilValue } from 'recoil';
 import { ProgramConfigState } from '../../../../schema/programSchema';
+import { CustomDhis2RulesEngine } from '../../../../hooks/programRules/rules-engine/RulesEngine';
+import Tooltip from "@material-ui/core/Tooltip";
 
 export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueTypeProps) {
     const { column, value, currentEvent, saveMarks, showFeedBack, setShowFeedBack, headers, loader, trackedEntity, prevValues, setPrevValues, inactive } = props;
     const dataElement = column.id.split('_')[0]
     const { imageUrl } = GetImageUrl()
     const programConfigState = useRecoilValue(ProgramConfigState);
+    const [values, setValues] = useState<Record<string, string>>({})
+    const { name, ...rest } = column
+    const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
+        type: "programStage",
+        variables: [{ ...rest, name: dataElement }],
+        formatKeyValueType: { [dataElement]: column.valueType },
+        values
+    })
+
+    useEffect(() => {
+        if (column.id.split('_')[1]) {
+            runRulesEngine()
+        }
+    }, [values])
+
+    useEffect(() => {
+        if (Object.keys(values).length === 0)
+            setValues({ [dataElement]: value })
+    }, [])
+
 
     function save(newMark: any) {
         void saveMarks({
@@ -44,8 +66,9 @@ export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueType
     }
 
     const onSubmit = (event: any, pristine: boolean) => {
-        if (event.target.value && !pristine && prevValues[column.id] !== event.target.value) {
-            setPrevValues((prevValues: any) => ({ ...prevValues, [column.id]: event.target.value }))
+        if (event.target.value && prevValues[column.id] !== event.target.value) {
+            setValues({ [dataElement]: event.target.value })
+            setPrevValues((prevValues: any) => ({ ...prevValues, [column.id]: event?.target?.value }))
             save(event.target.value)
         }
     }
@@ -54,16 +77,20 @@ export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueType
         return (
             <Form
                 onSubmit={() => { }}
-                initialValues={{ [column.name]: value }}
+                initialValues={{ [dataElement]: value }}
                 render={({ pristine }) => (
                     <form onClick={(event) => { event.stopPropagation() }}
                         onBlur={(event) => { onSubmit(event, pristine) }}
                         className={showFeedBack.dataElement === `${currentEvent?.event}/${dataElement}` && styles[showFeedBack.feedbackType]}>
-                        <GenericFields
-                            attribute={column}
-                            disabled={((loader === true) || inactive)}
-                            valueType={column.valueType}
-                        />
+                        <Tooltip arrow={true} title={updatedVariables[0]?.content}>
+                            <div>
+                                <GenericFields
+                                    attribute={updatedVariables[0]}
+                                    disabled={((loader === true) || inactive)}
+                                    valueType={updatedVariables[0]?.valueType}
+                                />
+                            </div>
+                        </Tooltip>
                     </form>
                 )}
             />

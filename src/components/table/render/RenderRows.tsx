@@ -48,7 +48,6 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
         feedbackType: ''
     })
 
-    console.log("allEvents", allEvents)
     useEffect(() => {
         setShowFeedBack({
             dataElement: '',

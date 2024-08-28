@@ -8,8 +8,6 @@ import DragDropList from '../../../dragDrop/DragDropList';
 import { Button } from 'react-bootstrap';
 import { DialogSelectColumnsProps } from '../../../../types/table/ConfigColumnsProps';
 import { CustomAttributeProps } from '../../../../types/variables/AttributeColumns';
-import { useRecoilValue } from 'recoil';
-import { TermMarksState } from '../../../../schema/termMarksSchema';
 
 function DialogSelectColumns(props: DialogSelectColumnsProps) {
     const { open, onClose, headers = [], updateVariables, filteredHeaders } = props;

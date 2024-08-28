@@ -3,7 +3,9 @@ import classNames from 'classnames';
 import defaultClasses from '../table.module.css';
 import Tooltip from "@material-ui/core/Tooltip";
 import useGetSectionTypeLabel from "../../../../hooks/commons/useGetSectionTypeLabel";
-import {type RowProps } from '../../../../types/table/TableContentProps';
+import { type RowProps } from '../../../../types/table/TableContentProps';
+
+
 function RowTable(props: RowProps): React.ReactElement {
     const {
         children,
@@ -12,7 +14,7 @@ function RowTable(props: RowProps): React.ReactElement {
         passOnProps,
         inactive = false
     } = props;
-    const {sectionName} = useGetSectionTypeLabel()
+    const { sectionName } = useGetSectionTypeLabel()
 
     const classes = classNames(
         defaultClasses.tableRow,
@@ -26,15 +28,23 @@ function RowTable(props: RowProps): React.ReactElement {
     );
 
     return (
-        <Tooltip arrow={true} disableHoverListener={!inactive}
-                 title={inactive && 'This ' + sectionName + '\'s enrollment is inactive'}>
+        inactive ?
+            <Tooltip arrow={true} disableHoverListener={!inactive}
+                title={'This ' + sectionName + '\'s enrollment is inactive'}>
+                <tr
+                    className={classes}
+                    {...passOnProps}
+                >
+                    {children}
+                </tr>
+            </Tooltip>
+            :
             <tr
                 className={classes}
                 {...passOnProps}
             >
                 {children}
             </tr>
-        </Tooltip>
     )
 }
 
