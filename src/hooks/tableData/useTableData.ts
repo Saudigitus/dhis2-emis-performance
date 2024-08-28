@@ -4,7 +4,7 @@ import { useDataEngine } from "@dhis2/app-runtime";
 import { useParams } from "../commons/useQueryParams";
 import { HeaderFieldsState } from "../../schema/headersSchema";
 import useShowAlerts from "../commons/useShowAlert";
-import { EventsState, TermMarksState } from "../../schema/termMarksSchema";
+import { EventsState, SubTabState } from "../../schema/termMarksSchema";
 import { type TableDataProps, type EventQueryProps, type TeiQueryProps, type MarksQueryResults, type EventQueryResults, type TeiQueryResults } from "../../types/table/TableData";
 import { formatResponseRowsMarks, formatResponseRows, getDataStoreKeys } from "../../utils";
 import { useGetProgramIndicators } from "../programIndicators/useGetProgramIndicators";

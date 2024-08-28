@@ -2,7 +2,7 @@ import { atom } from "recoil"
 import { TermMarksConfig } from "../types/terms/TermMarksConfig"
 
 
-export const TermMarksState = atom<TermMarksConfig>({
+export const SubTabState = atom<TermMarksConfig>({
     key: "termMarks-state",
     default: {
         id: "",

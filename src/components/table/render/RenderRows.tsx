@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { makeStyles, type Theme, createStyles } from '@material-ui/core/styles';
 import { RowCell, RowTable } from '../components';
 import { useRecoilState } from 'recoil';
-import { EventsState, TermMarksState } from '../../../schema/termMarksSchema';
+import { EventsState, SubTabState } from '../../../schema/termMarksSchema';
 import { type FieldFeedbackProps } from '../../../types/table/MarksFieldsFeedback';
 import ShowFieldsBasedValueType from '../components/row/showFieldsBasedValueType';
 import {type RenderHeaderProps } from '../../../types/table/TableContentProps';
@@ -40,7 +40,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
     const { rowsData, headerData, loader } = props
     const classes = useStyles()
     const [allEvents] = useRecoilState(EventsState);
-    const [selectedTerm] = useRecoilState(TermMarksState);
+    const [selectedTerm] = useRecoilState(SubTabState);
     const { saveMarks } = usePostDataElement()
     const [prevValues, setPrevValues] = useState<Object>({})
     const [showFeedBack, setShowFeedBack] = useState<FieldFeedbackProps>({

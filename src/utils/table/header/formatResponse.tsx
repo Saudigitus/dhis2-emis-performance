@@ -3,8 +3,9 @@ import { type ProgramConfig } from "../../../types/programConfig/ProgramConfig";
 import { VariablesTypes, type CustomAttributeProps } from "../../../types/variables/AttributeColumns";
 import { useMemo } from "react";
 
-export function formatResponse(data: ProgramConfig, programStageId: string, tableColumns: CustomAttributeProps[] = []): CustomAttributeProps[] {
+export function formatResponse(data: ProgramConfig, programStageId: string, tableColumns: CustomAttributeProps[] = [], programIndicators: any[]): CustomAttributeProps[] {
     const originalData = ((data?.programStages?.find(programStge => programStge.id === programStageId)) ?? {} as unknown as ProgramConfig["programStages"][0])
+    const programIndicatorsData = data?.programIndicators?.filter((x) => programIndicators?.map((x) => x.id).join(",").includes(x.id))
 
     function getProgramStageDataElement(): [] {
         return Object.keys(originalData).length > 0
@@ -31,6 +32,31 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
                 }
             }) as []
             : []
+    }
+
+    function getProgramIndicatorsHeaders(): [] {
+        return programIndicatorsData?.map((programIndicator) => {
+            return {
+                id: programIndicator.id,
+                rawId: programIndicator.id,
+                displayName: programIndicator.displayName,
+                header: programIndicator.displayName,
+                required: false,
+                name: programIndicator.displayName,
+                labelName: programIndicator.displayName,
+                valueType: Attribute.valueType.NUMBER as unknown as CustomAttributeProps["valueType"],
+                options: { optionSet: {} },
+                initialOptions: { optionSet: {} },
+                visible: true,
+                disabled: false,
+                pattern: '',
+                searchable: false,
+                error: false,
+                content: '',
+                key: programIndicator.id + "_" + programStageId,
+                type: VariablesTypes.Performance
+            }
+        }) as []
     }
 
     function getHeaders() {
@@ -64,8 +90,10 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
                 key: item.trackedEntityAttribute.id,
                 type: VariablesTypes.Attribute
             }
-        }).concat(getProgramStageDataElement())
-    }, [data, programStageId, tableColumns]);
+        })
+            .concat(getProgramStageDataElement())
+            .concat(getProgramIndicatorsHeaders())
+    }, [data, programStageId, tableColumns, programIndicators]);
 
     return headerResponse;
 }

@@ -6,7 +6,6 @@ const PROGRAM_INDICATORS_QUERY = (queryProps: any, program: string) => ({
         id: program,
         resource: "analytics/enrollments/query",
         params: {
-            fields: "*",
             ...queryProps
         }
     }
@@ -19,7 +18,7 @@ export const useGetProgramIndicators = () => {
     const getProgramIndicators = async (programIndicators: string[], orgUnit: any, program: string, filter: any[]) => {
         return await engine.query(PROGRAM_INDICATORS_QUERY({
             dimension: `ou:${orgUnit},${programIndicators.join(",")}`,
-            headers: `${programIndicators.join(",")}`,
+            headers: `ouname,${programIndicators.join(",")}`,
             totalPages: false,
             filter: filter,
             displayProperty: 'NAME',

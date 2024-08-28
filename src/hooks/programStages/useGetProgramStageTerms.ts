@@ -1,10 +1,8 @@
 import { useRecoilValue } from "recoil";
-import { ProgramConfigState } from "../../schema/programSchema";
 import { getDataStoreKeys } from "../../utils";
 import { TabsState } from "../../schema/tabSchema";
 
 const useGetProgramStageTerms = () => {
-  const programConfig = useRecoilValue(ProgramConfigState)
   const { assessment } = getDataStoreKeys()
   const tabsState = useRecoilValue(TabsState)
 
@@ -14,7 +12,7 @@ const useGetProgramStageTerms = () => {
       label: x.label,
       programStage: x.programStage,
       programIndicators: x.programIndicators,
-      // type: "programStage"
+      hasProgramStage: x.programStage ?? false
     }
   })
     ?? [];

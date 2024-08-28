@@ -1,6 +1,12 @@
 import { ProgramStageConfig } from "../programStageConfig/ProgramStageConfig"
 import { OptionsProps } from "../variables/AttributeColumns"
 
+interface ProgramIndicatorConfig {
+    id: string
+    expression: string
+    displayName: string
+    displayFormName: string
+}
 interface ProgramConfig {
     displayName: string
     id: string
@@ -8,6 +14,7 @@ interface ProgramConfig {
     access?: any
     programType: string
     programStages: ProgramStageConfig[]
+    programIndicators: ProgramIndicatorConfig[],
     programTrackedEntityAttributes: [
         {
             trackedEntityAttribute: {
@@ -35,4 +42,4 @@ interface ProgramConfig {
     }
 }
 
-export type { ProgramConfig }
+export type { ProgramConfig, ProgramIndicatorConfig }

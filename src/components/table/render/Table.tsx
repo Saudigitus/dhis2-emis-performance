@@ -10,7 +10,7 @@ import WithPadding from '../../template/WithPadding';
 import WorkingLists from '../components/filters/workingList/WorkingLists';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { HeaderFieldsState } from '../../../schema/headersSchema';
-import { TermMarksState } from '../../../schema/termMarksSchema';
+import { SubTabState } from '../../../schema/termMarksSchema';
 import { useHeader, useParams, useTableData } from '../../../hooks';
 import { TeiRefetch } from '../../../schema/refecthTeiSchema';
 import { TableDataLoadingState } from '../../../schema/tableDataLoadingSchema';
@@ -41,7 +41,7 @@ function Table() {
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
     const [refetch] = useRecoilState(TeiRefetch)
-    const termMarksState = useRecoilValue(TermMarksState)
+    const subTabState = useRecoilValue(SubTabState)
     const { urlParamiters } = useParams()
     const { academicYear, programStage, school, class: classSection, grade } = urlParamiters()
     const setLoading = useSetRecoilState(TableDataLoadingState)
@@ -56,14 +56,14 @@ function Table() {
 
     useEffect(() => {
         if (academicYear)
-            void getData(page, pageSize, termMarksState?.programStage, termMarksState?.programIndicators?.map((x) => x.id))
+            void getData(page, pageSize, subTabState?.programStage, subTabState?.programIndicators?.map((x) => x.id))
     }, [headerFieldsState, page, pageSize, refetch])
 
     useEffect(() => {
-        if (termMarksState.id !== null && termMarksState.id !== undefined && termMarksState.id !== '' && academicYear) {
-            // void getMarks(termMarksState.programStage)
+        if (subTabState.id !== null && subTabState.id !== undefined && subTabState.id !== '' && academicYear) {
+            // void getMarks(subTabState.programStage)
         }
-    }, [termMarksState.programStage])
+    }, [subTabState.programStage])
 
     const onPageChange = (newPage: number) => {
         setpage(newPage)

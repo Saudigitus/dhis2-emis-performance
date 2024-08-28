@@ -1,37 +1,43 @@
 import React, { useEffect } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import WithPadding from "../../../../template/WithPadding";
 import { TabsState } from "../../../../../schema/tabSchema";
 import { TabElementsProps } from "../../../../../types/tabs/TabsTypes";
 import { SelectedTabSchema } from "../../../../../types/table/SelectedTabTypes";
 import TabComponent from "../../../../tabs/TabComponent";
-import EnrollmentActionsButtons from '../../enrollmentButtons/EnrollmentActionsButtons';
 import { useParams } from "../../../../../hooks/commons/useQueryParams";
-import { DataStoreState } from "../../../../../schema/dataStoreSchema";
 import { getDataStoreKeys } from "../../../../../utils";
+import { SubTabState } from "../../../../../schema/termMarksSchema";
+import { useGetProgramStageTerms } from "../../../../../hooks";
+import { useGetTabsElements } from "../../../../../utils/tabs/tabsElements";
+import EnrollmentActionsButtons from "../../enrollmentButtons/EnrollmentActionsButtons";
 
 
 function WorkingLists() {
-  const { add, urlParamiters } = useParams()
+  const { add, urlParamiters, remove } = useParams()
   const { groupTab } = urlParamiters()
   const { assessment } = getDataStoreKeys()
+  const { items } = useGetProgramStageTerms()
+  const { tabsElements } = useGetTabsElements()
   const [selectedValue, setSelectedValue] = useRecoilState(TabsState);
-
-  const tabsElements = assessment?.tabGroups?.map((option) => ({
-      name: option.label,
-      value: option.label,
-    })) ?? []
+  const [, setSelectedTerm] = useRecoilState(SubTabState);
 
   useEffect(() => {
-    if (groupTab) {
-      const tab = tabsElements.find((x: any) => x.value == groupTab)
-      setSelectedValue(tab as unknown as SelectedTabSchema)
-    }
+    const tab = tabsElements.find((x: any) => x.value == groupTab) ?? tabsElements[0]
+    setSelectedValue(tab as unknown as SelectedTabSchema)
   }, [assessment])
 
   useEffect(() => {
     add("groupTab", selectedValue.value)
   }, [selectedValue])
+
+  useEffect(() => {
+    setSelectedTerm(items[0])
+    if (items[0]?.programStage)
+      add("programStage", items[0]?.id)
+    else
+      remove("programStage")
+  }, [groupTab])
 
 
   return (
@@ -43,9 +49,9 @@ function WorkingLists() {
           setSelectedValue={setSelectedValue}
         />
 
-        {/* <WithPadding p="10px">
+        <WithPadding p="10px">
           <EnrollmentActionsButtons />
-        </WithPadding> */}
+        </WithPadding>
 
       </div>
     </WithPadding>
