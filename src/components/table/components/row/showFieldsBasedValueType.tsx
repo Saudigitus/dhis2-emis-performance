@@ -22,10 +22,17 @@ export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueType
     const programConfigState = useRecoilValue(ProgramConfigState);
     const [values, setValues] = useState<Record<string, string>>({})
     const { name, ...rest } = column
-    const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({ variables: [{ ...rest, name: dataElement }], values: values, type: "programStage", formatKeyValueType: { [dataElement]: column.valueType } })
+    const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
+        type: "programStage",
+        variables: [{ ...rest, name: dataElement }],
+        formatKeyValueType: { [dataElement]: column.valueType },
+        values
+    })
 
     useEffect(() => {
-        runRulesEngine()
+        if (column.id.split('_')[1]) {
+            runRulesEngine()
+        }
     }, [values])
 
     useEffect(() => {
@@ -75,17 +82,14 @@ export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueType
                     <form onClick={(event) => { event.stopPropagation() }}
                         onBlur={(event) => { onSubmit(event, pristine) }}
                         className={showFeedBack.dataElement === `${currentEvent?.event}/${dataElement}` && styles[showFeedBack.feedbackType]}>
-                        <Tooltip arrow={true} title={updatedVariables[0].content}>
-                            <>
+                        <Tooltip arrow={true} title={updatedVariables[0]?.content}>
+                            <div>
                                 <GenericFields
                                     attribute={updatedVariables[0]}
                                     disabled={((loader === true) || inactive)}
-                                    valueType={column.valueType}
+                                    valueType={updatedVariables[0]?.valueType}
                                 />
-                                <span className={styles.content}>
-                                    {updatedVariables[0].content}
-                                </span>
-                            </>
+                            </div>
                         </Tooltip>
                     </form>
                 )}

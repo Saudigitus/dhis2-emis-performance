@@ -5,7 +5,6 @@ import { OptionGroupsConfigState } from "../../../schema/optionGroupsSchema";
 import { OrgUnitsGroupsConfigState } from "../../../schema/orgUnitsGroupSchema";
 import { compareStringByLabel } from "../../../utils/commons/sortStringsByLabel";
 import { ProgramRulesFormatedState } from "../../../schema/programRulesFormated";
-import { ProgramConfigState } from "../../../schema/programSchema";
 
 interface RulesEngineProps {
     variables: any[]
@@ -15,12 +14,11 @@ interface RulesEngineProps {
 }
 
 export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
-    const { variables, values, type, formatKeyValueType } = props
+    const { variables = [], values, type, formatKeyValueType } = props
     const getOptionGroups = useRecoilValue(OptionGroupsConfigState)
     const newProgramRules = useRecoilValue(ProgramRulesFormatedState)
     const [updatedVariables, setupdatedVariables] = useState([...variables])
     const orgUnitsGroups = useRecoilValue(OrgUnitsGroupsConfigState)
-    const programConfig = useRecoilValue(ProgramConfigState)
 
     useEffect(() => {
         if (updatedVariables.length === 0) {
@@ -103,7 +101,6 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
                         case "SHOWWARNING":
                             if (variable.name === programRule.variable) {
                                 if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType))) {
-                                    console.log(programRule.content);
                                     variable.content = programRule.content
                                     variable.warning = true
                                 } else {
@@ -186,18 +183,17 @@ export function removeSpecialCharacters(text: string | undefined) {
 
 // replace condition with specific variable
 export function replaceConditionVariables(condition: string | undefined, variables: Record<string, string | undefined>) {
-    let newcondition = condition;
-
-    if (condition) {
-        const dataArray = condition.split(/[^a-zA-Z0-9_ ]+/)
-            .map(item => item.trim().replace(/^'(.*)'$/, '$1'))
-
-        for (const value of Object.keys(variables)) {
-            if (dataArray?.includes(value)) {
-                newcondition = newcondition?.replaceAll(value, `'${variables[value]}'` || "''")
-            }
-        }
+    if (!condition) {
+        return condition;
     }
+
+    // Regex para capturar palavras completas fora de aspas simples
+    const regex = /(\b\w+\b)(?=(?:[^']*'[^']*')*[^']*$)/g;
+
+    // Substituição
+    const newcondition = condition.replace(regex, (match) => {
+        return variables[match] !== undefined ? `'${variables[match]}'` : match;
+    });
     return newcondition;
 }
 
