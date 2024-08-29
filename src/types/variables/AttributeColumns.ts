@@ -3,6 +3,7 @@ import { type Attribute } from '../generated/models';
 export enum VariablesTypes {
     DataElement = "dataElement",
     Attribute = "attribute",
+    Custom = "custom",
     Performance = "Performance"
 }
 

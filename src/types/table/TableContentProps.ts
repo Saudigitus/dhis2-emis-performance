@@ -64,4 +64,17 @@ interface ShowFieldsBasedValueTypeProps {
     prevValues: any
     inactive: boolean
 }
-export type { TableComponentProps, HeaderCellProps, RowProps, RenderHeaderProps, TableSortProps, TableDataProps, ShowFieldsBasedValueTypeProps }
+interface RowActionsType {
+    label: string
+    onClick: (arg?: any) => void
+    icon: React.ReactNode
+    disabled: boolean
+    color?: string
+}
+interface RowActionsProps {
+    row: any
+    onSelectTei?: (arg: any) => void
+    onShowHistory?: () => void
+}
+
+export type { TableComponentProps, HeaderCellProps, RowProps, RenderHeaderProps, TableSortProps, TableDataProps, ShowFieldsBasedValueTypeProps, RowActionsProps, RowActionsType }

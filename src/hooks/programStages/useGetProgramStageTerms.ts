@@ -12,7 +12,7 @@ const useGetProgramStageTerms = () => {
       label: x.label,
       programStage: x.programStage,
       programIndicators: x.programIndicators,
-      hasProgramStage: x.programStage ?? false
+      hasProgramStage: Boolean(x.programStage)
     }
   })
     ?? [];

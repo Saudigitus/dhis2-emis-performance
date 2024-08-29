@@ -1,0 +1,38 @@
+@media screen and (max-width: 1131px) {
+  .rowActionsContainer {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.rowActionsIcon svg,
+.rowSearchActionsIcon svg {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+
+.rowSearchActionsIcon.icon0 {
+  color: #28AFEA !important
+}
+
+.rowSearchActionsIcon.icon1 {
+  color: #0F9D58 !important
+}
+
+@media screen and (max-width: 600px) {
+  .rowActionsIcon svg,
+  .rowSearchActionsIcon svg {
+    width: 17px !important;
+    height: 17px !important;
+  }
+}
+
+
+@media screen and (max-width: 950px) and (min-width: 600px) {
+  .rowActionsIcon svg,
+  .rowSearchActionsIcon svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+}

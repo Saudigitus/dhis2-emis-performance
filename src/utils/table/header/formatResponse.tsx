@@ -4,9 +4,10 @@ import { VariablesTypes, type CustomAttributeProps } from "../../../types/variab
 import { useMemo } from "react";
 
 export function formatResponse(data: ProgramConfig, programStageId: string, tableColumns: CustomAttributeProps[] = [], programIndicators: any[]): CustomAttributeProps[] {
+    let columns = ['Actions']
     const originalData = ((data?.programStages?.find(programStge => programStge.id === programStageId)) ?? {} as unknown as ProgramConfig["programStages"][0])
     const programIndicatorsData = data?.programIndicators?.filter((x) => programIndicators?.map((x) => x.id).join(",").includes(x.id))
-
+console.log(programStageId, programIndicators)
     function getProgramStageDataElement(): [] {
         return Object.keys(originalData).length > 0
             ? originalData?.programStageDataElements?.map((programStageDataElement) => {
@@ -93,6 +94,30 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
         })
             .concat(getProgramStageDataElement())
             .concat(getProgramIndicatorsHeaders())
+            .concat(
+                columns?.map((column) => {
+                    return {
+                        id: column,
+                        displayName: column,
+                        header: column,
+                        required: false,
+                        name: column,
+                        labelName: column,
+                        valueType: '',
+                        options: undefined,
+                        initialOptions: undefined,
+                        visible: true,
+                        disabled: false,
+                        pattern: '',
+                        searchable: false,
+                        error: false,
+                        content: '',
+                        key: '',
+                        displayInFilters: false,
+                        type: VariablesTypes.Custom
+                    }
+                }) as []
+            )
     }, [data, programStageId, tableColumns, programIndicators]);
 
     return headerResponse;

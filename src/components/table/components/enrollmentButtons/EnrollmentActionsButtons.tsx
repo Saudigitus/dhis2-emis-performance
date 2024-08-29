@@ -1,13 +1,17 @@
 import React from 'react'
-import { IconUserGroup16, ButtonStrip, Button } from "@dhis2/ui";
+import { IconUserGroup16, ButtonStrip, Button, IconCheckmarkCircle16 } from "@dhis2/ui";
 import DropdownButtonComponent from '../../../buttons/DropdownButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useParams } from '../../../../hooks';
 import { FlyoutOptionsProps } from '../../../../types/buttons/FlyoutOptionsProps';
+import ButtonComponent from '../../../buttons/Button';
+import { useRecoilValue } from 'recoil';
+import { SubTabState } from '../../../../schema/termMarksSchema';
 
 function EnrollmentActionsButtons() {
   const { urlParamiters } = useParams();
   const { school: orgUnit } = urlParamiters();
+  const selectedTerm = useRecoilValue(SubTabState)
 
   const dropdownOptions: FlyoutOptionsProps[] = [
     { label: "Import studentss", divider: true, onClick: () => { alert("Import students"); } },
@@ -17,7 +21,7 @@ function EnrollmentActionsButtons() {
   return (
     <div>
       <ButtonStrip>
-        <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
+        {/* <Tooltip title={orgUnit === null ? "Please select an organisation unit before" : ""}>
           <span className='bulk-performance__hide'>
             <DropdownButtonComponent
               name="Bulk Performance"
@@ -25,7 +29,8 @@ function EnrollmentActionsButtons() {
               options={dropdownOptions}
             />
           </span>
-        </Tooltip>
+        </Tooltip> */}
+        <ButtonComponent primary label='Completar' icon={<IconCheckmarkCircle16/>}  onClick={()=>{}} disabled={!selectedTerm.hasProgramStage}/>
       </ButtonStrip>
     </div>
   )

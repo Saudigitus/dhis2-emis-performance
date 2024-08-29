@@ -19,7 +19,7 @@ export default function SwitchButtonView(): React.ReactElement {
     }
 
     return (() => {
-      setSelectedTerm({ id: '', label: '', programStage: '', programIndicators:[] })
+      setSelectedTerm({ id: '', label: '', programStage: '', hasProgramStage: false, programIndicators: [] })
     })
   }, [programStage])
 

@@ -7,9 +7,10 @@ import { useRecoilState } from 'recoil';
 import { EventsState, SubTabState } from '../../../schema/termMarksSchema';
 import { type FieldFeedbackProps } from '../../../types/table/MarksFieldsFeedback';
 import ShowFieldsBasedValueType from '../components/row/showFieldsBasedValueType';
-import {type RenderHeaderProps } from '../../../types/table/TableContentProps';
+import { type RenderHeaderProps } from '../../../types/table/TableContentProps';
 import { usePostDataElement } from '../../../hooks';
-import {checkCanceled} from "../../../utils/table/rows/checkCanceled";
+import { checkCanceled } from "../../../utils/table/rows/checkCanceled";
+import Actions from '../components/rowsActions/Actions';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -24,7 +25,8 @@ const useStyles = makeStyles((theme: Theme) =>
             padding: `${theme.spacing(1) / 2}px ${theme.spacing(1) * 7}px ${theme.spacing(1) /
                 2}px ${theme.spacing(1) * 3}px`,
             '&:last-child': {
-                paddingRight: theme.spacing(1) * 3
+                paddingRight: theme.spacing(1) * 1,
+                paddingLeft: theme.spacing(1) * 1.5
             },
             borderBottomColor: "rgba(224, 224, 224, 1)"
         },
@@ -32,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
             fontSize: theme.typography.pxToRem(13),
             color: theme.palette.text.primary
         },
-        opacity: {opacity: 0.5}
+        opacity: { opacity: 0.5 }
     })
 );
 
@@ -92,16 +94,17 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                     headers={headerData}
                                     prevValues={prevValues}
                                     setPrevValues={setPrevValues}
-                                    inactive={checkCanceled(row.status)}
+                                    inactive={checkCanceled(row.eventStatus)}
                                 />
                             </div>
+                            {(column.displayName == "Actions") && <Actions row={row} />}
                         </RowCell>
                     ));
                     return (
                         <RowTable
                             key={index}
-                            className={classNames(classes.row, classes.dataRow, checkCanceled(row.status) && classes.opacity)}
-                            inactive={checkCanceled(row.status)}
+                            className={classNames(classes.row, classes.dataRow, checkCanceled(row.eventStatus) && classes.opacity)}
+                            inactive={checkCanceled(row.eventStatus)}
                         >
                             {cells}
                         </RowTable>

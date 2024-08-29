@@ -18,12 +18,12 @@ export const useGetProgramIndicators = () => {
     const getProgramIndicators = async (programIndicators: string[], orgUnit: any, program: string, filter: any[]) => {
         return await engine.query(PROGRAM_INDICATORS_QUERY({
             dimension: `ou:${orgUnit},${programIndicators.join(",")}`,
-            headers: `ouname,${programIndicators.join(",")}`,
+            headers: `${programIndicators.join(",")}`,
             totalPages: false,
-            filter: filter,
+            filter: [...filter],
             displayProperty: 'NAME',
             outputType: 'ENROLLMENT',
-            includeMetadataDetails: true
+            includeMetadataDetails: false
         },
             program)).catch((error) => {
                 show({

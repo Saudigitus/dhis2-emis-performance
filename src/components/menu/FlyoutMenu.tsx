@@ -7,12 +7,12 @@ function FlyoutMenuComponent(props: FlyoutComponentProps): React.ReactElement {
   const { options } = props;
   return (
     <FlyoutMenu>
-      {options.map((option: any, i: any) => (
+      {options.map((option: any, i: any) => {(
         <>
           <MenuItem key={i} {...option}/>
           {option.divider === true && <Divider />}
         </>
-      ))}
+      )})}
     </FlyoutMenu>
   );
 }

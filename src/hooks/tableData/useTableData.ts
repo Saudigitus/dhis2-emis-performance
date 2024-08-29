@@ -9,6 +9,7 @@ import { type TableDataProps, type EventQueryProps, type TeiQueryProps, type Mar
 import { formatResponseRowsMarks, formatResponseRows, getDataStoreKeys } from "../../utils";
 import { useGetProgramIndicators } from "../programIndicators/useGetProgramIndicators";
 import { formatAttributesFilter } from "../../utils/tei/formatAttributesFilter";
+import { returnTeiProgramIndicators } from "../../utils/tei/returnTeiProgramIndicators";
 
 const EVENT_QUERY = (queryProps: EventQueryProps) => ({
     results: {
@@ -142,7 +143,6 @@ export function useTableData() {
         }
 
 
-        let programIndicatorsResults: any = {}
 
         if (selectedProgramStage !== null && selectedProgramStage !== undefined && selectedProgramStage !== '') {
             for (const tei of allTeis) {
@@ -152,9 +152,13 @@ export function useTableData() {
         }
 
 
+        const programIndicatorsInstances = []
+
         if (selectedProgramIndicators?.length) {
             for (const tei of teiResults?.results?.instances) {
-                programIndicatorsResults = await getProgramIndicators(selectedProgramIndicators, school, program, formatAttributesFilter(tei.attributes))
+                const programIndicatorsResults = await getProgramIndicators(selectedProgramIndicators, school, program, formatAttributesFilter(tei.attributes))
+
+                programIndicatorsInstances.push(returnTeiProgramIndicators(tei.trackedEntity, programIndicatorsResults))
             }
         }
 
@@ -163,6 +167,7 @@ export function useTableData() {
             eventsInstances: events?.results?.instances,
             teiInstances: teiResults?.results?.instances,
             marksInstances: marskEvents?.results?.instances,
+            programIndicatorsInstances: programIndicatorsInstances as any,
             setImmutableTeiData,
             programStage: selectedProgramStage
         })

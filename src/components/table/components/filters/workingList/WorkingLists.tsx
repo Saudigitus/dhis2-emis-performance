@@ -33,10 +33,10 @@ function WorkingLists() {
 
   useEffect(() => {
     setSelectedTerm(items[0])
-    if (items[0]?.programStage)
-      add("programStage", items[0]?.id)
-    else
-      remove("programStage")
+    // if (items[0]?.programStage)
+    //   add("programStage", items[0]?.id)
+    // else
+    //   remove("programStage")
   }, [groupTab])
 
 

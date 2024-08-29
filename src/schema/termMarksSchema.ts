@@ -7,8 +7,9 @@ export const SubTabState = atom<TermMarksConfig>({
     default: {
         id: "",
         label: "",
-        programStage:"", 
-        programIndicators:[]
+        programStage: "",
+        hasProgramStage: false,
+        programIndicators: []
     }
 })
 

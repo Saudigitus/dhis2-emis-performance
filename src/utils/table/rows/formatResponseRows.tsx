@@ -2,7 +2,8 @@ import { attributesProps } from "../../../types/api/WithRegistrationProps"
 import { dataValuesProps } from "../../../types/api/WithoutRegistrationProps"
 import { FormatResponseRowsMarksProps, FormatResponseRowsProps, RowsDataProps } from "../../../types/utils/FormatRowsDataProps"
 
-export function formatResponseRows({ eventsInstances, teiInstances, marksInstances, setImmutableTeiData, programStage }: FormatResponseRowsProps): RowsDataProps[] {
+export function formatResponseRows({ eventsInstances, teiInstances, marksInstances, programIndicatorsInstances, setImmutableTeiData, programStage }: FormatResponseRowsProps): RowsDataProps[] {
+
     const allRows: RowsDataProps[] = []
     for (const event of eventsInstances) {
         const teiDetails = teiInstances.find(tei => tei.trackedEntity === event.trackedEntity)
@@ -14,10 +15,14 @@ export function formatResponseRows({ eventsInstances, teiInstances, marksInstanc
             status: teiDetails?.enrollments?.[0]?.status
         }])
         allRows.push({
-            ...dataValues(event.dataValues), ...(marksDetails !== undefined ? { ...dataValues(marksDetails.dataValues, programStage) } : {}), ...(attributes((teiDetails?.attributes) ?? [])),
+            ...dataValues(event.dataValues), 
+            ...(marksDetails !== undefined ? { ...dataValues(marksDetails.dataValues, programStage) } : {}), 
+            ...(attributes((teiDetails?.attributes) ?? [])),
+            ...(programIndicators(programIndicatorsInstances?.find(x => x.trackedEntity === event.trackedEntity)?.programIndicators ?? [])),
             trackedEntity: event.trackedEntity,
             enrollment: event?.enrollment,
-            status: teiDetails?.enrollments?.[0]?.status
+            status: teiDetails?.enrollments?.[0]?.status,
+            eventStatus: marksDetails?.status
         })
     }
     return allRows;
@@ -40,6 +45,14 @@ function attributes(data: attributesProps[]): RowsDataProps {
     const localData: RowsDataProps = {}
     for (const attribute of data) {
         localData[attribute.attribute] = attribute.value
+    }
+    return localData
+}
+
+function programIndicators(data: any[]): RowsDataProps {
+    const localData: RowsDataProps = {}
+    for (const programIndicator of data) {
+        localData[programIndicator.programIndicator] = programIndicator.value
     }
     return localData
 }
