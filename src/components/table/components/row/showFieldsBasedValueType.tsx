@@ -22,16 +22,18 @@ export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueType
     const programConfigState = useRecoilValue(ProgramConfigState);
     const [values, setValues] = useState<Record<string, string>>({})
     const { name, ...rest } = column
+    const customVariables = [{ ...rest, name: dataElement }]
+    
     const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
         type: "programStage",
-        variables: [{ ...rest, name: dataElement }],
+        variables: customVariables,
         formatKeyValueType: { [dataElement]: column.valueType },
         values
     })
 
     useEffect(() => {
         if (column.id.split('_')[1]) {
-            runRulesEngine()
+            runRulesEngine(customVariables)
         }
     }, [values])
 

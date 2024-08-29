@@ -17,7 +17,7 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
     const { variables = [], values, type, formatKeyValueType } = props
     const getOptionGroups = useRecoilValue(OptionGroupsConfigState)
     const newProgramRules = useRecoilValue(ProgramRulesFormatedState)
-    const [updatedVariables, setupdatedVariables] = useState([...variables])
+    const [updatedVariables, setupdatedVariables] = useState<any>([])
     const orgUnitsGroups = useRecoilValue(OrgUnitsGroupsConfigState)
 
     useEffect(() => {
@@ -26,15 +26,15 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
         }
     }, [variables])
 
-    function runRulesEngine() {
-        if (type === "programStageSection") rulesEngineSections()
-        else if (type === "programStage") rulesEngineDataElements()
-        else if (type === "attributesSection") rulesEngineAttributesSections()
+    function runRulesEngine(data?: any[]) {
+        if (type === "programStageSection") rulesEngineSections(data)
+        else if (type === "programStage") rulesEngineDataElements(data)
+        else if (type === "attributesSection") rulesEngineAttributesSections(data)
     }
 
     // rules engine function for attributes/programSections
-    function rulesEngineAttributesSections() {
-        const localVariablesSections = [...updatedVariables]
+    function rulesEngineAttributesSections(data: any[] = []) {
+        const localVariablesSections = data?.length > 0 ? data : [...updatedVariables]
         const updatedVariablesCopy = localVariablesSections?.map(section => {
             const updatedSection = { ...section };
             updatedSection.variable = section?.variable?.map((variable: any) => {
@@ -46,8 +46,8 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
     }
 
     // rules engine function for programStageSections
-    function rulesEngineSections() {
-        const localVariablesSections = [...updatedVariables]
+    function rulesEngineSections(data: any[] = []) {
+        const localVariablesSections = data?.length > 0 ? data : [...updatedVariables]
         const updatedVariablesCopy = localVariablesSections?.map(section => {
             const updatedSection = { ...section };
             updatedSection.fields = section?.fields?.map((variable: any) => {
@@ -59,8 +59,8 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
     }
 
     // rules engine function for simple variables without sections
-    function rulesEngineDataElements() {
-        const localVariables = [...updatedVariables]
+    function rulesEngineDataElements(data: any[] = []) {
+        const localVariables = data?.length > 0 ? data : [...updatedVariables]
         const updatedVariablesCopy = localVariables?.map(variable => {
             return applyRulesToVariable(variable);
         });

@@ -47,18 +47,22 @@ function Table() {
     const { academicYear, programStage, grade } = urlParamiters()
     const setLoading = useSetRecoilState(TableDataLoadingState)
     const { getDataStoreData } = getSelectedKey()
+    const customColumns = columns?.map((column: any) => { return { ...column, name: column.id.split("_")[0] } })
+
     const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
         type: "programStage",
-        variables: columns.map((column: any) => { return { ...column, name: column.id.split("_")[0] } }),
+        variables: customColumns,
         formatKeyValueType: { [getDataStoreData.registration.grade as string]: "LIST" },
         values: { [getDataStoreData.registration.grade as string]: grade, testi: "test" }
     })
 
     useEffect(() => {
         if (grade) {
-            runRulesEngine()
+            runRulesEngine(customColumns)
         }
-    }, [grade, columns])
+    }, [grade, programStage])
+
+    // console.log(columns, updatedVariables);
 
     useEffect(() => {
         setLoading(loading)
