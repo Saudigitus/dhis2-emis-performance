@@ -7,7 +7,7 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
     let columns = ['Actions']
     const originalData = ((data?.programStages?.find(programStge => programStge.id === programStageId)) ?? {} as unknown as ProgramConfig["programStages"][0])
     const programIndicatorsData = data?.programIndicators?.filter((x) => programIndicators?.map((x) => x.id).join(",").includes(x.id))
-console.log(programStageId, programIndicators)
+
     function getProgramStageDataElement(): [] {
         return Object.keys(originalData).length > 0
             ? originalData?.programStageDataElements?.map((programStageDataElement) => {

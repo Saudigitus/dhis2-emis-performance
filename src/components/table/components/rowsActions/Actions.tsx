@@ -27,10 +27,10 @@ export default function Actions(props: BasicMenuProps) {
         <div>
             <Button
                 id="basic-button"
-                aria-controls={open ? 'basic-menu' : undefined}
                 aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
+                aria-expanded={open ? 'true' : undefined}
+                aria-controls={open ? 'basic-menu' : undefined}
             >
                 <IconMore24 />
             </Button>

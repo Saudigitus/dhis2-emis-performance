@@ -10,6 +10,7 @@ import { formatResponseRowsMarks, formatResponseRows, getDataStoreKeys } from ".
 import { useGetProgramIndicators } from "../programIndicators/useGetProgramIndicators";
 import { formatAttributesFilter } from "../../utils/tei/formatAttributesFilter";
 import { returnTeiProgramIndicators } from "../../utils/tei/returnTeiProgramIndicators";
+import { AllTeisSchema } from "../../schema/allTeisSchema";
 
 const EVENT_QUERY = (queryProps: EventQueryProps) => ({
     results: {
@@ -39,7 +40,7 @@ export function useTableData() {
     const [tableData, setTableData] = useState<TableDataProps[]>([])
     const [immutableTeiData, setImmutableTeiData] = useState<any[]>([]) // this variable receives the attributes and dataElements of the registragion programStage
     const { hide, show } = useShowAlerts()
-    const [allTeis, setAllTeis] = useState<any[]>([])
+    const [allTeis, setAllTeis] = useRecoilState(AllTeisSchema)
     const { program, registration } = getDataStoreKeys()
     const [, setAllEvents] = useRecoilState(EventsState);
     const { school } = urlParamiters()

@@ -8,7 +8,6 @@ interface programIndicators {
 }
 interface FormatResponseRowsProps {
     eventsInstances: [{
-        status: boolean
         enrollment: string
         trackedEntity: string
         dataValues: dataValuesProps[]

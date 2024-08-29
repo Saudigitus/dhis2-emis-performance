@@ -22,10 +22,6 @@ export function useGetEvents() {
     const engine = useDataEngine();
     const { hide, show } = useShowAlerts()
     const [loading, setLoading] = useState<boolean>(false)
-    const [allTeis, setAllTeis] = useState<any[]>([])
-    const [, setAllEvents] = useRecoilState(EventsState);
-
-
 
     const getEvents = async (page: number, pageSize: number, program: string, programStage: string, filter: any[], filterAttributes: any[], orgUnit: any, trackedEntity?: string): Promise<EventQueryResults> => {
         setLoading(true)
@@ -50,11 +46,6 @@ export function useGetEvents() {
             }) as unknown as EventQueryResults;
     }
 
-    // const allTeis = events?.results?.instances.map((x: { trackedEntity: string }) => x.trackedEntity)
-    // setAllTeis(allTeis)
-    // const trackedEntityToFetch = events?.results?.instances.map((x: { trackedEntity: string }) => x.trackedEntity).toString().replaceAll(",", ";")
 
-
-
-    return { getEvents, loading, allTeis }
+    return { getEvents, loading }
 }

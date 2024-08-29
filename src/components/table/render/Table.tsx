@@ -46,7 +46,6 @@ function Table() {
     const { academicYear, programStage, school, class: classSection, grade } = urlParamiters()
     const setLoading = useSetRecoilState(TableDataLoadingState)
     console.log(tableData)
-    
     useEffect(() => {
         setLoading(loading)
     }, [loading])

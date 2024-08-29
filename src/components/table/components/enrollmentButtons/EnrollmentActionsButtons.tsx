@@ -7,11 +7,13 @@ import { FlyoutOptionsProps } from '../../../../types/buttons/FlyoutOptionsProps
 import ButtonComponent from '../../../buttons/Button';
 import { useRecoilValue } from 'recoil';
 import { SubTabState } from '../../../../schema/termMarksSchema';
+import { useCompleteEvents } from '../../../../hooks/events/useCompleteEvents';
 
 function EnrollmentActionsButtons() {
   const { urlParamiters } = useParams();
   const { school: orgUnit } = urlParamiters();
   const selectedTerm = useRecoilValue(SubTabState)
+  const { completeEvents, loading } = useCompleteEvents()
 
   const dropdownOptions: FlyoutOptionsProps[] = [
     { label: "Import studentss", divider: true, onClick: () => { alert("Import students"); } },
@@ -30,7 +32,14 @@ function EnrollmentActionsButtons() {
             />
           </span>
         </Tooltip> */}
-        <ButtonComponent primary label='Completar' icon={<IconCheckmarkCircle16/>}  onClick={()=>{}} disabled={!selectedTerm.hasProgramStage}/>
+        <ButtonComponent
+          primary
+          label='Completar'
+          loading={loading}
+          icon={<IconCheckmarkCircle16 />}
+          onClick={() => { completeEvents() }}
+          disabled={!selectedTerm.hasProgramStage || loading}
+        />
       </ButtonStrip>
     </div>
   )
