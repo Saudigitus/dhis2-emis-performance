@@ -32,7 +32,7 @@ export default function FullLayout(props: LayoutProps) {
 
     return (
         <div className={style.LayoutContainer}>
-            <SideBar />
+            {/* <SideBar /> */}
             <div className={style.FullLayoutContainer}>
                 <MainHeader />
                 <main className={style.MainContentContainer}>
