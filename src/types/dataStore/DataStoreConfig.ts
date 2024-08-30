@@ -48,12 +48,13 @@ interface filters {
 }
 
 interface tabGroupItem {
-    label: string,
-    tabs: {
-        label: string
-        programStage?: string
-        programIndicators?: { id: string }[]
-    }[]
+    order: string,
+    label: string
+    programStage: string
+    nextAction?: {
+        displayName: string,
+        programStage: string
+    }
 }
 
 interface assessment {
