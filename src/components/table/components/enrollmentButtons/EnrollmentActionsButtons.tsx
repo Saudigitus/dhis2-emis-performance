@@ -34,23 +34,23 @@ function EnrollmentActionsButtons() {
           />
           </span>
         </Tooltip> */}
-        <ButtonComponent
+        {/* <ButtonComponent
           secondary
           label='Download'
           loading={downloading}
           icon={<IconDownload16 />}
           onClick={() => { downloadData(1, 1) }}
           disabled={false || downloading}
-        />
+        /> */}
 
-        <ButtonComponent
+        {/* <ButtonComponent
           primary
           label='Completar'
           loading={completing}
           icon={<IconCheckmarkCircle16 />}
           onClick={() => { completeEvents() }}
           disabled={!selectedTerm.hasProgramStage || completing}
-        />
+        /> */}
       </ButtonStrip>
     </div>
   )

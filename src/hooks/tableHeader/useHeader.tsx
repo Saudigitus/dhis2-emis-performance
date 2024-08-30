@@ -7,9 +7,8 @@ import { TableColumnState } from "../../schema/columnSchema";
 export function useHeader() {
     const tableColumns = useRecoilValue(TableColumnState)
     const programConfigState = useRecoilValue(ProgramConfigState);
-    const subTabState = useRecoilValue(SubTabState)
   
     return {
-        columns: formatResponse(programConfigState, subTabState?.programStage, tableColumns, subTabState.programIndicators)
+        columns: formatResponse(programConfigState, '', tableColumns, [])
     }
 }

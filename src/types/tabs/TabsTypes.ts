@@ -1,12 +1,14 @@
 interface TabElementsProps {
-    name: string
-    value: string
-  }
-
-interface TabBarProps {
-    elements: TabElementsProps[]
-    selectedValue: any
-    setSelectedValue: (arg: any) => void
+  order: string,
+  name: string
+  value: string
+  programStage: string
 }
 
-export type { TabElementsProps, TabBarProps}
+interface TabBarProps {
+  elements: TabElementsProps[]
+  selectedValue: any
+  setSelectedValue: (arg: any) => void
+}
+
+export type { TabElementsProps, TabBarProps }

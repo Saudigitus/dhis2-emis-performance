@@ -14,6 +14,7 @@ import { SubTabState } from '../../../schema/termMarksSchema';
 import { useHeader, useParams, useTableData } from '../../../hooks';
 import { TeiRefetch } from '../../../schema/refecthTeiSchema';
 import { TableDataLoadingState } from '../../../schema/tableDataLoadingSchema';
+import { TabsState } from '../../../schema/tabSchema';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -41,11 +42,11 @@ function Table() {
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
     const [refetch] = useRecoilState(TeiRefetch)
-    const subTabState = useRecoilValue(SubTabState)
+    const selectedTab = useRecoilValue(TabsState)
     const { urlParamiters } = useParams()
     const { school } = urlParamiters()
     const setLoading = useSetRecoilState(TableDataLoadingState)
-    console.log(tableData)
+
     useEffect(() => {
         setLoading(loading)
     }, [loading])
@@ -56,14 +57,10 @@ function Table() {
 
     useEffect(() => {
         if (school)
-            void getData(page, pageSize, subTabState?.programStage, subTabState?.programIndicators?.map((x) => x.id))
+            void getData(page, pageSize, selectedTab.programStage, [])
     }, [headerFieldsState, page, pageSize, refetch])
 
-    useEffect(() => {
-        if (subTabState.id !== null && subTabState.id !== undefined && subTabState.id !== '') {
-            // void getMarks(subTabState.programStage)
-        }
-    }, [subTabState.programStage])
+
 
     const onPageChange = (newPage: number) => {
         setpage(newPage)

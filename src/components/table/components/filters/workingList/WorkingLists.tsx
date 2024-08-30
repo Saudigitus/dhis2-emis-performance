@@ -15,7 +15,7 @@ import EnrollmentActionsButtons from "../../enrollmentButtons/EnrollmentActionsB
 
 function WorkingLists() {
   const { add, urlParamiters, remove } = useParams()
-  const { groupTab } = urlParamiters()
+  const { tab } = urlParamiters()
   const { assessment } = getDataStoreKeys()
   const { items } = useGetProgramStageTerms()
   const { tabsElements } = useGetTabsElements()
@@ -23,21 +23,17 @@ function WorkingLists() {
   const [, setSelectedTerm] = useRecoilState(SubTabState);
 
   useEffect(() => {
-    const tab = tabsElements.find((x: any) => x.value == groupTab) ?? tabsElements[0]
-    setSelectedValue(tab as unknown as SelectedTabSchema)
+    const selectedTab = tabsElements.find((x: any) => x.value == tab) ?? tabsElements[0]
+    setSelectedValue(selectedTab as unknown as SelectedTabSchema)
   }, [assessment])
 
   useEffect(() => {
-    add("groupTab", selectedValue.value)
+    add("tab", selectedValue.value)
   }, [selectedValue])
 
   useEffect(() => {
     setSelectedTerm(items[0])
-    // if (items[0]?.programStage)
-    //   add("programStage", items[0]?.id)
-    // else
-    //   remove("programStage")
-  }, [groupTab])
+  }, [tab])
 
 
   return (

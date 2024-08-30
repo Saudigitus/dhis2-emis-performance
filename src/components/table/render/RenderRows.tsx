@@ -10,7 +10,6 @@ import ShowFieldsBasedValueType from '../components/row/showFieldsBasedValueType
 import { type RenderHeaderProps } from '../../../types/table/TableContentProps';
 import { usePostDataElement } from '../../../hooks';
 import { checkCanceled } from "../../../utils/table/rows/checkCanceled";
-import Actions from '../components/rowsActions/Actions';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -97,7 +96,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                     inactive={checkCanceled(row.eventStatus)}
                                 />
                             </div>
-                            {(column.displayName == "Actions") && <Actions row={row} />}
+                            {(column.displayName == "Actions") && <RowActions row={row} />}
                         </RowCell>
                     ));
                     return (

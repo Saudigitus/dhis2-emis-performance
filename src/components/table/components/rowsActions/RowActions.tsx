@@ -2,7 +2,8 @@ import style from './rowActions.module.css'
 import { IconEdit24, IconDelete24, Button, IconCheckmarkCircle24, IconDownload24 } from "@dhis2/ui";
 import { IconButton, Tooltip } from '@material-ui/core';
 import { RowActionsProps, RowActionsType } from '../../../../types/table/TableContentProps';
-
+import { CancelOutlined } from '@material-ui/icons';
+// import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 
 export default function RowActions(props: RowActionsProps) {
   const { row } = props;
@@ -16,7 +17,7 @@ export default function RowActions(props: RowActionsProps) {
       onClick: () => { },
     },
     {
-      icon: <IconDownload24 />,
+      icon: <CancelOutlined/>,
       color: '#d64d4d',
       label: `Delete`,
       disabled: false,

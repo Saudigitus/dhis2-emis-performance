@@ -7,6 +7,7 @@ import { useHeader } from "../../../../hooks";
 import { useRecoilState } from "recoil";
 import { TableColumnState } from "../../../../schema/columnSchema";
 import EnrollmentActionsButtons from "../enrollmentButtons/EnrollmentActionsButtons";
+import RowActions from "../rowsActions/RowActions";
 
 function HeaderFilters() {
   const { columns } = useHeader();
@@ -19,7 +20,8 @@ function HeaderFilters() {
       <EnrollmentFilters />
 
       <div className={styles.filterLeftContainer}>
-        <SwitchButtonView />
+        {/* <RowActions row={{}}/> */}
+        {/* <SwitchButtonView /> */}
         <EnrollmentActionsButtons/>
         <ConfigTableColumns filteredHeaders={updatedCols} headers={columns} updateVariables={setTableHeaders} />
       </div>

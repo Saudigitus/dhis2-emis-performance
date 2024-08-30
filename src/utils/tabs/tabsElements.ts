@@ -5,8 +5,10 @@ function useGetTabsElements() {
     const { assessment } = getDataStoreKeys()
 
     const tabsElements: TabElementsProps[] =  assessment?.tabGroups?.map((option) => ({
+        order: option.order,
         name: option.label,
         value: option.label,
+        programStage: option.programStage
     })) ?? []
 
 

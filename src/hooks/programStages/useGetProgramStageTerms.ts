@@ -6,7 +6,7 @@ const useGetProgramStageTerms = () => {
   const { assessment } = getDataStoreKeys()
   const tabsState = useRecoilValue(TabsState)
 
-  const items: any[] = assessment.tabGroups?.find((x) => x.label == tabsState.value)?.tabs.map(x => {
+  const items: any[] = []?.map((x: any) => {
     return {
       id: x.label,
       label: x.label,
