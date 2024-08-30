@@ -10,6 +10,7 @@ import ShowFieldsBasedValueType from '../components/row/showFieldsBasedValueType
 import { type RenderHeaderProps } from '../../../types/table/TableContentProps';
 import { usePostDataElement } from '../../../hooks';
 import { checkCanceled } from "../../../utils/table/rows/checkCanceled";
+import RowActions from '../components/rowsActions/RowActions';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

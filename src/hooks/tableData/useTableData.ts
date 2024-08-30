@@ -148,7 +148,7 @@ export function useTableData() {
         if (selectedProgramStage !== null && selectedProgramStage !== undefined && selectedProgramStage !== '') {
             for (const tei of allTeis) {
                 const marksResults: MarksQueryResults = await fetchMarks(tei, selectedProgramStage)
-                marskEvents.results.instances.push(...marksResults?.results?.instances)
+                marskEvents?.results?.instances?.push(...marksResults?.results?.instances)
             }
         }
 
