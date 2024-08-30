@@ -4,7 +4,6 @@ import { formatFilterItems } from "../../utils/constants/headBar/formatFilterIte
 const useDataElementsParamMapping = () => {
     const { registration, filterItems } = getDataStoreKeys();
     return {
-        [registration?.academicYear]: "academicYear",
         ...formatFilterItems(filterItems)
 
     }

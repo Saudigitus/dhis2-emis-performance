@@ -13,16 +13,7 @@ function headBarData(selectedOptions: SelectedOptionsTypes, dataStoreData: dataS
             component: "orgUnitTree",
             selected: Boolean(selectedOptions?.schoolName),
         },
-        ...headBarDataElements(selectedOptions, dataStoreData, programStageDataElements),
-        {
-            id: "j2e9b216",
-            label: "Academic Year",
-            value: selectedOptions?.academicYear ?? "Select academic year",
-            placeholder: "Search for academic year",
-            dataElementId: dataStoreData?.registration?.academicYear ?? "",
-            component: "menuItemContainer",
-            selected: Boolean(selectedOptions?.academicYear),
-        }
+        ...headBarDataElements(selectedOptions, dataStoreData, programStageDataElements)
     ]
 }
 export { headBarData }

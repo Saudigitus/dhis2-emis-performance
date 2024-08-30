@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "build": "d2-app-scripts build",
-    "start": "d2-app-scripts start --proxy https://emis.dhis2.org/startracker",
+    "start": "d2-app-scripts start --proxy https://ascas.siiu.org/treino",
     "test": "d2-app-scripts test",
     "deploy": "d2-app-scripts deploy"
   },
@@ -31,6 +31,10 @@
     "bootstrap": "4.6.0",
     "classnames": "^2.3.1",
     "date-fns": "2.29.3",
+    "exceljs": "^4.4.0",
+    "file-saver": "^2.0.5",
+    "install": "^0.13.0",
+    "npm": "^10.8.3",
     "react-addons-update": "^15.6.3",
     "react-bootstrap": "^2.8.0",
     "react-dnd": "14.0.3",

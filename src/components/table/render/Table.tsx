@@ -43,7 +43,7 @@ function Table() {
     const [refetch] = useRecoilState(TeiRefetch)
     const subTabState = useRecoilValue(SubTabState)
     const { urlParamiters } = useParams()
-    const { academicYear, programStage, school, class: classSection, grade } = urlParamiters()
+    const { school } = urlParamiters()
     const setLoading = useSetRecoilState(TableDataLoadingState)
     console.log(tableData)
     useEffect(() => {
@@ -55,12 +55,12 @@ function Table() {
     }, [headerFieldsState])
 
     useEffect(() => {
-        if (academicYear)
+        if (school)
             void getData(page, pageSize, subTabState?.programStage, subTabState?.programIndicators?.map((x) => x.id))
     }, [headerFieldsState, page, pageSize, refetch])
 
     useEffect(() => {
-        if (subTabState.id !== null && subTabState.id !== undefined && subTabState.id !== '' && academicYear) {
+        if (subTabState.id !== null && subTabState.id !== undefined && subTabState.id !== '') {
             // void getMarks(subTabState.programStage)
         }
     }, [subTabState.programStage])

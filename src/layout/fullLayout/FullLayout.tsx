@@ -11,16 +11,8 @@ export default function FullLayout(props: LayoutProps) {
     const { children } = props;
     const { urlParamiters, add, useQuery } = useParams();
     const { school } = urlParamiters();
-    const academicYear = useQuery().get("academicYear");
     const { isSetSectionType } = useGetInitialValues()
-    const { program, currentAcademicYear } = getDataStoreKeys()
-    const { loading } = useGetProgramConfig(program);
-
-    useEffect(() => {
-        if ((academicYear === null || academicYear === undefined) || (typeof academicYear === "string" && academicYear?.length === 0)) {
-            add("academicYear", currentAcademicYear)
-        }
-    }, [academicYear])
+    const { loading } = useGetProgramConfig();
 
     if (!isSetSectionType) {
         return (

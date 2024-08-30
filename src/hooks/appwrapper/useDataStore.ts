@@ -5,7 +5,7 @@ import useShowAlerts from '../commons/useShowAlert';
 
 const DATASTORE_QUERY = ({
     config: {
-        resource: "dataStore/xtendedStaff/values",
+        resource: "dataStore/Poupar/assessment",
         params: {
             fields: "*"
         }
