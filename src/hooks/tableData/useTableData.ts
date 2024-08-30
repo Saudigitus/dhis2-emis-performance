@@ -100,7 +100,7 @@ export function useTableData() {
         setImmutableTeiData([])
 
         const events: EventQueryResults = await engine.query(EVENT_QUERY({
-            ouMode: "SELECTED",
+            ouMode: "DESCENDANTS",
             page,
             pageSize,
             // programStatus: "ACTIVE",
