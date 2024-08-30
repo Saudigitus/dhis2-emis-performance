@@ -30,7 +30,7 @@ export const useCompleteEvents = () => {
         }
 
         if (events?.length) {
-            await changeEventStatus("COMPLETED", events)
+            await changeEventStatus("ACTIVE", events)
                 .catch(() => {
                     setLoading(false)
 

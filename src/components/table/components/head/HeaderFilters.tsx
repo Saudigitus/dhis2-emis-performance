@@ -6,6 +6,7 @@ import styles from './HeaderFilters.module.css'
 import { useHeader } from "../../../../hooks";
 import { useRecoilState } from "recoil";
 import { TableColumnState } from "../../../../schema/columnSchema";
+import EnrollmentActionsButtons from "../enrollmentButtons/EnrollmentActionsButtons";
 
 function HeaderFilters() {
   const { columns } = useHeader();
@@ -19,6 +20,7 @@ function HeaderFilters() {
 
       <div className={styles.filterLeftContainer}>
         <SwitchButtonView />
+        <EnrollmentActionsButtons/>
         <ConfigTableColumns filteredHeaders={updatedCols} headers={columns} updateVariables={setTableHeaders} />
       </div>
     </div>
