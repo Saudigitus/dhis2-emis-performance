@@ -106,7 +106,7 @@ export function useTableData() {
             // programStatus: "ACTIVE",
             program: program,
             order: "createdAt:desc",
-            programStage: registration?.programStage,
+            programStage: selectedProgramStage,
             filter: headerFieldsState?.dataElements,
             filterAttributes: headerFieldsState?.attributes,
             orgUnit: school as unknown as string
@@ -145,12 +145,12 @@ export function useTableData() {
 
 
 
-        if (selectedProgramStage !== null && selectedProgramStage !== undefined && selectedProgramStage !== '') {
-            for (const tei of allTeis) {
-                const marksResults: MarksQueryResults = await fetchMarks(tei, selectedProgramStage)
-                marskEvents?.results?.instances?.push(...marksResults?.results?.instances)
-            }
-        }
+        // if (selectedProgramStage !== null && selectedProgramStage !== undefined && selectedProgramStage !== '') {
+        //     for (const tei of allTeis) {
+        //         const marksResults: MarksQueryResults = await fetchMarks(tei, selectedProgramStage)
+        //         marskEvents?.results?.instances?.push(...marksResults?.results?.instances)
+        //     }
+        // }
 
 
         const programIndicatorsInstances = []

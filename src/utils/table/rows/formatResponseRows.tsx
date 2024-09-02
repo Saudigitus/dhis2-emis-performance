@@ -22,7 +22,7 @@ export function formatResponseRows({ eventsInstances, teiInstances, marksInstanc
             trackedEntity: event.trackedEntity,
             enrollment: event?.enrollment,
             status: teiDetails?.enrollments?.[0]?.status,
-            eventStatus: marksDetails?.status
+            eventStatus: event?.status as unknown as any,
         })
     }
     return allRows;
