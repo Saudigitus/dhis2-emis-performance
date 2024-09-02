@@ -1,7 +1,17 @@
+.rowActionsContainer {
+  display: flex;
+  column-gap: 7px;
+  align-items: center;
+  justify-content: center;
+  justify-content: space-between;
+}
+
 @media screen and (max-width: 1131px) {
   .rowActionsContainer {
     display: flex;
+    align-items: center;
     justify-content: center;
+    justify-content: space-between;
   }
 }
 
