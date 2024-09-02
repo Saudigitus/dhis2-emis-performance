@@ -26,7 +26,7 @@ export function useGetEvents() {
     const getEvents = async (page: number, pageSize: number, program: string, programStage: string, filter: any[], filterAttributes: any[], orgUnit: any, trackedEntity?: string): Promise<EventQueryResults> => {
         setLoading(true)
         return await engine.query(EVENT_QUERY({
-            ouMode: "SELECTED",
+            ouMode: "DESCENDANTS",
             page,
             pageSize,
             program: program,

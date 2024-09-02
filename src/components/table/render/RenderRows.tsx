@@ -9,7 +9,7 @@ import { type FieldFeedbackProps } from '../../../types/table/MarksFieldsFeedbac
 import ShowFieldsBasedValueType from '../components/row/showFieldsBasedValueType';
 import { type RenderHeaderProps } from '../../../types/table/TableContentProps';
 import { usePostDataElement } from '../../../hooks';
-import { checkCanceled } from "../../../utils/table/rows/checkCanceled";
+import { checkCompleted } from "../../../utils/table/rows/checkCanceled";
 import RowActions from '../components/rowsActions/RowActions';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -94,7 +94,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                     headers={headerData}
                                     prevValues={prevValues}
                                     setPrevValues={setPrevValues}
-                                    inactive={checkCanceled(row.eventStatus)}
+                                    inactive={checkCompleted(row.eventStatus)}
                                 />
                             </div>
                             {(column.displayName == "Actions") && <RowActions row={row} />}
@@ -103,8 +103,8 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                     return (
                         <RowTable
                             key={index}
-                            className={classNames(classes.row, classes.dataRow, checkCanceled(row.eventStatus) && classes.opacity)}
-                            inactive={checkCanceled(row.eventStatus)}
+                            className={classNames(classes.row, classes.dataRow, checkCompleted(row.eventStatus) && classes.opacity)}
+                            inactive={checkCompleted(row.eventStatus)}
                         >
                             {cells}
                         </RowTable>

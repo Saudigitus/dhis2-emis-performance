@@ -66,7 +66,7 @@ function EnrollmentActionsButtons() {
           onClick={() => { completeEvents() }}
           disabled={!selectedTerm.hasProgramStage || completing}
         /> */}
-        <ButtonGroup buttons={eventsActions} />
+        {/* <ButtonGroup buttons={eventsActions} /> */}
       </ButtonStrip>
     </div>
   )

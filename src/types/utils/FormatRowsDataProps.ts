@@ -1,6 +1,7 @@
 import { attributesProps } from "../api/WithRegistrationProps"
 import { dataValuesProps } from "../api/WithoutRegistrationProps"
 import { ProgramConfig } from "../programConfig/ProgramConfig"
+import { enrollmentStatus } from "../variables/AttributeColumns"
 
 interface programIndicators {
     programIndicator: string
@@ -8,6 +9,8 @@ interface programIndicators {
 }
 interface FormatResponseRowsProps {
     eventsInstances: [{
+        status: enrollmentStatus
+        event: string
         enrollment: string
         trackedEntity: string
         dataValues: dataValuesProps[]

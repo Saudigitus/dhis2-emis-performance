@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useRecoilValue } from "recoil"
+import { useRecoilState, useRecoilValue } from "recoil"
 import { AllTeisSchema } from "../../schema/allTeisSchema"
 import { useGetEvents } from "./useGetEvents"
 import { getDataStoreKeys } from "../../utils"
@@ -7,6 +7,8 @@ import { SubTabState } from "../../schema/termMarksSchema"
 import { useParams } from "../commons/useQueryParams"
 import { useChangeEventStatus } from "./useChangeEventStatus"
 import { TabsState } from '../../schema/tabSchema'
+import { UpdatingEventState } from '../../schema/updateEventSchema'
+import { TeiRefetch } from '../../schema/refecthTeiSchema'
 
 
 export const useCompleteEvents = () => {
@@ -17,6 +19,8 @@ export const useCompleteEvents = () => {
     const selectedTab = useRecoilValue(TabsState)
     const { changeEventStatus } = useChangeEventStatus()
     const [loading, setLoading] = useState(false)
+    const [, setLoadingRow] = useRecoilState(UpdatingEventState)
+    const [refetch, setRefetch] = useRecoilState<boolean>(TeiRefetch)
 
 
     async function completeEvents(status: string, teisToUpdate: string[]) {
@@ -32,13 +36,17 @@ export const useCompleteEvents = () => {
 
         if (events?.length) {
             await changeEventStatus(status, events)
-                .catch(() => {
+                .finally(() => {
+                    setRefetch(!refetch)
+                    setLoadingRow({ event: '', loading: false })
                     setLoading(false)
-
                 })
         }
 
         setLoading(false)
+        setLoadingRow({ event: '', loading: false })
+
+
     }
 
     return { completeEvents, loading }

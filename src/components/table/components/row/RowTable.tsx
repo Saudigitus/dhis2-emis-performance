@@ -27,7 +27,7 @@ function RowTable(props: RowProps): React.ReactElement {
 
     return (
         <Tooltip arrow={true} disableHoverListener={!inactive} disableFocusListener={true}
-                 title={inactive && 'This enrollment is inactive'}>
+                 title={inactive && 'Essa ASCA não pode ser editada. Clique em "activar" para fazer alterações'}>
             <tr
                 className={classes}
                 {...passOnProps}

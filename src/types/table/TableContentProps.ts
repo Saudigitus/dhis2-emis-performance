@@ -70,6 +70,7 @@ interface RowActionsType {
     icon: React.ReactNode
     disabled: boolean
     color?: string
+    loading?: boolean
 }
 interface RowActionsProps {
     row: any
