@@ -20,6 +20,21 @@ interface ProgramStageConfig {
     id: string
     executionDateLabel?: string
     programStageDataElements: programStageDataElements[]
+    programStageSections: ProgramStageSectionConfig[]
 }
 
-export type { ProgramStageConfig, programStageDataElements }
+interface ProgramStageSectionConfig {
+    displayName: string
+    dataElements: [{
+        displayInReports: boolean | undefined
+        displayName: string
+        id: string
+        valueType: string
+        optionSet: {
+            id: string
+            options: OptionsProps[]
+        }
+    }]
+}
+
+export type { ProgramStageConfig, programStageDataElements, ProgramStageSectionConfig }

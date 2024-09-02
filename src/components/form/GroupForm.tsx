@@ -14,9 +14,6 @@ function GroupForm(props: GroupFormProps) {
         <WithBorder type={"all"}>
             <WithPadding p={"16px 5px 0px 5px"}>
                 <Subtitle label={name} />
-                <WithPadding />
-                <Label>{description}</Label>
-                <WithPadding p="0.2rem" />
                 <WithPadding p={"10px"}>
                     {fields?.filter(x => x.visible)?.map((x, i) => {
                         return (

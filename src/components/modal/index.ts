@@ -1,3 +1,5 @@
 import ModalComponent from "./Modal"
 import ModalContentComponent from "./ModalContent"
-export { ModalComponent, ModalContentComponent }
+import ModalContentProgramStages from "./ModalContentProgramStages"
+
+export { ModalComponent, ModalContentComponent , ModalContentProgramStages}
