@@ -21,6 +21,7 @@ export default function OrgUnitTree(props: OrgUnitTreeComponentProps): React.Rea
         setStringQuery(undefined)
         add("school", event?.id);
         add("schoolName", event?.displayName);
+        add("orgUnitLevel", event?.path?.split("/")?.length - 1)
         setSelectedOu(event);
         onToggle()
     }

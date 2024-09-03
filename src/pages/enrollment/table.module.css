@@ -1,0 +1,5 @@
+.float-button__container{
+    position: fixed !important;
+    bottom: 20px !important;
+    right: 20px;
+}

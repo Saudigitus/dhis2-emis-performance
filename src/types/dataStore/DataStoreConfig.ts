@@ -1,3 +1,4 @@
+import { programDataStoreType } from "../../schema/dataStoreSchema"
 
 interface attendance {
     absenceReason: string
@@ -58,7 +59,16 @@ interface tabGroupItem {
 }
 
 interface assessment {
+    groupsLevel: string
+    lastChildLevel: number
     tabGroups: tabGroupItem[]
+    programs: programDataStoreType[]
+    files_id: {
+        ficha: string
+    }
+    trackedEntityTypes: {
+        groups: string,
+    },
 }
 
 interface dataStoreRecord {
