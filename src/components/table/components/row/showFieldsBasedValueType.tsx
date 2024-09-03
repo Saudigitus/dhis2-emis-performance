@@ -19,8 +19,8 @@ export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueType
     const { imageUrl } = GetImageUrl()
     const programConfigState = useRecoilValue(ProgramConfigState);
 
-    console.log(dataElement,'deee')
     function save(newMark: any) {
+        console.log(currentEvent)
         void saveMarks({
             data: {
                 event: currentEvent?.event,

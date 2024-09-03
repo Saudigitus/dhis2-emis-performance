@@ -85,6 +85,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
         <React.Fragment>
             {
                 rowsData?.map((row, index) => {
+                    console.log(allEvents)
                     const currEvent = events?.find((x: any) => x?.trackedEntity === row?.trackedEntity)
                     const copyRow = { ...row, ...dataValues(currEvent?.dataValues ?? [], getDataStoreData.monitoria.programStage), event: currEvent?.event }
                     const cells = headerData?.filter(x => x.visible)?.map(column => (
@@ -96,7 +97,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                 <ShowFieldsBasedValueType
                                     loader={loader}
                                     column={column}
-                                    currentEvent={allEvents[index]}
+                                    currentEvent={currEvent}
                                     saveMarks={saveMarks}
                                     value={copyRow[column.id] ?? copyRow[column.rawId]}
                                     trackedEntity={row.trackedEntity}

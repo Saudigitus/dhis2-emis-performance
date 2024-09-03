@@ -11,6 +11,7 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
     function getProgramStageDataElement(): [] {
         return (Object.keys(originalData).length > 0 && moduloAdministrativo != null && moduloAdministrativo != undefined)
             ? originalData?.programStageDataElements?.map((programStageDataElement) => {
+
                 return {
                     id: programStageDataElement.dataElement.id + "_" + programStageId,
                     rawId: programStageDataElement.dataElement.id,
