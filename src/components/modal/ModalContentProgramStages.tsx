@@ -24,6 +24,8 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
   const { postTei, loading, data } = usePostTei()
   const [clickedButton, setClickedButton] = useState<string>("");
 
+
+
   const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
     variables: [...formEvents(getProgram.programStages.find((x) => x.id === nexProgramStage)?.executionDateLabel), ...getProgram.programStages.find((x) => x.id === nexProgramStage)?.programStageSections.map((x) => { return { ...x, fields: formatResponseDataElements(x.dataElements) } })!],
     values, type: "programStageSection",

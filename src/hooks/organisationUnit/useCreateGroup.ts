@@ -25,6 +25,7 @@ interface createGroupTypes {
     formData: any,
     closeModal: () => void,
     // refetch: any,
+    fieldsWithValue: any[]
 }
 
 export default function useCreateGroup() {
@@ -39,7 +40,7 @@ export default function useCreateGroup() {
 
     const { groupsAccess, groupsManagementProgram, groupsTEI, dataSet } = useFormatDataStore()
 
-    const createGroup = async ({ data, formData, closeModal }: createGroupTypes) => {
+    const createGroup = async ({ data, formData, closeModal, fieldsWithValue }: createGroupTypes) => {
         setLoading(true)
 
         await engine.mutate(POST_OU, { variables: { data } })
@@ -50,7 +51,7 @@ export default function useCreateGroup() {
 
                         await addOuToDataSet([dataSet], saveOuresponse?.response?.uid).
                             then(async () => {
-                                await createTracker({ data: postTrackerBody(formData, groupsManagementProgram, groupsTEI, saveOuresponse?.response?.uid) })
+                                await createTracker({ data: postTrackerBody(formData, groupsManagementProgram, groupsTEI, saveOuresponse?.response?.uid, fieldsWithValue) })
                                     .then(async () => {
 
                                         const currentUser = generateUsers(saveOuresponse?.response?.uid)

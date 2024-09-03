@@ -1,6 +1,25 @@
 import { programDataStoreType } from "../../schema/dataStoreSchema";
+import { reducer } from "../commons/formatDistinctValue";
 
-const postTrackerBody = (formData: Record<string, any>, program: programDataStoreType, trackedEntityType: string | undefined, orgUnit: string, type?: string) => {
+const postTrackerBody = (formData: Record<string, any>, program: programDataStoreType, trackedEntityType: string | undefined, orgUnit: string, fieldsWithValue: any[]) => {
+    const events : any = []
+
+    for (const field of fieldsWithValue) {
+        for (const [key, value] of Object.entries(reducer(field))) {
+            events.push({
+                occurredAt: formData["registrationDate"],
+                notes: [],
+                status: "ACTIVE",
+                program: program?.program,
+                programStage: key,
+                orgUnit,
+                scheduledAt: formData["registrationDate"],
+                dataValues: value
+            })
+        }
+    }
+    
+    
     return {
         trackedEntities: [{
             enrollments: [
@@ -15,11 +34,7 @@ const postTrackerBody = (formData: Record<string, any>, program: programDataStor
                         return null;
                     }).filter((attribute: any) => attribute != null),
                     status: "ACTIVE",
-                    ...(type == 'cicles' ? {
-                        
-                    }
-                        : null
-                    )
+                    events: events
                 }
             ],
             orgUnit: orgUnit,

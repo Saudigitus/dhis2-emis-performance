@@ -1,26 +1,85 @@
-import { CustomAttributeProps} from "../../../types/attributes/AttributeColumns";
-import { FormSectionProps } from "../../../types/form/FieldsTypes";
+// import { CustomAttributeProps} from "../../../types/attributes/AttributeColumns";
+// import { FormSectionProps } from "../../../types/form/FieldsTypes";
 import { Attribute } from "../../../types/generated/models";
 import type { ValidationNameType } from "../../../types/form/validateOuNameObject";
+import { CustomAttributeProps, VariablesTypes } from "../../../types/variables/AttributeColumns";
+import { FormSectionProps } from "../../../types/fields/FieldsTypes";
+import { format } from "date-fns";
 
-function formFields(validationObj: ValidationNameType): FormSectionProps[] {
+
+const staticForm = () => {
+  return {
+    registeringSchool: {
+      required: true,
+      name: "parentOrgUnit",
+      labelName: "Distrito",
+      valueType: "TEXT",
+      options: undefined,
+      disabled: true,
+      pattern: "",
+      visible: true,
+      description: "Distrito",
+      searchable: false,
+      error: false,
+      programStage: "",
+      content: "",
+      id: "parentOrgUnit",
+      displayName: "Distrito",
+      header: "Distrito",
+      type: VariablesTypes.DataElement,
+      assignedValue: undefined
+    },
+    enrollmentDate: {
+      required: true,
+      name: "registrationDate",
+      labelName: "Data do Cadastro",
+      valueType: "DATE",
+      options: undefined,
+      disabled: false,
+      pattern: "",
+      visible: true,
+      description: "Data do Cadastro",
+      searchable: false,
+      error: false,
+      programStage: "",
+      content: "",
+      id: "registrationDate",
+      displayName: "Data do Cadastro",
+      header: "Data do Cadastro",
+      type: VariablesTypes.DataElement,
+      assignedValue: format(new Date(), "yyyy-MM-dd")
+    }
+  }
+}
+
+function formFields(validationObj: ValidationNameType, formData: any): FormSectionProps[] {
+  const [ mapeamentoFields = [] ] = formData
+
   return [
     {
-      section: "",
-      description: "",
+      section: "Detalhes gerais",
+      description: "Detalhes gerais",
       fields: [
-        {
-          id: "registrationDate",
-          labelName: "Data do Cadastro",
-          displayName: "Data do Cadastro",
-          header: "Data do Cadastro",
-          disabled: false,
-          valueType: Attribute.valueType.DATE as unknown as CustomAttributeProps["valueType"],
-          name: "registrationDate",
-          required: true,
-          visible: true,
-          description: "Description for the field"
-        },
+        staticForm().enrollmentDate,
+        staticForm().registeringSchool
+      ]
+    },
+    {
+      section: "Detalhes da ASCA",
+      description: "Detalhes da ASCA",
+      fields: [
+        // {
+        //   id: "registrationDate",
+        //   labelName: "Data do Cadastro",
+        //   displayName: "Data do Cadastro",
+        //   header: "Data do Cadastro",
+        //   disabled: false,
+        //   valueType: Attribute.valueType.DATE as unknown as CustomAttributeProps["valueType"],
+        //   name: "registrationDate",
+        //   required: true,
+        //   visible: true,
+        //   description: "Description for the field"
+        // },
         {
           id: "groupCode",
           labelName: "Código do Grupo",
@@ -45,8 +104,8 @@ function formFields(validationObj: ValidationNameType): FormSectionProps[] {
           visible: true,
           description: "Description for the field",
           helpText: validationObj.validationText,
-          error:validationObj.error,
-          warning:validationObj.warning
+          error: validationObj.error,
+          warning: validationObj.warning
         },
         {
           id: "meetingAddress",
@@ -88,7 +147,13 @@ function formFields(validationObj: ValidationNameType): FormSectionProps[] {
           description: "Description for the field"
         }
       ]
-    }
+    },
+    {
+      section: "Mapeamento e Saúde da ASCA",
+      description: "Mapeamento e Saúde da ASCA",
+      fields: mapeamentoFields
+      
+    },
   ];
 }
 
