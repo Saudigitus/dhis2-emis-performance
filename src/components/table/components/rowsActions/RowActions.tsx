@@ -51,10 +51,10 @@ export default function RowActions(props: RowActionsProps) {
       disabled: completing,
       onClick: () => {
         setOpenEditionModal(!openEditionModal)
+        buildFormData(row?.trackedEntity, nextAction?.programStage!)
       },
     }
   ];
-
 
   return (
     <div className={style.rowActionsContainer}>
