@@ -4,8 +4,9 @@ export const fieldsType = {
 }
 
 interface EventQueryProps {
-    page: number
-    pageSize: number
+    paging?: boolean
+    page?: number
+    pageSize?: number
     ouMode: string
     program: string
     order: string

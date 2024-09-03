@@ -7,12 +7,12 @@ import { useDataElementsParamMapping, useParams } from '../../hooks';
 import { OuQueryString } from '../../schema/headerSearchInputSchema';
 
 export default function Item(props: MenuItemsProps): React.ReactElement {
-    const {  menuItems, dataElementId, onToggle } = props;
-    
+    const { menuItems, dataElementId, onToggle } = props;
+
     const stringQuery = useRecoilValue(OuQueryString);
     const filteredMenuItems = stringQuery
-    ? menuItems.filter(item => item.label.toLowerCase().includes(stringQuery.toLowerCase()))
-    : menuItems;
+        ? menuItems.filter(item => item.label.toLowerCase().includes(stringQuery.toLowerCase()))
+        : menuItems;
 
     const { add } = useParams();
     const [headerFields, setHeaderFields] = useRecoilState(HeaderFieldsState)
@@ -34,7 +34,7 @@ export default function Item(props: MenuItemsProps): React.ReactElement {
         setHeaderFields({ attributes, dataElements });
         onToggle()
     }
-    
+
     if ((stringQuery && !filteredMenuItems.length) || !menuItems.length) {
         return <Help>
             No items found

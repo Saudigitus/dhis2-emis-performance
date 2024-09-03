@@ -38,6 +38,7 @@ interface RenderHeaderProps {
     createSortHandler?: (property: string) => any
     rowsData?: any[]
     headerData?: CustomAttributeProps[]
+    events?: any[]
 }
 
 interface TableSortProps {
@@ -62,6 +63,7 @@ interface ShowFieldsBasedValueTypeProps {
     trackedEntity: string
     setPrevValues: (a: Object) => void
     prevValues: any
+    disableInput: boolean
     inactive: boolean
 }
 interface RowActionsType {
@@ -73,6 +75,8 @@ interface RowActionsType {
 }
 interface RowActionsProps {
     row: any
+    event: string
+    disabled: boolean
     onSelectTei?: (arg: any) => void
     onShowHistory?: () => void
 }

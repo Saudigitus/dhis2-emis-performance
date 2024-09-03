@@ -3,13 +3,13 @@ import { type ProgramConfig } from "../../../types/programConfig/ProgramConfig";
 import { VariablesTypes, type CustomAttributeProps } from "../../../types/variables/AttributeColumns";
 import { useMemo } from "react";
 
-export function formatResponse(data: ProgramConfig, programStageId: string, tableColumns: CustomAttributeProps[] = [], programIndicators: any[]): CustomAttributeProps[] {
-    let columns = ['Actions']
+export function formatResponse(data: ProgramConfig, programStageId: string, tableColumns: CustomAttributeProps[] = [], programIndicators: any[], moduloAdministrativo: string, dataElementId: string): CustomAttributeProps[] {
     const originalData = ((data?.programStages?.find(programStge => programStge.id === programStageId)) ?? {} as unknown as ProgramConfig["programStages"][0])
     const programIndicatorsData = data?.programIndicators?.filter((x) => programIndicators?.map((x) => x.id).join(",").includes(x.id))
+    const selected = data?.programStages?.find(x => x.id === programStageId)?.programStageDataElements?.find(de => de.dataElement.id === dataElementId)?.dataElement
 
     function getProgramStageDataElement(): [] {
-        return Object.keys(originalData).length > 0
+        return (Object.keys(originalData).length > 0 && moduloAdministrativo != null && moduloAdministrativo != undefined)
             ? originalData?.programStageDataElements?.map((programStageDataElement) => {
                 return {
                     id: programStageDataElement.dataElement.id + "_" + programStageId,
@@ -94,31 +94,28 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
         })
             .concat(getProgramStageDataElement())
             .concat(getProgramIndicatorsHeaders())
-            .concat(
-                columns?.map((column) => {
-                    return {
-                        id: column,
-                        displayName: column,
-                        header: column,
-                        required: false,
-                        name: column,
-                        labelName: column,
-                        valueType: '',
-                        options: undefined,
-                        initialOptions: undefined,
-                        visible: true,
-                        disabled: false,
-                        pattern: '',
-                        searchable: false,
-                        error: false,
-                        content: '',
-                        key: '',
-                        displayInFilters: false,
-                        type: VariablesTypes.Custom
-                    }
-                }) as []
-            )
-    }, [data, programStageId, tableColumns, programIndicators]);
+            .concat([{
+                id: selected?.id,
+                displayName: selected?.optionSet.options.find(x => x.value === moduloAdministrativo)?.label,
+                header: selected?.optionSet.options.find(x => x.value === moduloAdministrativo)?.label,
+                required: false,
+                name: selected?.id,
+                labelName: selected?.optionSet.options.find(x => x.value === moduloAdministrativo)?.label,
+                valueType: '',
+                options: undefined,
+                initialOptions: undefined,
+                visible: true,
+                disabled: false,
+                pattern: '',
+                searchable: false,
+                error: false,
+                content: '',
+                key: '',
+                displayInFilters: false,
+                type: VariablesTypes.Custom
+            }]) as []
+
+    }, [data, programStageId, tableColumns, programIndicators, moduloAdministrativo]);
 
     return headerResponse;
 }

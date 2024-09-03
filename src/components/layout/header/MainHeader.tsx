@@ -14,7 +14,7 @@ export default function MainHeader(): React.ReactElement {
     const selectedOptions = urlParamiters();
     const { getDataStoreData } = getSelectedKey()
     const programConfig: ProgramConfig = useRecoilValue(ProgramConfigState)
-    const programStageDataElements: programStageDataElements[] | any = programConfig?.programStages?.find((programStage: any) => programStage.id === getDataStoreData.registration.programStage)?.programStageDataElements
+    const programStageDataElements: programStageDataElements[] | any = programConfig?.programStages?.find((programStage: any) => programStage.id === getDataStoreData.monitoria.programStage)?.programStageDataElements
     const { initialize } = initializeRulesEngine()
 
     useEffect(() => {

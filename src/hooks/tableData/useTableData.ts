@@ -41,7 +41,7 @@ export function useTableData() {
     const [immutableTeiData, setImmutableTeiData] = useState<any[]>([]) // this variable receives the attributes and dataElements of the registragion programStage
     const { hide, show } = useShowAlerts()
     const [allTeis, setAllTeis] = useRecoilState(AllTeisSchema)
-    const { program, registration } = getDataStoreKeys()
+    const { program } = getDataStoreKeys()
     const [, setAllEvents] = useRecoilState(EventsState);
     const { school } = urlParamiters()
     const { getProgramIndicators } = useGetProgramIndicators()
@@ -107,7 +107,7 @@ export function useTableData() {
             program: program,
             order: "createdAt:desc",
             programStage: selectedProgramStage,
-            filter: headerFieldsState?.dataElements,
+            // filter: headerFieldsState?.dataElements,
             filterAttributes: headerFieldsState?.attributes,
             orgUnit: school as unknown as string
         })).catch((error) => {
@@ -143,8 +143,6 @@ export function useTableData() {
             }
         }
 
-
-
         // if (selectedProgramStage !== null && selectedProgramStage !== undefined && selectedProgramStage !== '') {
         //     for (const tei of allTeis) {
         //         const marksResults: MarksQueryResults = await fetchMarks(tei, selectedProgramStage)
@@ -162,7 +160,6 @@ export function useTableData() {
                 programIndicatorsInstances.push(returnTeiProgramIndicators(tei.trackedEntity, programIndicatorsResults))
             }
         }
-
 
         const localData = formatResponseRows({
             eventsInstances: events?.results?.instances,

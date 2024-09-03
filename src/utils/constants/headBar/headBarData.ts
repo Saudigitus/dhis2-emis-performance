@@ -4,6 +4,7 @@ import { programStageDataElements } from "../../../types/programStageConfig/Prog
 import { headBarDataElements } from "./headBarDataElements"
 
 function headBarData(selectedOptions: SelectedOptionsTypes, dataStoreData: dataStoreRecord, programStageDataElements: programStageDataElements[]): HeadBarTypes[] {
+
     return [
         {
             id: "c540ac7c",

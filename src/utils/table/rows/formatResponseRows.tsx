@@ -8,21 +8,24 @@ export function formatResponseRows({ eventsInstances, teiInstances, marksInstanc
     for (const event of eventsInstances) {
         const teiDetails = teiInstances.find(tei => tei.trackedEntity === event.trackedEntity)
         const marksDetails = marksInstances.find(mark => (mark.trackedEntity === event.trackedEntity) && (mark?.enrollment === event?.enrollment))
+
         setImmutableTeiData((prevState: any) => [...prevState, {
             ...dataValues(event.dataValues), ...(attributes((teiDetails?.attributes) ?? [])),
             trackedEntity: event.trackedEntity,
             enrollment: event?.enrollment,
             status: teiDetails?.enrollments?.[0]?.status
         }])
+
         allRows.push({
-            ...dataValues(event.dataValues), 
-            ...(marksDetails !== undefined ? { ...dataValues(marksDetails.dataValues, programStage) } : {}), 
+            ...dataValues(event.dataValues),
+            ...(marksDetails !== undefined ? { ...dataValues(marksDetails.dataValues, programStage) } : {}),
             ...(attributes((teiDetails?.attributes) ?? [])),
             ...(programIndicators(programIndicatorsInstances?.find(x => x.trackedEntity === event.trackedEntity)?.programIndicators ?? [])),
             trackedEntity: event.trackedEntity,
             enrollment: event?.enrollment,
             status: teiDetails?.enrollments?.[0]?.status,
             eventStatus: event?.status as unknown as any,
+            orgUnit: teiDetails?.orgUnit
         })
     }
     return allRows;
@@ -32,7 +35,7 @@ export function formatResponseRowsMarks({ marksInstance, programStage }: FormatR
     return dataValues(marksInstance?.dataValues ?? [], programStage)
 }
 
-function dataValues(data: dataValuesProps[], programStage?: string | null): RowsDataProps {
+export function dataValues(data: dataValuesProps[], programStage?: string | null): RowsDataProps {
     const localData: RowsDataProps = {}
     for (const dataElement of data) {
         let key = programStage ? dataElement.dataElement + '_' + programStage : dataElement.dataElement

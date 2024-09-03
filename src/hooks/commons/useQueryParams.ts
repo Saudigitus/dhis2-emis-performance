@@ -27,7 +27,7 @@ const useParams = () => {
             position: useQuery().get('position'),
             employmentType: useQuery().get('employmentType'),
             programStage: useQuery().get('programStage'),
-            tab: useQuery().get('tab'),
+            moduloAdministrativo: useQuery().get('moduloAdministrativo'),
         }
     }
     return { add, remove, useQuery, urlParamiters }

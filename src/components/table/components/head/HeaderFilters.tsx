@@ -22,7 +22,7 @@ function HeaderFilters() {
       <div className={styles.filterLeftContainer}>
         {/* <RowActions row={{}}/> */}
         {/* <SwitchButtonView /> */}
-        <EnrollmentActionsButtons/>
+        {/* <EnrollmentActionsButtons/> */}
         <ConfigTableColumns filteredHeaders={updatedCols} headers={columns} updateVariables={setTableHeaders} />
       </div>
     </div>

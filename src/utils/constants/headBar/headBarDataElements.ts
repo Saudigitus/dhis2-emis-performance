@@ -6,20 +6,20 @@ import { formatCamelCaseToWords } from "../../commons/formatCamelCaseToWords";
 export const headBarDataElements = (selectedOptions: SelectedOptionsTypes, getDataStoreData: dataStoreRecord, programStageDataElements: programStageDataElements[]): HeadBarTypes[] => {
     const headBarFilters: HeadBarTypes[] = []
 
-    getDataStoreData?.filters?.dataElements.map((filter: filterItem) => {
-
+    getDataStoreData?.monitoria?.filters?.dataElements.map((filter: filterItem) => {
         if (programStageDataElements) {
             let headBarFilterName: string = '';
 
             const dataElement = programStageDataElements?.find((psDataElement: any) => psDataElement?.dataElement?.id === filter?.dataElement)?.dataElement;
 
+            const value = dataElement?.optionSet.options.find(x => x.value === selectedOptions[filter.code as unknown as keyof typeof selectedOptions])?.label
             if (dataElement) headBarFilterName = dataElement.displayName;
 
             headBarFilters.push({
                 disabled: !(selectedOptions?.school && selectedOptions?.schoolName),
                 id: filter.code,
                 label: headBarFilterName,
-                value: selectedOptions[filter.code as unknown as keyof typeof selectedOptions] ?? `Select a ${formatCamelCaseToWords(filter.code)}`,
+                value: value ?? `Select a ${formatCamelCaseToWords(filter.code)}`,
                 placeholder: `Search for ${formatCamelCaseToWords(filter.code)}`,
                 dataElementId: filter.dataElement,
                 component: "menuItemContainer",

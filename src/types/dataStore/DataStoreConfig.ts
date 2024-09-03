@@ -61,9 +61,15 @@ interface assessment {
     tabGroups: tabGroupItem[]
 }
 
+interface monitoria {
+    filters: filters
+    programStage: string
+}
+
 interface dataStoreRecord {
     assessment: assessment
     attendance: attendance
+    monitoria: monitoria
     key: string
     trackedEntityType: string
     lastUpdate: string

@@ -14,7 +14,7 @@ import { useRecoilValue } from 'recoil';
 import { ProgramConfigState } from '../../../../schema/programSchema';
 
 export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueTypeProps) {
-    const { column, value, currentEvent, saveMarks, showFeedBack, setShowFeedBack, headers, loader, trackedEntity, prevValues, setPrevValues, inactive } = props;
+    const { column, value, currentEvent, saveMarks, showFeedBack, setShowFeedBack, headers, loader, trackedEntity, prevValues, setPrevValues, inactive, disableInput } = props;
     const dataElement = column.id.split('_')[0]
     const { imageUrl } = GetImageUrl()
     const programConfigState = useRecoilValue(ProgramConfigState);
@@ -61,7 +61,7 @@ export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueType
                         className={showFeedBack.dataElement === `${currentEvent?.event}/${dataElement}` && styles[showFeedBack.feedbackType]}>
                         <GenericFields
                             attribute={column}
-                            disabled={((loader === true) || inactive)}
+                            disabled={((loader === true) || inactive || disableInput)}
                             valueType={column.valueType}
                         />
                     </form>

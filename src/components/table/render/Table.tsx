@@ -10,11 +10,12 @@ import WithPadding from '../../template/WithPadding';
 import WorkingLists from '../components/filters/workingList/WorkingLists';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { HeaderFieldsState } from '../../../schema/headersSchema';
-import { SubTabState } from '../../../schema/termMarksSchema';
+import { EventsState } from '../../../schema/termMarksSchema';
 import { useHeader, useParams, useTableData } from '../../../hooks';
 import { TeiRefetch } from '../../../schema/refecthTeiSchema';
 import { TableDataLoadingState } from '../../../schema/tableDataLoadingSchema';
-import { TabsState } from '../../../schema/tabSchema';
+import { getDataStoreKeys, getSelectedKey } from '../../../utils';
+import { useGetEvents } from '../../../hooks/events/useGetEvents';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -37,15 +38,17 @@ function Table() {
     const classes = usetStyles()
     const { columns } = useHeader()
     const { getData, loading, tableData } = useTableData()
-    const { useQuery } = useParams();
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
     const [refetch] = useRecoilState(TeiRefetch)
-    const selectedTab = useRecoilValue(TabsState)
     const { urlParamiters } = useParams()
     const { school } = urlParamiters()
     const setLoading = useSetRecoilState(TableDataLoadingState)
+    const { getDataStoreData } = getSelectedKey()
+    const { program } = getDataStoreKeys()
+    const { getEvents } = useGetEvents()
+    const monitoriaEvents = useRecoilValue(EventsState);
 
     useEffect(() => {
         setLoading(loading)
@@ -57,10 +60,14 @@ function Table() {
 
     useEffect(() => {
         if (school)
-            void getData(page, pageSize, selectedTab.programStage, [])
+            void getData(page, pageSize, getDataStoreData.registration.programStage, [])
     }, [headerFieldsState, page, pageSize, refetch])
 
-
+    useEffect(() => {
+        if (school) {
+            void getEvents(page, pageSize, program, getDataStoreData.monitoria.programStage, headerFieldsState.dataElements, headerFieldsState.attributes, school)
+        }
+    }, [headerFieldsState, refetch])
 
     const onPageChange = (newPage: number) => {
         setpage(newPage)
@@ -101,6 +108,7 @@ function Table() {
                                         loader={loading}
                                         headerData={columns}
                                         rowsData={tableData}
+                                        events={monitoriaEvents}
                                     />
                                 </>
                             </TableComponent>

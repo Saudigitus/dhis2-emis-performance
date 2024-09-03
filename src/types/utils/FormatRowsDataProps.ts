@@ -16,6 +16,7 @@ interface FormatResponseRowsProps {
         enrollments: any
         trackedEntity: string
         attributes: attributesProps[]
+        orgUnit: string
     }]
     marksInstances: [{
         status: boolean
@@ -23,7 +24,7 @@ interface FormatResponseRowsProps {
         trackedEntity: string
         dataValues: dataValuesProps[]
     }]
-    programIndicatorsInstances:[{
+    programIndicatorsInstances: [{
         trackedEntity: string
         programIndicators: programIndicators[]
     }]
