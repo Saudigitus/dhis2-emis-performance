@@ -19,10 +19,11 @@ export default function RowActions(props: RowActionsProps) {
   const dataStore = useRecoilValue(DataStoreState)
   const getProgram = useRecoilValue(ProgramConfigState);
   const [openEditionModal, setOpenEditionModal] = useState<boolean>(false);
+  const [actionPStage, setActionPStage] = useState<string>();
   const { completeEvents, loading: completing } = useCompleteEvents()
   const [loadingRow, setLoadingRow] = useRecoilState(UpdatingEventState)
   const nextAction = dataStore[0].assessment?.tabGroups?.find((x) => x.programStage == selectedTab.programStage)?.nextAction
-  const title = getProgram?.programStages?.filter((x: any) => x.id === nextAction?.programStage)?.[0]?.displayName || ""
+  const title = getProgram?.programStages?.filter((x: any) => x.id === actionPStage)?.[0]?.displayName || ""
   const eventsIsCompleted = checkCompleted(row?.eventStatus as string)
   const { buildFormData, error, loading } = useGetEventUpdateFormData()
 
@@ -44,16 +45,17 @@ export default function RowActions(props: RowActionsProps) {
         completeEvents(eventsIsCompleted ? "ACTIVE" : "COMPLETED", [row?.trackedEntity])
       },
     },
-    {
+    ...nextAction?.map((action) => ({
       icon: <CancelOutlined />,
       color: '#d64d4d',
-      label: nextAction?.displayName!,
+      label: action?.displayName,
       disabled: completing,
       onClick: () => {
         setOpenEditionModal(!openEditionModal)
-        buildFormData(row?.trackedEntity, nextAction?.programStage!)
+        buildFormData(row?.trackedEntity, action?.programStage!)
+        setActionPStage(action.programStage)
       },
-    }
+    })) || [],
   ];
 
   return (
@@ -73,7 +75,7 @@ export default function RowActions(props: RowActionsProps) {
       {
         openEditionModal &&
         <ModalComponent title={title} open={openEditionModal} setOpen={setOpenEditionModal}>
-          <ModalContentProgramStages open={openEditionModal} setOpen={setOpenEditionModal} nexProgramStage={nextAction?.programStage!} />
+          <ModalContentProgramStages open={openEditionModal} setOpen={setOpenEditionModal} nexProgramStage={actionPStage as string} />
         </ModalComponent>
       }
     </div>

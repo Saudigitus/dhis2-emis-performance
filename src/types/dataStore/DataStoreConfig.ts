@@ -52,10 +52,10 @@ interface tabGroupItem {
     order: string,
     label: string
     programStage: string
-    nextAction?: {
+    nextAction?: [{
         displayName: string,
         programStage: string
-    }
+    }]
 }
 
 interface assessment {
