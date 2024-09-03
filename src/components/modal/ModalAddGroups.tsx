@@ -12,8 +12,9 @@ import { postBody } from "../../utils/organisationUnit/formatDataForPost.js";
 import WithPadding from "../template/WithPadding";
 import { TeiRefetch } from "../../schema/refecthTeiSchema.js";
 import { useGetOrgUnitCode } from "../../hooks/organisationUnit/useGetOrgUnitCode.js";
+import { useParams } from "../../hooks/commons/useQueryParams";
 
-function ModalContentAddGroups({ setOpen, parentId }: any) {
+function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
   const formRef = useRef<any>(null);
   const [values, setValues] = useState({})
   const closeModal = () => setOpen(false);
@@ -23,6 +24,8 @@ function ModalContentAddGroups({ setOpen, parentId }: any) {
   const [initialValues] = useState({ registrationDate: format(new Date(), "yyyy-MM-dd") })
   const debouncedValue = useDebounce(values["ouName" as keyof typeof values], 400)
   const setRefetch = useSetRecoilState(TeiRefetch)
+  const { urlParamiters } = useParams()
+  const { schoolName } = urlParamiters()
 
   useEffect(() => {
     setRefetch(false)
@@ -34,7 +37,7 @@ function ModalContentAddGroups({ setOpen, parentId }: any) {
   }, [debouncedValue])
 
   function onSubmit() {
-    createGroup({ data: postBody(values, parentId).data, formData: { ...values, parentId: parentId },  closeModal });
+    createGroup({ data: postBody(values, parentId).data, formData: { ...values, parentId: parentId }, closeModal });
   }
 
   function onChange(e: any) {
@@ -58,15 +61,15 @@ function ModalContentAddGroups({ setOpen, parentId }: any) {
   return (
     <WithPadding p="0px">
       <span className="text-secondary">Por favor, preencha todos os campos do formulário:</span>
-      <Form initialValues={{ ...initialValues, groupCode: orgUnitCode }} onSubmit={onSubmit}>
+      <Form initialValues={{ ...initialValues, groupCode: orgUnitCode, parentOrgUnit: schoolName }} onSubmit={onSubmit}>
         {({ handleSubmit, values, form }) => {
           formRef.current = form;
           return <form
             onSubmit={handleSubmit}
-            onChange={onChange(values) as unknown as ()=> void}
+            onChange={onChange(values) as unknown as () => void}
           >
             {
-              formFields(ouNameValidationObject).map((field, index) => (
+              formFields(ouNameValidationObject, formData).map((field, index,) => (
                 <div className="my-3">
                   <GroupForm
                     name={field.section}

@@ -7,7 +7,6 @@ export function useFormatDataStore() {
     const dataStore = useRecoilValue(DataStoreState)
     const groupsProgram: programDataStoreType = dataStore[0]?.assessment?.programs.find((program: programDataStoreType) => program?.programName == 'groupsManagement')
 
-    console.log(dataStore)
     return {
         dataSet: dataStore[0]?.assessment?.files_id?.ficha,
         groupsLevel: dataStore[0]?.assessment?.groupsLevel,
