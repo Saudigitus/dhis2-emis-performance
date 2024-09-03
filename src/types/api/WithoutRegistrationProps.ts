@@ -16,6 +16,13 @@ interface EventQueryProps {
     filterAttributes?: string[]
 }
 
+interface EventQueryByTeiProps {
+    program: string
+    programStage: string
+    orgUnit: string
+    trackedEntity: string
+}
+
 interface GetDataElementsProps {
     programStageId: string
     type?: keyof typeof fieldsType
@@ -36,4 +43,4 @@ interface EventQueryResults {
     }
 }
 
-export type { EventQueryProps, GetDataElementsProps, EventQueryResults, dataValuesProps }
+export type { EventQueryProps, GetDataElementsProps, EventQueryResults, dataValuesProps, EventQueryByTeiProps }

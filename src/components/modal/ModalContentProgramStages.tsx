@@ -11,8 +11,7 @@ import { useParams, usePostTei } from "../../hooks";
 import { CustomDhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine";
 import styles from "./modal.module.css";
 import classNames from "classnames";
-import { formatProgramStageSections } from "../../utils/events/formatProgramStageSections";
-import { formatResponseDataElements } from "../../utils/events/formatResponseDataElements";
+import { formatResponseDataElements, formEvents } from "../../utils/events/formatResponseDataElements";
 
 function ModalContentProgramStages(props: ModalContentProgramStageProps): React.ReactElement {
   const { setOpen, nexProgramStage } = props;
@@ -25,12 +24,8 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
   const { postTei, loading, data } = usePostTei()
   const [clickedButton, setClickedButton] = useState<string>("");
 
-  console.log(getProgram.programStages.find((x) => x.id === nexProgramStage)?.programStageSections.map((x) => { return { ...x, fields: formatResponseDataElements(x.dataElements) } }));
-
-  // console.log(getProgram.programStages);
-
   const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
-    variables: getProgram.programStages.find((x) => x.id === nexProgramStage)?.programStageSections.map((x) => { return { ...x, fields: formatResponseDataElements(x.dataElements) } })!,
+    variables: [...formEvents(getProgram.programStages.find((x) => x.id === nexProgramStage)?.executionDateLabel), ...getProgram.programStages.find((x) => x.id === nexProgramStage)?.programStageSections.map((x) => { return { ...x, fields: formatResponseDataElements(x.dataElements) } })!],
     values, type: "programStageSection",
     formatKeyValueType: {}
   })
@@ -55,7 +50,7 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
 
   }
 
-  
+console.log(updatedVariables);
 
   return (
     <WithPadding>

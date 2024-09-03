@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import style from './rowActions.module.css'
 import { Button, IconCheckmarkCircle24 } from "@dhis2/ui";
 import { RowActionsProps, RowActionsType } from '../../../../types/table/TableContentProps';
@@ -11,6 +11,7 @@ import { ProgramConfigState } from "../../../../schema/programSchema";
 import { useCompleteEvents } from '../../../../hooks/events/useCompleteEvents';
 import { checkCompleted } from "../../../../utils/table/rows/checkCanceled";
 import { UpdatingEventState } from "../../../../schema/updateEventSchema";
+import { useGetEventUpdateFormData } from "../../../../hooks/form/useGetEventUpdateFormData";
 
 export default function RowActions(props: RowActionsProps) {
   const { row } = props;
@@ -23,6 +24,12 @@ export default function RowActions(props: RowActionsProps) {
   const nextAction = dataStore[0].assessment?.tabGroups?.find((x) => x.programStage == selectedTab.programStage)?.nextAction
   const title = getProgram?.programStages?.filter((x: any) => x.id === nextAction?.programStage)?.[0]?.displayName || ""
   const eventsIsCompleted = checkCompleted(row?.eventStatus as string)
+  const { buildFormData, error, loading } = useGetEventUpdateFormData()
+
+  useEffect(() => {
+    if (error)
+      setOpenEditionModal(false)
+  }, [error])
 
 
   const rowsActions: RowActionsType[] = [
@@ -42,7 +49,9 @@ export default function RowActions(props: RowActionsProps) {
       color: '#d64d4d',
       label: nextAction?.displayName!,
       disabled: completing,
-      onClick: () => { setOpenEditionModal(!openEditionModal) },
+      onClick: () => {
+        setOpenEditionModal(!openEditionModal)
+      },
     }
   ];
 

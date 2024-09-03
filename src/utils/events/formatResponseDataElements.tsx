@@ -12,7 +12,7 @@ export function formatResponseDataElements(programStageObject: ProgramStageSecti
             labelName: dataElement.displayName,
             valueType: dataElement?.optionSet
                 ? Attribute.valueType.LIST as unknown as CustomAttributeProps["valueType"]
-                : dataElement?.valueType as unknown as  CustomAttributeProps["valueType"],
+                : dataElement?.valueType as unknown as CustomAttributeProps["valueType"],
             options: { optionSet: dataElement?.optionSet },
             initialOptions: { optionSet: dataElement?.optionSet },
             disabled: false,
@@ -30,4 +30,33 @@ export function formatResponseDataElements(programStageObject: ProgramStageSecti
             assignedValue: undefined
         }
     ));
+}
+
+export function formEvents(executionDateLabel = "Data do Evento") {
+    return [{
+        displayName: "Informação básica",
+        fields: [
+            {
+                required: true,
+                name: "eventDate",
+                labelName: executionDateLabel,
+                valueType: Attribute.valueType.DATE as unknown as CustomAttributeProps["valueType"],
+                options: { optionSet: undefined },
+                initialOptions: { optionSet: undefined },
+                disabled: false,
+                pattern: "",
+                visible: true,
+                description: executionDateLabel,
+                searchable: false,
+                error: false,
+                programStage: "programStageObject.id",
+                content: "",
+                id: "eventDate",
+                displayName: executionDateLabel,
+                header: executionDateLabel,
+                type: VariablesTypes.DataElement,
+                assignedValue: undefined
+            }
+        ]
+    }]
 }
