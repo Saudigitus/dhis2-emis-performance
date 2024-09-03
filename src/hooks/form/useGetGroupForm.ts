@@ -15,7 +15,7 @@ export default function useGetGroupForm() {
         if (Object.keys(getDataStoreData)?.length && getProgram) {
             const mapeamentoProgramStage = getProgram.programStages.find((x) => x.id === getDataStore[0]?.assessment.tabGroups?.[0].programStage)
 
-            setformData(formatResponseEvents(mapeamentoProgramStage))
+            setformData([formatResponseEvents(mapeamentoProgramStage)])
         }
     }
     useEffect(() => {

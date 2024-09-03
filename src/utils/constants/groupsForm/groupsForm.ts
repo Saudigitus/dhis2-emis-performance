@@ -52,7 +52,9 @@ const staticForm = () => {
   }
 }
 
-function formFields(validationObj: ValidationNameType, mapeamentoFields: any): FormSectionProps[] {
+function formFields(validationObj: ValidationNameType, formData: any): FormSectionProps[] {
+  const [ mapeamentoFields = [] ] = formData
+
   return [
     {
       section: "Detalhes gerais",
@@ -147,9 +149,9 @@ function formFields(validationObj: ValidationNameType, mapeamentoFields: any): F
       ]
     },
     {
-      section: "Detalhes gerais",
-      description: "Detalhes gerais",
-      fields: [...mapeamentoFields]
+      section: "Mapeamento e Saúde da ASCA",
+      description: "Mapeamento e Saúde da ASCA",
+      fields: mapeamentoFields
       
     },
   ];
