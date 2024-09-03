@@ -19,28 +19,23 @@ export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueType
     const { imageUrl } = GetImageUrl()
     const programConfigState = useRecoilValue(ProgramConfigState);
 
+    console.log(dataElement,'deee')
     function save(newMark: any) {
-        console.log(newMark, 'kekeke')
         void saveMarks({
             data: {
                 event: currentEvent?.event,
                 orgUnit: currentEvent?.orgUnit,
                 enrollment: currentEvent?.enrollment,
-                dataValues: [
-                    ...(dataElement === 'eventDate' ? currentEvent?.dataValues ?? []
-                        : {
-                            dataElement,
-                            value: newMark
-                        }
-                    )
-                ],
+                dataValues: [{
+                    dataElement,
+                    value: newMark
+                }],
                 program: currentEvent?.program,
                 status: currentEvent?.status,
                 trackedEntity: currentEvent?.trackedEntity,
-                programStage: currentEvent?.programStage,
-                ...(dataElement === 'eventDate' && { eventDate: newMark })
+                programStage: currentEvent?.programStage
             },
-            id: `${currentEvent?.event}`
+            id: `${currentEvent?.event}/${dataElement}`
         }).then(() => {
             setShowFeedBack({
                 dataElement: `${currentEvent?.event}/${dataElement}`,
