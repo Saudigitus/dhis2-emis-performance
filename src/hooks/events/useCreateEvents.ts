@@ -17,7 +17,7 @@ export function usePostEvent() {
     const { hide, show } = useShowAlerts()
     const [refetch, setRefetch] = useRecoilState<boolean>(TeiRefetch)
 
-    const [create, { loading, data,error }] = useDataMutation(POST_EVENT, {
+    const [create, { loading, data, error }] = useDataMutation(POST_EVENT, {
         onComplete: () => {
             show({ message: "Data updated successfully", type: { success: true } })
             setRefetch(!refetch)

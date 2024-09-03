@@ -16,6 +16,7 @@ import { TeiRefetch } from '../../../schema/refecthTeiSchema';
 import { TableDataLoadingState } from '../../../schema/tableDataLoadingSchema';
 import { getDataStoreKeys, getSelectedKey } from '../../../utils';
 import { useGetEvents } from '../../../hooks/events/useGetEvents';
+import AlertDialog from '../../confirm/confirm';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -61,12 +62,11 @@ function Table() {
     useEffect(() => {
         if (school)
             void getData(page, pageSize, getDataStoreData.registration.programStage, [])
-    }, [headerFieldsState, page, pageSize, refetch])
+    }, [headerFieldsState, page, pageSize])
 
     useEffect(() => {
-        if (school) {
+        if (school)
             void getEvents(page, pageSize, program, getDataStoreData.monitoria.programStage, headerFieldsState.dataElements, headerFieldsState.attributes, school)
-        }
     }, [headerFieldsState, refetch])
 
     const onPageChange = (newPage: number) => {
@@ -124,6 +124,7 @@ function Table() {
                     />
                 </WithBorder>
             </WithPadding>
+            <AlertDialog />
         </Paper>
     )
 }

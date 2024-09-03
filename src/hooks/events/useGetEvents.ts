@@ -4,6 +4,7 @@ import useShowAlerts from '../commons/useShowAlert';
 import { EventsState } from '../../schema/termMarksSchema';
 import { EventQueryProps, EventQueryResults } from "../../types/api/WithoutRegistrationProps";
 import { useSetRecoilState } from 'recoil';
+import { ConfirmationState } from '../../schema/confirmationDialog';
 
 const EVENT_QUERY = (queryProps: EventQueryProps) => ({
     results: {
@@ -18,12 +19,11 @@ const EVENT_QUERY = (queryProps: EventQueryProps) => ({
 export function useGetEvents() {
     const engine = useDataEngine();
     const { hide, show } = useShowAlerts()
-    const [loading, setLoading] = useState<boolean>(false)
     const setAllEvents = useSetRecoilState(EventsState);
+    const setConfirmState = useSetRecoilState(ConfirmationState)
 
     const getEvents = async (page: number, pageSize: number, program: string, programStage: string, filter: any[], filterAttributes: any[], orgUnit: any): Promise<EventQueryResults> => {
-        setLoading(true)
-        return await engine.query(EVENT_QUERY({
+        await engine.query(EVENT_QUERY({
             ouMode: "DESCENDANTS",
             paging: false,
             program: program,
@@ -34,6 +34,7 @@ export function useGetEvents() {
             orgUnit: orgUnit as unknown as string,
         })).then((resp: any) => {
             setAllEvents(resp.results.instances)
+            setConfirmState((cd) => ({ ...cd, loading: false, open: false }))
         })
             .catch((error) => {
                 show({
@@ -41,9 +42,10 @@ export function useGetEvents() {
                     type: { critical: true }
                 });
                 setTimeout(hide, 5000);
-            }) as unknown as EventQueryResults;
+            })
+
     }
 
 
-    return { getEvents, loading }
+    return { getEvents }
 }

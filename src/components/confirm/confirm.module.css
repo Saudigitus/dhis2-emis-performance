@@ -1,0 +1,12 @@
+.closeAppointmentBtn {
+    height: 35px;
+    width: 190px;
+    margin-top: 37px;
+    margin-right: 30px;
+    border: dashed 1px #6CAE75;
+    border-radius: 7px;
+    text-align: center;
+    color: #8BBD8B;
+    padding: 6px 0 0 0;
+    font-size: 15px;
+}

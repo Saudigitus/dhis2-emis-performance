@@ -20,21 +20,27 @@ export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueType
     const programConfigState = useRecoilValue(ProgramConfigState);
 
     function save(newMark: any) {
+        console.log(newMark, 'kekeke')
         void saveMarks({
             data: {
                 event: currentEvent?.event,
                 orgUnit: currentEvent?.orgUnit,
                 enrollment: currentEvent?.enrollment,
-                dataValues: [{
-                    dataElement,
-                    value: newMark
-                }],
+                dataValues: [
+                    ...(dataElement === 'eventDate' ? currentEvent?.dataValues ?? []
+                        : {
+                            dataElement,
+                            value: newMark
+                        }
+                    )
+                ],
                 program: currentEvent?.program,
                 status: currentEvent?.status,
                 trackedEntity: currentEvent?.trackedEntity,
-                programStage: currentEvent?.programStage
+                programStage: currentEvent?.programStage,
+                ...(dataElement === 'eventDate' && { eventDate: newMark })
             },
-            id: `${currentEvent?.event}/${dataElement}`
+            id: `${currentEvent?.event}`
         }).then(() => {
             setShowFeedBack({
                 dataElement: `${currentEvent?.event}/${dataElement}`,

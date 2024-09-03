@@ -1,56 +1,67 @@
-import { useState } from "react";
 import style from './rowActions.module.css'
-import { Button, IconCheckmarkCircle24 } from "@dhis2/ui";
-import { RowActionsProps, RowActionsType } from '../../../../types/table/TableContentProps';
-import { CancelOutlined } from '@material-ui/icons';
-import { useRecoilValue } from 'recoil';
-import { DataStoreState } from '../../../../schema/dataStoreSchema';
-import { TabsState } from '../../../../schema/tabSchema';
-import { ModalComponent, ModalContentProgramStages } from '../../../modal';
+import { RowActionsProps } from '../../../../types/table/TableContentProps';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { ProgramConfigState } from "../../../../schema/programSchema";
-import { ButtonGroup } from '../../../buttons/ButtonGroup';
-import { useCompleteEvents } from '../../../../hooks/events/useCompleteEvents';
 import { Switch } from "@material-ui/core";
 import { usePostEvent } from "../../../../hooks/events/useCreateEvents";
 import { useParams } from "../../../../hooks";
 import { getSelectedKey } from "../../../../utils";
 import { format } from "date-fns";
+import { useDeleteEvent } from "../../../../hooks/events/useDeleteEvents";
+import { CircularLoader, CenteredContent } from "@dhis2/ui";
+import { useGetEvents } from '../../../../hooks/events/useGetEvents';
+import { ConfirmationState } from '../../../../schema/confirmationDialog';
 
 export default function RowActions(props: RowActionsProps) {
-  const { row, event,disabled } = props;
+  const { row, event, disabled } = props;
   const getProgram = useRecoilValue(ProgramConfigState);
-  const { loadUpdateEvent, data, updateEvent } = usePostEvent()
+  const { updateEvent } = usePostEvent()
   const { getDataStoreData } = getSelectedKey()
   const { urlParamiters } = useParams()
   const { moduloAdministrativo } = urlParamiters()
   const selected = getProgram?.programStages?.find(x => x.id === getDataStoreData.monitoria.programStage)?.programStageDataElements?.find(de => de.dataElement.id === getDataStoreData.monitoria.filters.dataElements[0].dataElement)?.dataElement
+  const [confirmSate, setConfirmState] = useRecoilState(ConfirmationState)
 
-  function Changing() {
-    const dateFormated = format(new Date(), "yyyy-MM-dd")
+  function Changing(changeEvent: any) {
+    if (changeEvent.target.checked) {
+      const dateFormated = format(new Date(), "yyyy-MM-dd")
 
-    const data: any = {
-      events: [
-        {
-          trackedEntityInstance: row.trackedEntity,
-          program: getProgram.id,
-          programStage: getDataStoreData.monitoria.programStage,
-          orgUnit: row.orgUnit,
-          enrollment: row.enrollment,
-          dataValues: [{
-            dataElement: selected?.id,
-            value: moduloAdministrativo
-          }],
-          eventDate: dateFormated,
-          occurredAt: dateFormated
-        }
-      ]
+      const data: any = {
+        events: [
+          {
+            trackedEntityInstance: row.trackedEntity,
+            program: getProgram.id,
+            programStage: getDataStoreData.monitoria.programStage,
+            orgUnit: row.orgUnit,
+            enrollment: row.enrollment,
+            dataValues: [{
+              dataElement: selected?.id,
+              value: moduloAdministrativo
+            }],
+            eventDate: dateFormated,
+            occurredAt: dateFormated
+          }
+        ]
+      }
+      void updateEvent({ data: data })
+      setConfirmState({ open: false, event: event, tei: row.trackedEntity, loading: true })
+    } else {
+      setConfirmState({ open: true, event: event, tei: row.trackedEntity })
     }
-    void updateEvent({ data: data })
   }
 
   return (
     <div className={style.rowActionsContainer}>
-      <Switch disabled={disabled} onChange={() => Changing()} checked={event ? true : false} color="primary" />
+      {
+        (confirmSate.loading && confirmSate.tei === row.trackedEntity) ?
+          <CenteredContent>
+            <CircularLoader small />
+          </CenteredContent>
+          :
+          <CenteredContent>
+            <Switch disabled={disabled} onChange={(event: any) => Changing(event)} checked={event ? true : false} color="primary" />
+          </CenteredContent>
+      }
     </div>
   );
 }
