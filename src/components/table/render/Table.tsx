@@ -74,7 +74,7 @@ function Table() {
     return (
         <Paper>
             <div className={classes.workingListsContainer}>
-                <h4 className={classes.h4}>Performance</h4>
+                <h4 className={classes.h4}>Sumário das ASCAS</h4>
                 <WorkingLists />
             </div>
             <WithBorder type='bottom' />
