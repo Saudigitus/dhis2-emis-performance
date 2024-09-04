@@ -28,8 +28,8 @@ interface registration {
 }
 
 interface transfer {
-    destinySchool: string
-    originSchool: string
+    destinyorgUnit: string
+    originorgUnit: string
     programStage: string
     status: string
 }

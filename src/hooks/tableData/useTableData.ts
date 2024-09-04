@@ -43,7 +43,7 @@ export function useTableData() {
     const [allTeis, setAllTeis] = useRecoilState(AllTeisSchema)
     const { program, registration } = getDataStoreKeys()
     const [, setAllEvents] = useRecoilState(EventsState);
-    const { school } = urlParamiters()
+    const { orgUnit } = urlParamiters()
     const { getProgramIndicators } = useGetProgramIndicators()
 
     const fetchMarks = async (tei: string, programStageId: string) => {
@@ -109,7 +109,7 @@ export function useTableData() {
             programStage: selectedProgramStage,
             filter: headerFieldsState?.dataElements,
             filterAttributes: headerFieldsState?.attributes,
-            orgUnit: school as unknown as string
+            orgUnit: orgUnit as unknown as string
         })).catch((error) => {
             show({
                 message: `${("Could not get events")}: ${error.message}`,
@@ -124,7 +124,7 @@ export function useTableData() {
 
         const teiResults: TeiQueryResults = trackedEntityToFetch?.length > 0
             ? await engine.query(TEI_QUERY({
-                ouMode: school != null ? "SELECTED" : "ACCESSIBLE",
+                ouMode: orgUnit != null ? "SELECTED" : "ACCESSIBLE",
                 pageSize,
                 program: program,
                 trackedEntity: trackedEntityToFetch
@@ -157,7 +157,7 @@ export function useTableData() {
 
         if (selectedProgramIndicators?.length) {
             for (const tei of teiResults?.results?.instances) {
-                const programIndicatorsResults = await getProgramIndicators(selectedProgramIndicators, school, program, formatAttributesFilter(tei.attributes))
+                const programIndicatorsResults = await getProgramIndicators(selectedProgramIndicators, orgUnit, program, formatAttributesFilter(tei.attributes))
 
                 programIndicatorsInstances.push(returnTeiProgramIndicators(tei.trackedEntity, programIndicatorsResults))
             }

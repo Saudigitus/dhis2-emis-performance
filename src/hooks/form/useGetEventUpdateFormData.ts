@@ -9,7 +9,7 @@ export const useGetEventUpdateFormData = () => {
     const { getEvent } = useGetEvent()
     const { urlParamiters } = useParams()
     const { show } = useShowAlerts()
-    const { school: orgUnit } = urlParamiters()
+    const { orgUnit: orgUnit } = urlParamiters()
     const { getDataStoreData } = getSelectedKey()
     const [initialValues, setInitialValues] = useState<any>({})
     const [loading, setLoading] = useState<boolean>(false)

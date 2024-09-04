@@ -27,7 +27,7 @@ function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
   const debouncedValue = useDebounce(values["ouName" as keyof typeof values], 400)
   const setRefetch = useSetRecoilState(TeiRefetch)
   const { urlParamiters } = useParams()
-  const { schoolName } = urlParamiters()
+  const { orgUnitName } = urlParamiters()
   const [fieldsWithValue, setFieldsWitValues] = useState<any[]>([formData])
   const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({ variables: formFields(ouNameValidationObject, formData), values, type: "programStageSection", formatKeyValueType: formatKeyValueType(formData) })
 
@@ -90,7 +90,7 @@ function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
   return (
     <WithPadding p="0px">
       <span className="text-secondary">Por favor, preencha todos os campos do formulário:</span>
-      <Form initialValues={{ ...initialValues, groupCode: orgUnitCode, parentOrgUnit: schoolName }} onSubmit={onSubmit}>
+      <Form initialValues={{ ...initialValues, groupCode: orgUnitCode, parentOrgUnit: orgUnitName }} onSubmit={onSubmit}>
         {({ handleSubmit, values, form }) => {
           formRef.current = form;
           return <form

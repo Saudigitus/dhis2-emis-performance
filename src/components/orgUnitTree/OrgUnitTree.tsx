@@ -19,8 +19,8 @@ export default function OrgUnitTree(props: OrgUnitTreeComponentProps): React.Rea
 
     const onOuChange = (event: SelectedOuType) => {
         setStringQuery(undefined)
-        add("school", event?.id);
-        add("schoolName", event?.displayName);
+        add("orgUnit", event?.id);
+        add("orgUnitName", event?.displayName);
         add("orgUnitLevel", event?.path?.split("/")?.length - 1)
         setSelectedOu(event);
         onToggle()
