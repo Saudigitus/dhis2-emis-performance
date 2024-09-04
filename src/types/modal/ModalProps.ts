@@ -1,3 +1,4 @@
+import { dataStoreRecord } from "../dataStore/DataStoreConfig"
 
 interface ModalProps {
     open: boolean
@@ -17,6 +18,7 @@ interface ModalContentProgramStageProps {
     loading: boolean
     formInitialValues: any
     row: any
+    mapping: dataStoreRecord["mappingVariables"]
 }
 
 

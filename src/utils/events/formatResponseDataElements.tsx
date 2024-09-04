@@ -33,30 +33,58 @@ export function formatResponseDataElements(programStageObject: ProgramStageSecti
 }
 
 export function formEvents(executionDateLabel = "Data do Evento") {
-    return [{
-        displayName: "Informação básica",
-        fields: [
-            {
-                required: true,
-                name: "eventDate",
-                labelName: executionDateLabel,
-                valueType: Attribute.valueType.DATE as unknown as CustomAttributeProps["valueType"],
-                options: { optionSet: undefined },
-                initialOptions: { optionSet: undefined },
-                disabled: false,
-                pattern: "",
-                visible: true,
-                description: executionDateLabel,
-                searchable: false,
-                error: false,
-                programStage: "programStageObject.id",
-                content: "",
-                id: "eventDate",
-                displayName: executionDateLabel,
-                header: executionDateLabel,
-                type: VariablesTypes.DataElement,
-                assignedValue: undefined
-            }
-        ]
-    }]
+    return [
+        {
+            displayName: "Informação básica",
+            fields: [
+                {
+                    required: true,
+                    name: "eventDate",
+                    labelName: executionDateLabel,
+                    valueType: Attribute.valueType.DATE as unknown as CustomAttributeProps["valueType"],
+                    options: { optionSet: undefined },
+                    initialOptions: { optionSet: undefined },
+                    disabled: false,
+                    pattern: "",
+                    visible: true,
+                    description: executionDateLabel,
+                    searchable: false,
+                    error: false,
+                    programStage: "programStageObject.id",
+                    content: "",
+                    id: "eventDate",
+                    displayName: executionDateLabel,
+                    header: executionDateLabel,
+                    type: VariablesTypes.DataElement,
+                    assignedValue: undefined
+                }
+            ]
+        },
+        {
+            displayName: "Detalhes do grupo",
+            fields: [
+                {
+                    required: false,
+                    name: "nomeAsca",
+                    labelName: "Nome da ASCA",
+                    valueType: Attribute.valueType.TEXT as unknown as CustomAttributeProps["valueType"],
+                    options: { optionSet: undefined },
+                    initialOptions: { optionSet: undefined },
+                    disabled: true,
+                    pattern: "",
+                    visible: true,
+                    description: "Nome da ASCA",
+                    searchable: false,
+                    error: false,
+                    programStage: "programStageObject.id",
+                    content: "",
+                    id: "nomeAsca",
+                    displayName: "Nome da ASCA",
+                    header: "Nome da ASCA",
+                    type: VariablesTypes.DataElement,
+                    assignedValue: undefined
+                }
+            ]
+        },
+    ]
 }

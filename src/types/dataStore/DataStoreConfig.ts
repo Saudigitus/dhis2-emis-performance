@@ -85,6 +85,13 @@ interface dataStoreRecord {
     ["final-result"]: simpleProgramStage
     defaults: defaults
     filters: filters
+    mappingVariables: {
+        "nomeAsca": string,
+        "homensAdultos": string
+        "homensJovens": string
+        "mulheresAdultas": string
+        "mulheresJovens": string
+    }
 }
 
 
