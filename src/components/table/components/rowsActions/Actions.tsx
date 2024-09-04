@@ -1,12 +1,13 @@
-import * as React from 'react';
+import React from 'react';
 import { IconMore24 } from '@dhis2/ui'
-import { Button, Divider, ListItemIcon, ListItemText, Menu, MenuItem } from '@material-ui/core';
+import { Button, ListItemText, Menu, MenuItem } from '@material-ui/core';
 
 interface BasicMenuProps {
-    row: any
+    menuItems: any[]
 }
 
 export default function Actions(props: BasicMenuProps) {
+    const { menuItems } = props;
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
 
@@ -18,10 +19,6 @@ export default function Actions(props: BasicMenuProps) {
         setAnchorEl(null);
     };
 
-    const menuItems: any = [
-        { label: 'Complete', onClick: () => { }, icon: <IconMore24 /> },
-        { label: 'Download', onClick: () => { }, icon: <IconMore24 /> },
-    ];
 
     return (
         <div>
@@ -35,7 +32,6 @@ export default function Actions(props: BasicMenuProps) {
                 <IconMore24 />
             </Button>
             <Menu
-                dense
                 id="basic-menu"
                 anchorEl={anchorEl}
                 open={open}
@@ -44,22 +40,17 @@ export default function Actions(props: BasicMenuProps) {
                     'aria-labelledby': 'basic-button',
                 }}
             >
-                {menuItems.map((item: any, index: any) => (
-                    <>
-                        <MenuItem
-                            dense
-                            key={index}
-                            onClick={() => {
-                                item.onClick();
-                                handleClose();
-                            }}
-                        >
-                            <ListItemIcon>{item.icon}</ListItemIcon>
-                            <ListItemText>{item.label}</ListItemText>
-                        </MenuItem>
-                        {index + 1 !== menuItems.length && < Divider />}
-
-                    </>
+                {menuItems?.map((item: any, index: any) => (
+                    <MenuItem
+                        dense
+                        key={index}
+                        onClick={() => {
+                            item.onClick();
+                            handleClose();
+                        }}
+                    >
+                        <ListItemText>{item.label}</ListItemText>
+                    </MenuItem>
                 ))}
             </Menu>
         </div>

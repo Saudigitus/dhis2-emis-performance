@@ -23,9 +23,10 @@ export function useGetEvents() {
     const { hide, show } = useShowAlerts()
     const [loading, setLoading] = useState<boolean>(false)
 
-    const getEvents = async (page: number, pageSize: number, program: string, programStage: string, filter: any[], filterAttributes: any[], orgUnit: any, trackedEntity?: string): Promise<EventQueryResults> => {
+    const getEvents = async (page: number, pageSize: number, program: string, programStage: string, filter: any[], filterAttributes: any[], orgUnit: any, trackedEntity?: string, completed?: boolean): Promise<EventQueryResults> => {
         setLoading(true)
         return await engine.query(EVENT_QUERY({
+            totalPages: true,
             ouMode: "DESCENDANTS",
             page,
             pageSize,
@@ -35,7 +36,9 @@ export function useGetEvents() {
             filter: filter,
             filterAttributes: filterAttributes,
             orgUnit: orgUnit as unknown as string,
-            ...( trackedEntity ? { trackedEntity: trackedEntity } : null)
+            ...(trackedEntity ? { trackedEntity: trackedEntity } : null),
+            ...(completed ? { status: 'COMPLETED' } : null)
+
         }))
             .catch((error) => {
                 show({

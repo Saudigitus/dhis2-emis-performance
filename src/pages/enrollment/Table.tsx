@@ -15,6 +15,8 @@ function TableComponent() {
   const { assessment } = getDataStoreKeys()
   const [open, setOpen] = useState(false);
   const { formData } = useGetGroupForm();
+
+  console.log(orgUnitLevel, assessment?.groupsLevel, parseInt(orgUnitLevel), parseInt(assessment?.groupsLevel))
   
   return (
     <>

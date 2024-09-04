@@ -97,7 +97,8 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                     inactive={checkCompleted(row.eventStatus)}
                                 />
                             </div>
-                            {(column.displayName == "Actions") && <RowActions row={row} />}
+                            {(column.displayName == "Actions") && <RowActions row />}
+
                         </RowCell>
                     ));
                     return (
