@@ -11,10 +11,11 @@ import { type RenderHeaderProps } from '../../../types/table/TableContentProps';
 import { useParams, usePostDataElement } from '../../../hooks';
 import { checkCanceled } from "../../../utils/table/rows/checkCanceled";
 import RowActions from '../components/rowsActions/RowActions';
-import { getDataStoreKeys, getSelectedKey } from '../../../utils';
+import { getSelectedKey } from '../../../utils';
 import { ProgramConfig } from '../../../types/programConfig/ProgramConfig';
 import { ProgramConfigState } from '../../../schema/programSchema';
 import { dataValues } from '../../../utils/table/rows/formatResponseRows';
+import { format } from 'date-fns';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -85,9 +86,15 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
         <React.Fragment>
             {
                 rowsData?.map((row, index) => {
-                    console.log(allEvents)
                     const currEvent = events?.find((x: any) => x?.trackedEntity === row?.trackedEntity)
-                    const copyRow = { ...row, ...dataValues(currEvent?.dataValues ?? [], getDataStoreData.monitoria.programStage), event: currEvent?.event }
+
+                    const copyRow = {
+                        ...row,
+                        eventDate: currEvent?.occurredAt && format(new Date(currEvent?.occurredAt), "yyyy-MM-dd"),
+                        ...dataValues(currEvent?.dataValues ?? [], getDataStoreData.monitoria.programStage),
+                        event: currEvent?.event
+
+                    }
                     const cells = headerData?.filter(x => x.visible)?.map(column => (
                         <RowCell
                             key={column.id}

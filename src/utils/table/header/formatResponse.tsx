@@ -32,7 +32,26 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
                     key: programStageDataElement.dataElement.id + "_" + programStageId,
                     type: VariablesTypes.Performance
                 }
-            }) as []
+            }).concat([{
+                id: 'eventDate',
+                displayName: 'Event Date',
+                header: 'Event Date',
+                required: false,
+                name: 'eventDate',
+                labelName: 'Event Date',
+                valueType: Attribute.valueType.DATE as unknown as CustomAttributeProps["valueType"],
+                options: undefined,
+                initialOptions: undefined,
+                visible: true,
+                disabled: false,
+                pattern: '',
+                searchable: false,
+                error: false,
+                content: '',
+                key: '',
+                displayInFilters: false,
+                type: VariablesTypes.Performance
+            }]) as []
             : []
     }
 

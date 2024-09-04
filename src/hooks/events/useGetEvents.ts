@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useDataEngine } from "@dhis2/app-runtime";
 import useShowAlerts from '../commons/useShowAlert';
 import { EventsState } from '../../schema/termMarksSchema';
@@ -22,7 +21,7 @@ export function useGetEvents() {
     const setAllEvents = useSetRecoilState(EventsState);
     const setConfirmState = useSetRecoilState(ConfirmationState)
 
-    const getEvents = async (page: number, pageSize: number, program: string, programStage: string, filter: any[], filterAttributes: any[], orgUnit: any): Promise<EventQueryResults> => {
+    const getEvents = async (page: number, pageSize: number, program: string, programStage: string, filter: any[], filterAttributes: any[], orgUnit: any) => {
         await engine.query(EVENT_QUERY({
             ouMode: "DESCENDANTS",
             paging: false,
