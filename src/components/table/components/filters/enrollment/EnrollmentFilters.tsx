@@ -6,6 +6,7 @@ import { useHeader } from '../../../../../hooks';
 
 function EnrollmentFilters(): React.ReactElement {
     const { columns } = useHeader()
+    
     return (
         <div className={styles.container}>
             <ContentFilter headers={columns?.filter(column => column?.type !== VariablesTypes?.Performance)} />

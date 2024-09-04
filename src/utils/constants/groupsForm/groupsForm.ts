@@ -9,7 +9,7 @@ import { format } from "date-fns";
 
 const staticForm = () => {
   return {
-    registeringSchool: {
+    registeringorgUnit: {
       required: true,
       name: "parentOrgUnit",
       labelName: "Distrito",
@@ -61,7 +61,7 @@ function formFields(validationObj: ValidationNameType, formData: any): FormSecti
       description: "Detalhes gerais",
       fields: [
         staticForm().enrollmentDate,
-        staticForm().registeringSchool
+        staticForm().registeringorgUnit
       ]
     },
     {

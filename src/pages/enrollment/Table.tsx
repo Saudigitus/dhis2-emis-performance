@@ -11,11 +11,11 @@ import { Tooltip } from "@material-ui/core";
 
 function TableComponent() {
   const { urlParamiters } = useParams()
-  const { orgUnitLevel, school } = urlParamiters()
+  const { orgUnitLevel, orgUnit } = urlParamiters()
   const { assessment } = getDataStoreKeys()
   const [open, setOpen] = useState(false);
   const { formData } = useGetGroupForm();
-
+  
   return (
     <>
       <Table />
@@ -30,7 +30,7 @@ function TableComponent() {
         <ModalComponent title="Cadastro de Novo Grupo" open={open} setOpen={setOpen}>
           <ModalContentAddGroups
             setOpen={setOpen}
-            parentId={school}
+            parentId={orgUnit}
             formData={formData}
           />
         </ModalComponent>

@@ -13,7 +13,7 @@ export default function HeadBarLayout(props: LayoutProps): React.ReactElement {
         <div className={style.HeadBarLayoutContainer}>
             <MainHeader />
             <main className={style.MainContentContainer}>{
-                (urlParamiters().school != null) ? children : <InfoPage />
+                (urlParamiters().orgUnit != null) ? children : <InfoPage />
             }</main>
         </div>
     )

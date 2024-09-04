@@ -18,10 +18,9 @@ const useParams = () => {
 
     const urlParamiters = () => {
         return {
-            school: useQuery().get('school'),
-            schoolName: useQuery().get('schoolName'),
+            orgUnit: useQuery().get('orgUnit'),
+            orgUnitName: useQuery().get('orgUnitName'),
             academicYear: useQuery().get('academicYear'),
-            sectionType: useQuery().get('sectionType'),
             grade: useQuery().get('grade'),
             class: useQuery().get('class'),
             position: useQuery().get('position'),

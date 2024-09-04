@@ -30,8 +30,8 @@ export default function HeaderItem(props: HeadBarTypes): React.ReactElement {
         if (dataElementId) {
             remove(paramsMapping[dataElementId as unknown as keyof typeof paramsMapping])
         } else if (id === "c540ac7c") {
-            remove("school");
-            remove("schoolName");
+            remove("orgUnit");
+            remove("orgUnitName");
             remove("class");
             remove("grade");
         }

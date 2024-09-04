@@ -8,10 +8,10 @@ function headBarData(selectedOptions: SelectedOptionsTypes, dataStoreData: dataS
         {
             id: "c540ac7c",
             label: "Unidade Organizacional",
-            value: selectedOptions?.schoolName ?? "Selecione a unidade organizacional",
+            value: selectedOptions?.orgUnitName ?? "Selecione a unidade organizacional",
             placeholder: "Pesquisar por uma unidade Organizacional",
             component: "orgUnitTree",
-            selected: Boolean(selectedOptions?.schoolName),
+            selected: Boolean(selectedOptions?.orgUnitName),
         },
         ...headBarDataElements(selectedOptions, dataStoreData, programStageDataElements)
     ]

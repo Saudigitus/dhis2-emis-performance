@@ -10,7 +10,6 @@ import WithPadding from '../../template/WithPadding';
 import WorkingLists from '../components/filters/workingList/WorkingLists';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { HeaderFieldsState } from '../../../schema/headersSchema';
-import { SubTabState } from '../../../schema/termMarksSchema';
 import { useHeader, useParams, useTableData } from '../../../hooks';
 import { TeiRefetch } from '../../../schema/refecthTeiSchema';
 import { TableDataLoadingState } from '../../../schema/tableDataLoadingSchema';
@@ -37,14 +36,13 @@ function Table() {
     const classes = usetStyles()
     const { columns } = useHeader()
     const { getData, loading, tableData } = useTableData()
-    const { useQuery } = useParams();
     const headerFieldsState = useRecoilValue(HeaderFieldsState)
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
     const [refetch] = useRecoilState(TeiRefetch)
     const selectedTab = useRecoilValue(TabsState)
     const { urlParamiters } = useParams()
-    const { school } = urlParamiters()
+    const { orgUnit, tab } = urlParamiters()
     const setLoading = useSetRecoilState(TableDataLoadingState)
 
     useEffect(() => {
@@ -56,11 +54,9 @@ function Table() {
     }, [headerFieldsState])
 
     useEffect(() => {
-        if (school)
-            void getData(page, pageSize, selectedTab.programStage, [])
-    }, [headerFieldsState, page, pageSize, refetch])
-
-
+        if (orgUnit)
+            void getData(page, pageSize, selectedTab?.programStage, [])
+    }, [headerFieldsState, page, pageSize, refetch, orgUnit, tab])
 
     const onPageChange = (newPage: number) => {
         setpage(newPage)
@@ -81,9 +77,7 @@ function Table() {
             <WithPadding >
                 <WithBorder type='all' >
                     <HeaderFilters />
-                    <div
-                        className={classes.tableContainer}
-                    >
+                    <div className={classes.tableContainer}  >
                         {loading ?
                             <CenteredContent className="p-4">
                                 <CircularLoader />
