@@ -25,13 +25,17 @@ export default function RowActions(props: RowActionsProps) {
   const nextAction = dataStore[0].assessment?.tabGroups?.find((x) => x.programStage == selectedTab.programStage)?.nextAction
   const title = getProgram?.programStages?.filter((x: any) => x.id === actionPStage)?.[0]?.displayName || ""
   const eventsIsCompleted = checkCompleted(row?.eventStatus as string)
-  const { buildFormData, error, loading } = useGetEventUpdateFormData()
+  const { buildFormData, error, loading, initialValues, setInitialValues } = useGetEventUpdateFormData()
 
   useEffect(() => {
     if (error)
       setOpenEditionModal(false)
   }, [error])
 
+  useEffect(() => {
+    if (!openEditionModal)
+      setInitialValues({})
+  }, [openEditionModal])
 
   const rowsActions: RowActionsType[] = [
     {
@@ -75,7 +79,14 @@ export default function RowActions(props: RowActionsProps) {
       {
         openEditionModal &&
         <ModalComponent title={title} open={openEditionModal} setOpen={setOpenEditionModal}>
-          <ModalContentProgramStages open={openEditionModal} setOpen={setOpenEditionModal} nexProgramStage={actionPStage as string} />
+          <ModalContentProgramStages
+            open={openEditionModal}
+            setOpen={setOpenEditionModal}
+            nexProgramStage={actionPStage as string}
+            loading={loading}
+            formInitialValues={initialValues}
+            row={row}
+          />
         </ModalComponent>
       }
     </div>

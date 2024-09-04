@@ -11,7 +11,7 @@ function GroupForm(props: GroupFormProps) {
     const { name, fields, description } = props
 
     return (
-        <div style={{ marginBottom: 5 }}>
+        <div style={{ marginBottom: 10 }}>
             <WithBorder type={"all"}>
                 <WithPadding p={"16px 5px 0px 5px"}>
                     <Subtitle label={name} />

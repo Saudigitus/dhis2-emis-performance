@@ -5,6 +5,6 @@ const useGetSectionTypeLabel = () => {
     const { urlParamiters } = useParams()
     const sectionType = urlParamiters().sectionType;
 
-    return { sectionName: formatCamelToTitleCase(sectionType as unknown as string) };
+    return { sectionName: "student" };
 }
 export default useGetSectionTypeLabel;

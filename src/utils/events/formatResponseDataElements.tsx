@@ -7,7 +7,7 @@ export function formatResponseDataElements(programStageObject: ProgramStageSecti
 
     return programStageObject.map(dataElement => (
         {
-            required: true,
+            required: false,
             name: dataElement.id,
             labelName: dataElement.displayName,
             valueType: dataElement?.optionSet

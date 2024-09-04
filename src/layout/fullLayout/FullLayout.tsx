@@ -14,13 +14,13 @@ export default function FullLayout(props: LayoutProps) {
     const { isSetSectionType } = useGetInitialValues()
     const { loading } = useGetProgramConfig();
 
-    if (!isSetSectionType) {
-        return (
-            <CenteredContent>
-                Cant load the app without section type
-            </CenteredContent>
-        )
-    }
+    // if (!isSetSectionType) {
+    //     return (
+    //         <CenteredContent>
+    //             Cant load the app without section type
+    //         </CenteredContent>
+    //     )
+    // }
 
     if (loading) {
         return (
@@ -36,7 +36,7 @@ export default function FullLayout(props: LayoutProps) {
             <div className={style.FullLayoutContainer}>
                 <MainHeader />
                 <main className={style.MainContentContainer}>
-                    {(school === null || school === undefined) ? <InfoPage /> : children}
+                    { children}
                 </main>
             </div>
         </div>

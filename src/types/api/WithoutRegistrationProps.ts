@@ -39,6 +39,7 @@ interface EventQueryResults {
             enrollment: string
             trackedEntity: string
             dataValues: dataValuesProps[]
+            event: string
         }]
     }
 }

@@ -14,6 +14,9 @@ interface ModalContentProgramStageProps {
     open: boolean
     setOpen: (value: boolean) => void
     nexProgramStage: string
+    loading: boolean
+    formInitialValues: any
+    row: any
 }
 
 

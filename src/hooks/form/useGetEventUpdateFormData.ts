@@ -3,6 +3,7 @@ import { getSelectedKey } from "../../utils"
 import { useParams } from "../commons/useQueryParams"
 import useShowAlerts from "../commons/useShowAlert"
 import { useGetEvent } from "../events/useGetEvent"
+import { dataValues } from "../../utils/table/rows/formatResponseRows";
 
 export const useGetEventUpdateFormData = () => {
     const { getEvent } = useGetEvent()
@@ -18,7 +19,10 @@ export const useGetEventUpdateFormData = () => {
         setLoading(true)
         await getEvent(getDataStoreData.program, programStage, teiId, orgUnit!)
             .then((event) => {
-                console.log(event);
+                setInitialValues({
+                    ...dataValues(event?.results?.instances?.[0]?.dataValues ?? []),
+                    event: event?.results?.instances?.[0]?.event
+                })
             })
             .catch((error) => {
                 setError(true)
@@ -37,6 +41,8 @@ export const useGetEventUpdateFormData = () => {
     return {
         buildFormData,
         loading,
-        error
+        error,
+        initialValues,
+        setInitialValues
     }
 }

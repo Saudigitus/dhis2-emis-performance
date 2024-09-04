@@ -33,7 +33,7 @@ export function formatResponseRowsMarks({ marksInstance, programStage }: FormatR
     return dataValues(marksInstance?.dataValues ?? [], programStage)
 }
 
-function dataValues(data: dataValuesProps[], programStage?: string | null): RowsDataProps {
+export function dataValues(data: dataValuesProps[], programStage?: string | null): RowsDataProps {
     const localData: RowsDataProps = {}
     for (const dataElement of data) {
         let key = programStage ? dataElement.dataElement + '_' + programStage : dataElement.dataElement

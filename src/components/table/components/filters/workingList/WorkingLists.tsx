@@ -28,7 +28,9 @@ function WorkingLists() {
   }, [assessment])
 
   useEffect(() => {
-    add("tab", selectedValue.value)
+    if (selectedValue?.value) {
+      add("tab", selectedValue?.value)
+    }
   }, [selectedValue])
 
   useEffect(() => {
