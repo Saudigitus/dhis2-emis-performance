@@ -86,6 +86,7 @@ export default function RowActions(props: RowActionsProps) {
             loading={loading}
             formInitialValues={initialValues}
             row={row}
+            mapping={dataStore[0].mappingVariables}
           />
         </ModalComponent>
       }

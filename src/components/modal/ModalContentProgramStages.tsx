@@ -27,7 +27,10 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
   const [clickedButton, setClickedButton] = useState<string>("");
 
   const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
-    variables: [...formEvents(getProgram.programStages.find((x) => x.id === nexProgramStage)?.executionDateLabel), ...getProgram.programStages.find((x) => x.id === nexProgramStage)?.programStageSections.map((x) => { return { ...x, fields: formatResponseDataElements(x.dataElements) } })!],
+    variables: [
+      ...formEvents(getProgram.programStages.find((x) => x.id === nexProgramStage)?.executionDateLabel),
+      ...getProgram.programStages.find((x) => x.id === nexProgramStage)?.programStageSections.map((x) => { return { ...x, fields: formatResponseDataElements(x.dataElements) } })!
+    ],
     values, type: "programStageSection",
     formatKeyValueType: {}
   })
@@ -39,9 +42,8 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
   useEffect(() => { setClicked(false) }, [])
 
   const modalActions = [
-    { id: "cancel", type: "button", label: "Cancel", disabled: loading, onClick: () => { setClickedButton("cancel"); setOpen(false); } },
-    { id: "saveandnew", type: "submit", label: "Save and add new", primary: true, disabled: loading, onClick: () => { setClickedButton("saveandnew"); setClicked(true) } },
-    { id: "saveandcontinue", type: "submit", label: "Save and close", primary: true, disabled: loading, onClick: () => { setClickedButton("saveandcontinue"); setClicked(true) } }
+    { id: "cancel", type: "button", label: "Cancelar", disabled: loading, onClick: () => { setClickedButton("cancel"); setOpen(false); } },
+    { id: "saveandcontinue", type: "submit", label: "Salvar", primary: true, disabled: loading, onClick: () => { setClickedButton("saveandcontinue"); setClicked(true) } }
   ];
 
   function onSubmit() {
