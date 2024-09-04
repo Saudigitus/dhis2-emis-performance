@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import WithPadding from "../../../../template/WithPadding";
 import { TabsState } from "../../../../../schema/tabSchema";
@@ -9,15 +9,18 @@ import { getDataStoreKeys } from "../../../../../utils";
 import { SubTabState } from "../../../../../schema/termMarksSchema";
 import { useGetProgramStageTerms } from "../../../../../hooks";
 import { useGetTabsElements } from "../../../../../utils/tabs/tabsElements";
+import { useGetTotalCompleted } from "../../../../../hooks/events/totals/useGetTotalCompleted";
 
 function WorkingLists() {
   const { add, urlParamiters } = useParams()
-  const { tab } = urlParamiters()
+  const { tab, orgUnit } = urlParamiters()
   const { assessment } = getDataStoreKeys()
   const { items } = useGetProgramStageTerms()
   const { tabsElements } = useGetTabsElements()
   const [selectedValue, setSelectedValue] = useRecoilState(TabsState);
+  const [totals, setTotals] = useState<any>({});
   const [, setSelectedTerm] = useRecoilState(SubTabState);
+  const { getTotals } = useGetTotalCompleted({ setTotals })
 
   useEffect(() => {
     const selectedTab = tabsElements.find((x: any) => x.value == tab) ?? tabsElements[0]
@@ -34,6 +37,9 @@ function WorkingLists() {
     setSelectedTerm(items[0])
   }, [tab])
 
+  useEffect(() => {
+    void getTotals()
+  }, [orgUnit])
 
   return (
     <WithPadding>
@@ -42,6 +48,7 @@ function WorkingLists() {
           elements={tabsElements}
           selectedValue={selectedValue}
           setSelectedValue={setSelectedValue}
+          totals={totals}
         />
 
         {/* <WithPadding p="10px">
