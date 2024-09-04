@@ -59,7 +59,6 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
       createdAt: transformedArray.filter((x) => x.dataElement === "eventDate")?.[0].value,
       dataValues: transformedArray.filter((x) => (x.dataElement !== "eventDate" && x.dataElement !== "event" && x.dataElement !== "orgUnit"))
     }
-    console.log(formToPost);
 
   }
 

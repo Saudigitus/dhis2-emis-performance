@@ -35,7 +35,6 @@ function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
   //   runRulesEngine()
   // }, [values])
 
-  console.log(values, fieldsWithValue)
   useEffect(() => {
     setRefetch(false)
   }, [])

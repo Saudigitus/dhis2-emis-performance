@@ -3,7 +3,12 @@ import { type ProgramConfig } from "../../../types/programConfig/ProgramConfig";
 import { VariablesTypes, type CustomAttributeProps } from "../../../types/variables/AttributeColumns";
 import { useMemo } from "react";
 
-export function formatResponse(data: ProgramConfig, programStageId: string, tableColumns: CustomAttributeProps[] = [], programIndicators: any[]): CustomAttributeProps[] {
+type nextProgramStageType = {
+    displayName: string,
+    programStage: string
+}
+
+export function formatResponse(data: ProgramConfig, programStageId: string, tableColumns: CustomAttributeProps[] = [], programIndicators: any[], nextProgramStages: nextProgramStageType[]): CustomAttributeProps[] {
     let columns = ['Actions']
     const originalData = ((data?.programStages?.find(programStge => programStge.id === programStageId)) ?? {} as unknown as ProgramConfig["programStages"][0])
     const programIndicatorsData = data?.programIndicators?.filter((x) => programIndicators?.map((x) => x.id).join(",").includes(x.id))
@@ -60,6 +65,32 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
         }) as []
     }
 
+    function getNextProgramStagesColumns(): [] {
+        return nextProgramStages?.map((nextProgramStage) => {
+            return {
+                id: nextProgramStage.programStage,
+                rawId: nextProgramStage.programStage,
+                displayName: nextProgramStage.displayName,
+                header: nextProgramStage.displayName,
+                required: false,
+                name: nextProgramStage.displayName,
+                labelName: nextProgramStage.displayName,
+                valueType: '',
+                options: { optionSet: {} },
+                initialOptions: { optionSet: {} },
+                visible: true,
+                disabled: false,
+                pattern: '',
+                searchable: false,
+                error: false,
+                content: '',
+                key: nextProgramStage.programStage + "_" + programStageId,
+                type: VariablesTypes.Custom
+            }
+        }) as []
+    }
+
+
     function getHeaders() {
         let performanceHeaders = getProgramStageDataElement()
         let containsAllPerformance = performanceHeaders.every((performanceHeader: any) => tableColumns.find(customizedHeaders => customizedHeaders.id == performanceHeader.id));
@@ -94,6 +125,7 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
         })
             .concat(getProgramStageDataElement())
             .concat(getProgramIndicatorsHeaders())
+            .concat(getNextProgramStagesColumns())
             .concat(
                 columns?.map((column) => {
                     return {
