@@ -1,6 +1,8 @@
 import React from 'react';
 import { IconMore24 } from '@dhis2/ui'
 import { Button, ListItemText, Menu, MenuItem } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
+import { MoreHorizOutlined, MoreVert } from '@material-ui/icons';
 
 interface BasicMenuProps {
     menuItems: any[]
@@ -21,16 +23,16 @@ export default function Actions(props: BasicMenuProps) {
 
 
     return (
-        <div>
-            <Button
+        <>
+            <IconButton
                 id="basic-button"
                 aria-haspopup="true"
                 onClick={handleClick}
                 aria-expanded={open ? 'true' : undefined}
                 aria-controls={open ? 'basic-menu' : undefined}
             >
-                <IconMore24 />
-            </Button>
+                <MoreVert />
+            </IconButton>
             <Menu
                 id="basic-menu"
                 anchorEl={anchorEl}
@@ -53,6 +55,6 @@ export default function Actions(props: BasicMenuProps) {
                     </MenuItem>
                 ))}
             </Menu>
-        </div>
+        </>
     );
 }

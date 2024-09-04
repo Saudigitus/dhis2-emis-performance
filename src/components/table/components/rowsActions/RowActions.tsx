@@ -65,7 +65,7 @@ export default function RowActions(props: RowActionsProps) {
 
 
   return (
-    <div className={style.rowActionsContainer}>
+    <div>
       <Actions menuItems={menuItems}/>
 
       {
