@@ -12,6 +12,7 @@ import { useCompleteEvents } from '../../../../hooks/events/useCompleteEvents';
 import { checkCompleted } from "../../../../utils/table/rows/checkCanceled";
 import { UpdatingEventState } from "../../../../schema/updateEventSchema";
 import { useGetEventUpdateFormData } from "../../../../hooks/form/useGetEventUpdateFormData";
+import Actions from "./Actions";
 
 export default function RowActions(props: RowActionsProps) {
   const { row } = props;
@@ -37,7 +38,7 @@ export default function RowActions(props: RowActionsProps) {
       setInitialValues({})
   }, [openEditionModal])
 
-  const rowsActions: RowActionsType[] = [
+  const menuItems: RowActionsType[] = [
     {
       icon: eventsIsCompleted ? <CancelOutlined /> : <IconCheckmarkCircle24 />,
       color: eventsIsCompleted ? '#277314' : '#d64d4d',
@@ -62,19 +63,10 @@ export default function RowActions(props: RowActionsProps) {
     })) || [],
   ];
 
+
   return (
     <div className={style.rowActionsContainer}>
-      {rowsActions.map((option: RowActionsType, i: number) => (
-        option.label ?
-          <Button
-            loading={option.loading}
-            disabled={option.disabled || completing || loadingRow.loading}
-            onClick={() => { option.onClick() }}
-          >
-            {option.label}
-          </Button>
-          : null
-      ))}
+      <Actions menuItems={menuItems}/>
 
       {
         openEditionModal &&
