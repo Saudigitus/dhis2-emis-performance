@@ -4,6 +4,7 @@ import { useParams } from "../commons/useQueryParams"
 import useShowAlerts from "../commons/useShowAlert"
 import { useGetEvent } from "../events/useGetEvent"
 import { dataValues } from "../../utils/table/rows/formatResponseRows";
+import { format } from "date-fns";
 
 export const useGetEventUpdateFormData = () => {
     const { getEvent } = useGetEvent()
@@ -21,7 +22,8 @@ export const useGetEventUpdateFormData = () => {
             .then((event) => {
                 setInitialValues({
                     ...dataValues(event?.results?.instances?.[0]?.dataValues ?? []),
-                    event: event?.results?.instances?.[0]?.event
+                    event: event?.results?.instances?.[0]?.event,
+                    eventDate: event?.results?.instances?.[0]?.occurredAt? format(new Date(event?.results?.instances?.[0]?.occurredAt) as unknown as Date , "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd")
                 })
             })
             .catch((error) => {

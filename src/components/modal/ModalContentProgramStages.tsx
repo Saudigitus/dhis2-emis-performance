@@ -16,7 +16,7 @@ import { removeFalseKeys } from "../../utils/commons/removeFalseKeys";
 import { usePostEvent } from "../../hooks/events/useCreateEvents";
 
 function ModalContentProgramStages(props: ModalContentProgramStageProps): React.ReactElement {
-  const { setOpen, nexProgramStage, loading: loadingEvents, formInitialValues, row } = props;
+  const { setOpen, nexProgramStage, loading: loadingEvents, formInitialValues, row, mapping } = props;
   const getProgram = useRecoilValue(ProgramConfigState);
   const { useQuery } = useParams();
   const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
@@ -36,6 +36,16 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
   })
 
   useEffect(() => {
+    if (data && data["status" as unknown as keyof typeof data] === "OK") {
+      if (clickedButton === "save") {
+        setOpen(false)
+      }
+      setClicked(false)
+      formRef.current.restart()
+    }
+  }, [data])
+
+  useEffect(() => {
     runRulesEngine()
   }, [values])
 
@@ -47,20 +57,27 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
   ];
 
   function onSubmit() {
+    const exclude = ["nomeAsca", "event", "orgUnit", "eventDate"]
     const transformedArray = Object.entries(values).map(([key, value]) => ({
       dataElement: key,
       value: value
     }));
 
     const formToPost = {
+      orgUnit: row.orgUnit,
+      status: "ACTIVE",
+      programStage: nexProgramStage,
+      program: getProgram.id,
+      notes: [],
+      enrollment: row.enrollment,
+      trackedEntity: row.trackedEntity,
       event: transformedArray.filter((x) => x.dataElement === "event")?.[0].value,
       occurredAt: transformedArray.filter((x) => x.dataElement === "eventDate")?.[0].value,
       scheduledAt: transformedArray.filter((x) => x.dataElement === "eventDate")?.[0].value,
       createdAt: transformedArray.filter((x) => x.dataElement === "eventDate")?.[0].value,
-      dataValues: transformedArray.filter((x) => (x.dataElement !== "eventDate" && x.dataElement !== "event" && x.dataElement !== "orgUnit"))
+      dataValues: transformedArray.filter((x) => !exclude.includes(x.dataElement))
     }
-    console.log(formToPost);
-
+    updateEvent({ data: { events: [formToPost] } })
   }
 
   function onChange(e: any): void {
@@ -74,7 +91,7 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
       </CenteredContent>
     )
   }
-
+  console.log(row);
   return (
     <WithPadding>
       <Form initialValues={{ orgUnit, ...formInitialValues }} onSubmit={onSubmit}>
@@ -92,7 +109,7 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
                     description={field.description}
                     key={index}
                     fields={field.fields}
-                    disabled={false}
+                    disabled={row.event ? true : false}
                   />
                 )
               })
@@ -108,7 +125,7 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
                           key={i}
                           {...action}
                           className={styles.modalButtons}
-                          loading={(!!(loading) && action.id === clickedButton)}
+                          loading={(loading && action.id === clickedButton)}
                         >
                           {action.label}
                         </Button>

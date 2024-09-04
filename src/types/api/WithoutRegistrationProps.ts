@@ -21,6 +21,7 @@ interface EventQueryByTeiProps {
     programStage: string
     orgUnit: string
     trackedEntity: string
+    ouMode: string
 }
 
 interface GetDataElementsProps {
@@ -40,6 +41,7 @@ interface EventQueryResults {
             trackedEntity: string
             dataValues: dataValuesProps[]
             event: string
+            occurredAt: string
         }]
     }
 }

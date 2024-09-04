@@ -84,7 +84,10 @@ export default function RowActions(props: RowActionsProps) {
             setOpen={setOpenEditionModal}
             nexProgramStage={actionPStage as string}
             loading={loading}
-            formInitialValues={initialValues}
+            formInitialValues={{
+              ...initialValues,
+              "nomeAsca": row[dataStore[0].mappingVariables.nomeAsca]
+            }}
             row={row}
             mapping={dataStore[0].mappingVariables}
           />

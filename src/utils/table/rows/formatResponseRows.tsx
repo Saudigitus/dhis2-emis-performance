@@ -23,7 +23,8 @@ export function formatResponseRows({ eventsInstances, teiInstances, marksInstanc
             enrollment: event?.enrollment,
             status: teiDetails?.enrollments?.[0]?.status,
             eventStatus: event?.status as unknown as any,
-            event: event?.event as unknown as any
+            event: event?.event as unknown as any,
+            orgUnit:teiDetails?.enrollments?.[0]?.orgUnit
         })
     }
     return allRows;
