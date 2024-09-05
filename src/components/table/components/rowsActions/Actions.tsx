@@ -34,7 +34,7 @@ export default function Actions(props: BasicMenuProps) {
                         onClick={handleClick}
                         aria-expanded={open ? 'true' : undefined}
                         aria-controls={open ? 'basic-menu' : undefined}
-                        style={inactive ? { background: "#ffffffb9", color: "#000", Opacity: "1", height: "42px", width: "42px", } : { height: "42px", width: "42px" }}
+                        style={{ color: "#000"}}
                     >
                         < MoreVert />
                     </IconButton>

@@ -48,54 +48,6 @@ export function useTableData() {
     const { getProgramIndicators } = useGetProgramIndicators()
     const { getOrgUnitCode } = useGetOrgUnitCode()
 
-    const fetchMarks = async (tei: string, programStageId: string) => {
-        return await engine.query(EVENT_QUERY({
-            program: program,
-            order: "createdAt:desc",
-            programStage: programStageId,
-            trackedEntity: tei
-        })).catch((error) => {
-            show({
-                message: `${("Could not get marks")}: ${error.message}`,
-                type: { critical: true }
-            });
-            setTimeout(hide, 5000);
-        }) as unknown as MarksQueryResults;
-    }
-
-    const getMarks = async (programStageId: string) => {
-        setLoading(true)
-        setAllEvents([])
-        let localData: any = []
-        localData = [...immutableTeiData]
-
-        const marskEvents: MarksQueryResults = {
-            results: {
-                instances: []
-            }
-        }
-
-        // Get the events from the programStage marks for the each student
-        for (const tei of allTeis) {
-            const marksResults: MarksQueryResults = await fetchMarks(tei, programStageId)
-            marskEvents.results.instances.push(...marksResults?.results?.instances)
-        }
-
-        for (let i = 0; i < localData.length; i++) {
-            const marksDetails = marskEvents?.results?.instances?.find((event: any) => (event.trackedEntity === localData[i]?.trackedEntity) && (event?.enrollment === localData[i]?.enrollment));
-            if (marksDetails !== undefined) {
-                localData[i] = { ...localData[i], ...formatResponseRowsMarks({ marksInstance: marksDetails, programStage: programStageId }) }
-            }
-        }
-
-        for (const row of localData) {
-            setAllEvents((prev) => [...prev, marskEvents.results.instances.find((event: any) => (event.trackedEntity === row.trackedEntity) && (event.enrollment === row.enrollment))])
-        }
-
-        setTableData(localData);
-        setLoading(false)
-    }
-
     async function getData(page: number, pageSize: number, selectedProgramStage: string, selectedProgramIndicators: string[]) {
         setLoading(true)
         setAllEvents([])
@@ -161,13 +113,6 @@ export function useTableData() {
             }
         }
 
-        // if (selectedProgramStage !== null && selectedProgramStage !== undefined && selectedProgramStage !== '') {
-        //     for (const tei of allTeis) {
-        //         const marksResults: MarksQueryResults = await fetchMarks(tei, selectedProgramStage)
-        //         marskEvents?.results?.instances?.push(...marksResults?.results?.instances)
-        //     }
-        // }
-
         const programIndicatorsInstances = []
 
         if (selectedProgramIndicators?.length) {
@@ -177,7 +122,6 @@ export function useTableData() {
                 programIndicatorsInstances.push(returnTeiProgramIndicators(tei.trackedEntity, programIndicatorsResults))
             }
         }
-
 
         const localData = formatResponseRows({
             eventsInstances: events?.results?.instances ?? [],
@@ -199,7 +143,6 @@ export function useTableData() {
     return {
         getData,
         tableData,
-        loading,
-        getMarks
+        loading
     }
 }

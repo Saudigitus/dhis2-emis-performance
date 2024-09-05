@@ -103,10 +103,9 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
     )
   }
 
-  console.log(row, "row");
   return (
     <WithPadding>
-      {(row.event && disabled) &&
+      {(formInitialValues.event && disabled) &&
         <div>
           <NoticeBox warning title="Registo existente">
             Este grupo já possue o evento registado, se deseja editar pressione em "Editar".
@@ -129,7 +128,7 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
                     description={field.description}
                     key={index}
                     fields={field.fields}
-                    disabled={(row.event && disabled) ? true : false}
+                    disabled={(formInitialValues.event && disabled) ? true : false}
                   />
                 )
               })
@@ -138,7 +137,7 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
             <ModalActions>
               <ButtonStrip end className={classNames(styles.modalButtonsStrip)}>
                 {
-                  !(row.event && disabled) ?
+                  !(formInitialValues.event && disabled) ?
                     modalActions.map((action, i) => {
                       return (
                         <>
