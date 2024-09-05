@@ -1,18 +1,14 @@
+import { nextProgramStageType } from "../../../types/dataStore/DataStoreConfig";
 import { Attribute } from "../../../types/generated/models";
 import { type ProgramConfig } from "../../../types/programConfig/ProgramConfig";
 import { VariablesTypes, type CustomAttributeProps } from "../../../types/variables/AttributeColumns";
 import { useMemo } from "react";
 
-type nextProgramStageType = {
-    displayName: string,
-    programStage: string
-}
 
 export function formatResponse(data: ProgramConfig, programStageId: string, tableColumns: CustomAttributeProps[] = [], programIndicators: any[], nextProgramStages: nextProgramStageType[]): CustomAttributeProps[] {
     let columns = ['Actions']
     const originalData = ((data?.programStages?.find(programStge => programStge.id === programStageId)) ?? {} as unknown as ProgramConfig["programStages"][0])
     const programIndicatorsData = data?.programIndicators?.filter((x) => programIndicators?.map((x) => x.id).join(",").includes(x.id))
-    const programStageName = (programStageId: string) => data.programStages?.find((pstage) => pstage.id == programStageId)?.displayName
 
     function getProgramStageDataElement(): [] {
         return Object.keys(originalData).length > 0
@@ -71,11 +67,11 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
             return {
                 id: nextProgramStage.programStage,
                 rawId: nextProgramStage.programStage,
-                displayName: programStageName(nextProgramStage.programStage),
-                header: programStageName(nextProgramStage.programStage),
+                displayName: nextProgramStage.columnName,
+                header: nextProgramStage.columnName,
                 required: false,
-                name: programStageName(nextProgramStage.programStage),
-                labelName: programStageName(nextProgramStage.programStage),
+                name: nextProgramStage.columnName,
+                labelName: nextProgramStage.columnName,
                 valueType: '',
                 options: { optionSet: {} },
                 initialOptions: { optionSet: {} },
@@ -87,7 +83,7 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
                 content: '',
                 key: nextProgramStage.programStage + "_" + programStageId,
                 displayInFilters: false,
-                type: VariablesTypes.Custom
+                type: VariablesTypes.HasEvent
             }
         }) as []
     }

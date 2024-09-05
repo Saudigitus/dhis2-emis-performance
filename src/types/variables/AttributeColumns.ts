@@ -4,6 +4,7 @@ export enum VariablesTypes {
     DataElement = "dataElement",
     Attribute = "attribute",
     Custom = "custom",
+    HasEvent = "hasevent",
     Performance = "Performance"
 }
 

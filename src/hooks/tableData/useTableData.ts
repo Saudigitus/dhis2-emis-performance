@@ -4,7 +4,7 @@ import { useDataEngine } from "@dhis2/app-runtime";
 import { useParams } from "../commons/useQueryParams";
 import { HeaderFieldsState } from "../../schema/headersSchema";
 import useShowAlerts from "../commons/useShowAlert";
-import { EventsState, SubTabState } from "../../schema/termMarksSchema";
+import { EventsState } from "../../schema/termMarksSchema";
 import { type TableDataProps, type EventQueryProps, type TeiQueryProps, type MarksQueryResults, type EventQueryResults, type TeiQueryResults } from "../../types/table/TableData";
 import { formatResponseRowsMarks, formatResponseRows, getDataStoreKeys } from "../../utils";
 import { useGetProgramIndicators } from "../programIndicators/useGetProgramIndicators";
@@ -12,6 +12,9 @@ import { formatAttributesFilter } from "../../utils/tei/formatAttributesFilter";
 import { returnTeiProgramIndicators } from "../../utils/tei/returnTeiProgramIndicators";
 import { AllTeisSchema } from "../../schema/allTeisSchema";
 import { useGetOrgUnitCode } from "../organisationUnit/useGetOrgUnitCode";
+import { useGetEvents } from "../events/useGetEvents";
+import { useGetNextActions } from "../programStages/useGetNextActions";
+import { teiHasEvents } from "../../utils/table/rows/formatTeiHasEvents";
 
 const EVENT_QUERY = (queryProps: EventQueryProps) => ({
     results: {
@@ -47,6 +50,9 @@ export function useTableData() {
     const { orgUnit } = urlParamiters()
     const { getProgramIndicators } = useGetProgramIndicators()
     const { getOrgUnitCode } = useGetOrgUnitCode()
+    const { getEvents } = useGetEvents()
+    const { nextAction = [] } = useGetNextActions()
+    // const [nextPstageEvents, setNextPstageEvents] = useState()
 
     const fetchMarks = async (tei: string, programStageId: string) => {
         return await engine.query(EVENT_QUERY({
@@ -152,7 +158,7 @@ export function useTableData() {
                 const ouId = tei.attributes.find(x => x.attribute === attId)?.value
 
                 if (ouId) {
-                    const teiName = await getOrgUnitCode(ouId as unknown as string, true)
+                    const teiName: any = await getOrgUnitCode(ouId as unknown as string, true)
                     teiResults.results?.instances[counter].attributes.map((x: any) => {
                         if (x.attribute === attId) x.value = teiName?.results?.name
                     })
@@ -160,6 +166,22 @@ export function useTableData() {
                 counter++
             }
         }
+
+        const promises = []
+        const nextPstageEvents: any[] = []
+        for (const action of nextAction) {
+            for (const tei of allTeis) {
+                promises.push(await getEvents(1, 1, program, action.programStage, [], [], orgUnit, tei))
+            }
+        }
+
+        Promise.all(promises)
+            .then((responses) => {
+                for (const response of responses) {
+                    if (response?.results?.instances[0])
+                        nextPstageEvents.push(response?.results?.instances[0])
+                }
+            })
 
         // if (selectedProgramStage !== null && selectedProgramStage !== undefined && selectedProgramStage !== '') {
         //     for (const tei of allTeis) {
@@ -185,7 +207,8 @@ export function useTableData() {
             marksInstances: marskEvents?.results?.instances,
             programIndicatorsInstances: programIndicatorsInstances as any,
             setImmutableTeiData,
-            programStage: selectedProgramStage
+            programStage: selectedProgramStage,
+            nextPstageEvents: teiHasEvents(nextAction, nextPstageEvents, allTeis)
         })
 
         for (const row of localData) {

@@ -13,21 +13,20 @@ import { checkCompleted } from "../../../../utils/table/rows/checkCanceled";
 import { UpdatingEventState } from "../../../../schema/updateEventSchema";
 import { useGetEventUpdateFormData } from "../../../../hooks/form/useGetEventUpdateFormData";
 import Actions from "./Actions";
+import { useGetNextActions } from "../../../../hooks/programStages/useGetNextActions";
 
 export default function RowActions(props: RowActionsProps) {
   const { row, inactive } = props;
-  const selectedTab = useRecoilValue(TabsState)
   const dataStore = useRecoilValue(DataStoreState)
   const getProgram = useRecoilValue(ProgramConfigState);
   const [openEditionModal, setOpenEditionModal] = useState<boolean>(false);
   const [actionPStage, setActionPStage] = useState<string>();
   const { completeEvents, loading: completing } = useCompleteEvents()
   const [loadingRow, setLoadingRow] = useRecoilState(UpdatingEventState)
-  const nextAction = dataStore[0].assessment?.tabGroups?.find((x) => x.programStage == selectedTab.programStage)?.nextAction
   const title = getProgram?.programStages?.filter((x: any) => x.id === actionPStage)?.[0]?.displayName || ""
   const eventsIsCompleted = checkCompleted(row?.eventStatus as string)
   const { buildFormData, error, loading, initialValues, setInitialValues } = useGetEventUpdateFormData()
-
+  const { nextAction } = useGetNextActions()
 
   useEffect(() => {
     if (error)

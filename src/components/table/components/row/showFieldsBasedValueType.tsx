@@ -12,6 +12,8 @@ import { IconButton } from '@material-ui/core';
 import CropOriginal from '@material-ui/icons/CropOriginal';
 import { useRecoilValue } from 'recoil';
 import { ProgramConfigState } from '../../../../schema/programSchema';
+import { IconCheckmark24 } from "@dhis2/ui"
+import { RemoveCircleOutline } from '@material-ui/icons';
 
 export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueTypeProps) {
     const { column, value, currentEvent, saveMarks, showFeedBack, setShowFeedBack, headers, loader, trackedEntity, prevValues, setPrevValues, inactive } = props;
@@ -67,6 +69,20 @@ export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueType
                     </form>
                 )}
             />
+        )
+    }
+
+    if (column.type === VariablesTypes.HasEvent) {
+        return (
+            <>
+                {
+                    value ?
+                        <IconCheckmark24 />
+                        :
+                        <RemoveCircleOutline />
+
+                }
+            </>
         )
     }
 

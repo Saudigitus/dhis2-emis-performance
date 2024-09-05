@@ -1,15 +1,14 @@
+import { useGetNextActions } from "../../../hooks/programStages/useGetNextActions"
 import { attributesProps } from "../../../types/api/WithRegistrationProps"
 import { dataValuesProps } from "../../../types/api/WithoutRegistrationProps"
 import { FormatResponseRowsMarksProps, FormatResponseRowsProps, RowsDataProps } from "../../../types/utils/FormatRowsDataProps"
 
-export function formatResponseRows({ eventsInstances, teiInstances, marksInstances, programIndicatorsInstances, setImmutableTeiData, programStage }: FormatResponseRowsProps): RowsDataProps[] {
+export function formatResponseRows({ eventsInstances, teiInstances, marksInstances, programIndicatorsInstances, setImmutableTeiData, programStage, nextPstageEvents }: FormatResponseRowsProps): RowsDataProps[] {
 
     const allRows: RowsDataProps[] = []
     for (const event of eventsInstances) {
         const teiDetails = teiInstances.find(tei => tei.trackedEntity === event.trackedEntity)
         const marksDetails = marksInstances.find(mark => (mark.trackedEntity === event.trackedEntity) && (mark?.enrollment === event?.enrollment))
-
-        console.log(teiDetails, event)
 
         setImmutableTeiData((prevState: any) => [...prevState, {
             ...dataValues(event.dataValues), ...(attributes((teiDetails?.attributes) ?? [])),
@@ -27,7 +26,8 @@ export function formatResponseRows({ eventsInstances, teiInstances, marksInstanc
             status: teiDetails?.enrollments?.[0]?.status,
             eventStatus: event?.status as unknown as any,
             event: event?.event as unknown as any,
-            orgUnit:teiDetails?.enrollments?.[0]?.orgUnit
+            orgUnit: teiDetails?.enrollments?.[0]?.orgUnit,
+            ...(getNextProgramStages(nextPstageEvents, event.trackedEntity))
         })
     }
     return allRows;
@@ -60,4 +60,8 @@ function programIndicators(data: any[]): RowsDataProps {
         localData[programIndicator.programIndicator] = programIndicator.value
     }
     return localData
+}
+
+function getNextProgramStages(data: any[], trackedEntity: string) {
+    return data?.find((x) => x.trackedEntity === trackedEntity)
 }

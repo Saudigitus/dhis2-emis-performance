@@ -48,14 +48,17 @@ interface filters {
     dataElements: filterItem[]
 }
 
+type nextProgramStageType = {
+    displayName: string,
+    programStage: string,
+    columnName: string
+}
+
 interface tabGroupItem {
     order: string,
     label: string
     programStage: string
-    nextAction?: [{
-        displayName: string,
-        programStage: string
-    }]
+    nextAction?: nextProgramStageType[]
 }
 
 interface assessment {
@@ -95,4 +98,4 @@ interface dataStoreRecord {
 }
 
 
-export type { dataStoreRecord, transfer, registration, performance, attendance, simpleProgramStage, filterItem, assessment }
+export type { dataStoreRecord, transfer, registration, performance, attendance, simpleProgramStage, filterItem, assessment, nextProgramStageType }
