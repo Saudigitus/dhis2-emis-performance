@@ -46,13 +46,12 @@ const useStyles = makeStyles((theme: Theme) =>
 function RenderRows(props: RenderHeaderProps): React.ReactElement {
     const { rowsData, headerData, loader, events } = props
     const classes = useStyles()
-    const [allEvents] = useRecoilState(EventsState);
     const [selectedTerm] = useRecoilState(SubTabState);
     const { getDataStoreData } = getSelectedKey()
     const programConfig: ProgramConfig = useRecoilValue(ProgramConfigState)
     const { urlParamiters } = useParams()
     const { moduloAdministrativo } = urlParamiters()
-    const selected = programConfig?.programStages?.find(x => x.id === getDataStoreData.monitoria.programStage)?.programStageDataElements?.find(de => de.dataElement.id === getDataStoreData.monitoria.filters.dataElements[0].dataElement)?.dataElement
+    const selected = programConfig?.programStages?.find(x => x.id === getDataStoreData?.monitoria?.programStage)?.programStageDataElements?.find(de => de.dataElement.id === getDataStoreData?.monitoria?.filters?.dataElements[0].dataElement)?.dataElement
     const { saveMarks } = usePostDataElement()
     const [prevValues, setPrevValues] = useState<Object>({})
     const [showFeedBack, setShowFeedBack] = useState<FieldFeedbackProps>({
@@ -91,9 +90,8 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                     const copyRow = {
                         ...row,
                         eventDate: currEvent?.occurredAt && format(new Date(currEvent?.occurredAt), "yyyy-MM-dd"),
-                        ...dataValues(currEvent?.dataValues ?? [], getDataStoreData.monitoria.programStage),
+                        ...dataValues(currEvent?.dataValues ?? [], getDataStoreData?.monitoria?.programStage),
                         event: currEvent?.event
-
                     }
                     const cells = headerData?.filter(x => x.visible)?.map(column => (
                         <RowCell

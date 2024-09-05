@@ -12,7 +12,6 @@ function RowTable(props: RowProps): React.ReactElement {
         passOnProps,
         inactive = false
     } = props;
-    const {sectionName} = useGetSectionTypeLabel()
 
     const classes = classNames(
         defaultClasses.tableRow,

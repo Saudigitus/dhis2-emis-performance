@@ -13,6 +13,6 @@ export function useHeader() {
     const { moduloAdministrativo } = urlParamiters()
 
     return {
-        columns: formatResponse(programConfigState, getDataStoreData.monitoria.programStage, tableColumns, [], moduloAdministrativo as unknown as string, getDataStoreData.monitoria.filters.dataElements[0].dataElement)
+        columns: formatResponse(programConfigState, getDataStoreData?.monitoria?.programStage, tableColumns, [], moduloAdministrativo as unknown as string, getDataStoreData.monitoria?.filters?.dataElements[0].dataElement)
     }
 }

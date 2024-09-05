@@ -19,7 +19,7 @@ export default function RowActions(props: RowActionsProps) {
   const { getDataStoreData } = getSelectedKey()
   const { urlParamiters } = useParams()
   const { moduloAdministrativo } = urlParamiters()
-  const selected = getProgram?.programStages?.find(x => x.id === getDataStoreData.monitoria.programStage)?.programStageDataElements?.find(de => de.dataElement.id === getDataStoreData.monitoria.filters.dataElements[0].dataElement)?.dataElement
+  const selected = getProgram?.programStages?.find(x => x.id === getDataStoreData.monitoria.programStage)?.programStageDataElements?.find(de => de.dataElement.id === getDataStoreData.monitoria?.filters?.dataElements[0].dataElement)?.dataElement
   const [confirmSate, setConfirmState] = useRecoilState(ConfirmationState)
 
   function Changing(changeEvent: any) {

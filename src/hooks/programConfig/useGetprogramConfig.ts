@@ -3,7 +3,6 @@ import { ProgramConfigState } from "../../schema/programSchema";
 import { useDataQuery } from "@dhis2/app-runtime";
 import { useEffect, useState } from "react";
 import useShowAlerts from "../commons/useShowAlert";
-import { useGetInitialValues } from "../initialValues/useGetInitialValues";
 import { ProgramConfig } from "../../types/programConfig/ProgramConfig";
 import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
 
@@ -25,7 +24,6 @@ const PROGRAMQUERY: any = {
 }
 
 export function useGetProgramConfig() {
-    const { isSetSectionType, sectionType } = useGetInitialValues()
     const setProgramConfigState = useSetRecoilState(ProgramConfigState);
     const { hide, show } = useShowAlerts()
     const { getDataStoreData } = getSelectedKey()
@@ -33,13 +31,11 @@ export function useGetProgramConfig() {
     const [customLoading, setcustomLoading] = useState(false)
 
     useEffect(() => {
-        if (isSetSectionType) {
-            setcustomLoading(true)
-            void refetch({
-                id: program
-            })
-        }
-    }, [sectionType, program])
+        setcustomLoading(true)
+        void refetch({
+            id: program
+        })
+    }, [program])
 
     const { loading, refetch } = useDataQuery<{ results: ProgramConfig }>(PROGRAMQUERY, {
         variables: { id: program },

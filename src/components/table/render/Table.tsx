@@ -61,12 +61,12 @@ function Table() {
 
     useEffect(() => {
         if (school)
-            void getData(page, pageSize, getDataStoreData.registration.programStage, [])
+            void getData(page, pageSize, getDataStoreData?.registration?.programStage, [])
     }, [headerFieldsState, page, pageSize])
 
     useEffect(() => {
         if (school)
-            void getEvents(page, pageSize, program, getDataStoreData.monitoria.programStage, headerFieldsState.dataElements, headerFieldsState.attributes, school)
+            void getEvents(page, pageSize, program, getDataStoreData?.monitoria?.programStage, headerFieldsState.dataElements, headerFieldsState.attributes, school)
     }, [headerFieldsState, refetch])
 
     const onPageChange = (newPage: number) => {

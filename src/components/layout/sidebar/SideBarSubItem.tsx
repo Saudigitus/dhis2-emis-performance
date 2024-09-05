@@ -11,9 +11,7 @@ export default function SideBarSubItem(props: SideBarSubItemProps) {
     const { icon, label, showBadge, disabled, route, appName, pathName } = props;
     const { baseUrl } = useConfig()
     const location = useLocation()
-    const { urlParamiters } = useParams()
-    const { sectionType } = urlParamiters()
-    const formattedPathName = `${location.pathname}/${sectionType}`
+    const formattedPathName = `${location.pathname}`
 
     return (
         <a href={`${baseUrl}/api/apps/${appName}/index.html#/${route}`} className={style.subItemLink}>

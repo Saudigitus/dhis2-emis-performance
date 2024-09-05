@@ -3,6 +3,6 @@ export const formatCamelCaseToWords = (text: string): string => {
 }
 
 export const formatCamelToTitleCase = (text: string) => {
-    const result = text.replace(/([A-Z])/g, ' $1');
-    return result.charAt(0).toUpperCase() + result.slice(1);
+    const result = text?.replace(/([A-Z])/g, ' $1');
+    return result?.charAt(0)?.toUpperCase() + result?.slice(1);
   }
