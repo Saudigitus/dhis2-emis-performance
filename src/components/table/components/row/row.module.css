@@ -5,3 +5,11 @@
 .success input {
     border: rgb(23, 167, 66) solid;
 }
+
+.iconHasValue {
+    color: #00897b;
+}
+
+.iconHasNotValue {
+    color: #A0ADBA;
+}

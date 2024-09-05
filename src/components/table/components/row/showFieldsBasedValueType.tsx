@@ -74,15 +74,15 @@ export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueType
 
     if (column.type === VariablesTypes.HasEvent) {
         return (
-            <>
+            <span className={ value ? styles.iconHasValue : styles.iconHasNotValue}>
                 {
                     value ?
-                        <IconCheckmark24 />
+                        <IconCheckmark24 primary/>
                         :
                         <RemoveCircleOutline />
 
                 }
-            </>
+            </span>
         )
     }
 
