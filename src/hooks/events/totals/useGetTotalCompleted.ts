@@ -10,12 +10,12 @@ export function useGetTotalCompleted({ setTotals }: { setTotals: (args: any) => 
 
     async function getTotals() {
         let totals: any = {}
-        const status = ['ACTIVE', 'COMPLETED']
+        const status = ['', 'COMPLETED']
         const selectedTabStage = getDataStoreData.assessment.tabGroups.find(x => x.label === tab)?.programStage as unknown as string
 
         for (const stage of status) {
             const response = await getEvents(1, 1, getDataStoreData.program, selectedTabStage, [], [], orgUnit, '', stage)
-            totals[stage] = response?.results?.total
+            totals[stage ? stage : 'Total'] = response?.results?.total
         }
 
         setTotals(totals)

@@ -19,10 +19,10 @@ export default function MainHeader(): React.ReactElement {
     const programStageDataElements: programStageDataElements[] | any = programConfig?.programStages?.find((programStage: any) => programStage.id === getDataStoreData.registration.programStage)?.programStageDataElements
     const { initialize } = initializeRulesEngine()
     const { tab, orgUnit } = urlParamiters()
-    const [totals, setTotals] = useState<any>({ ACTIVE: 0, COMPLETED: 0 });
+    const [totals, setTotals] = useState<any>({ Total: 0, COMPLETED: 0 });
     const { getTotals } = useGetTotalCompleted({ setTotals })
     const refetch = useRecoilValue<boolean>(TeiRefetch)
-    const percent = ((100 * totals.COMPLETED) / (totals.COMPLETED + totals.ACTIVE)).toFixed(1)
+    const percent = ((100 * totals.COMPLETED) / totals.Total).toFixed(1)
 
     useEffect(() => {
         if (orgUnit)
@@ -43,7 +43,7 @@ export default function MainHeader(): React.ReactElement {
 
             <div className={style.percentContainer}>
                 <div className={style.totals}>
-                    <span>Registados: {totals.ACTIVE ?? 0}</span>
+                    <span>Registados: {totals.Total ?? 0}</span>
                     <span>Completos: &nbsp;{totals.COMPLETED ?? 0}</span>
                 </div>
                 <div className={style.percent}>
