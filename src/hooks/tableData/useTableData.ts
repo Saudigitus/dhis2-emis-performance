@@ -152,6 +152,26 @@ export function useTableData() {
         //     }
         // }
 
+        console.log(allTeis, 4,  headerFieldsState)
+        // const events2: EventQueryResults = await engine.query(EVENT_QUERY({
+        //     ouMode: "DESCENDANTS",
+        //     page,
+        //     pageSize,
+        //     // programStatus: "ACTIVE",
+        //     program: program,
+        //     order: "createdAt:desc",
+        //     programStage: selectedProgramStage,
+        //     filter: headerFieldsState?.dataElements,
+        //     filterAttributes: headerFieldsState?.attributes,
+        //     orgUnit: orgUnit as unknown as string
+        // })).catch((error) => {
+        //     show({
+        //         message: `${("Could not get events")}: ${error.message}`,
+        //         type: { critical: true }
+        //     });
+        //     setTimeout(hide, 5000);
+        // }) as unknown as EventQueryResults;
+
 
         const programIndicatorsInstances = []
 

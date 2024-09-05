@@ -28,6 +28,8 @@ export default function RowActions(props: RowActionsProps) {
   const eventsIsCompleted = checkCompleted(row?.eventStatus as string)
   const { buildFormData, error, loading, initialValues, setInitialValues } = useGetEventUpdateFormData()
 
+  console.log(eventsIsCompleted, row?.eventStatus, row)
+
   useEffect(() => {
     if (error)
       setOpenEditionModal(false)

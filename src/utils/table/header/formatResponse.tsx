@@ -85,6 +85,7 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
                 error: false,
                 content: '',
                 key: nextProgramStage.programStage + "_" + programStageId,
+                displayInFilters: false,
                 type: VariablesTypes.Custom
             }
         }) as []

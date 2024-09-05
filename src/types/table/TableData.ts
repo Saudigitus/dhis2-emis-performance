@@ -1,5 +1,6 @@
 import { attributesProps } from "../api/WithRegistrationProps";
 import { dataValuesProps } from "../api/WithoutRegistrationProps";
+import { enrollmentStatus } from "../variables/AttributeColumns";
 
 export type TableDataProps = Record<string, string>;
 
@@ -28,6 +29,8 @@ export interface TeiQueryProps {
 export interface EventQueryResults {
     results: {
         instances: [{
+            status: enrollmentStatus
+            event: string
             enrollment: string
             trackedEntity: string
             dataValues: dataValuesProps[]
