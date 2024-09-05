@@ -11,6 +11,7 @@ import { type RenderHeaderProps } from '../../../types/table/TableContentProps';
 import { usePostDataElement } from '../../../hooks';
 import { checkCompleted } from "../../../utils/table/rows/checkCanceled";
 import RowActions from '../components/rowsActions/RowActions';
+import { RemoveCircleOutline } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -98,6 +99,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                 />
                             </div>
                             {(column.displayName == "Actions") && <RowActions row={row} />}
+                            {(column.id == "gNkskijk6Hx" || column.id == "XtBUmvMpFRx") && <RemoveCircleOutline />}
 
                         </RowCell>
                     ));

@@ -152,7 +152,7 @@ export function useTableData() {
         //     }
         // }
 
-        console.log(allTeis, 4,  headerFieldsState)
+        // console.log(allTeis, 4,  headerFieldsState)
         // const events2: EventQueryResults = await engine.query(EVENT_QUERY({
         //     ouMode: "DESCENDANTS",
         //     page,

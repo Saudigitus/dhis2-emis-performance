@@ -91,7 +91,7 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
       </CenteredContent>
     )
   }
-  console.log(row);
+
   return (
     <WithPadding>
       <Form initialValues={{ orgUnit, ...formInitialValues }} onSubmit={onSubmit}>
