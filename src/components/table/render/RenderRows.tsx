@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
             fontSize: theme.typography.pxToRem(13),
             color: theme.palette.text.primary
         },
-        opacity: { opacity: 0.5 }
+        opacity: { backgroundColor: "#e8f5e9" }
     })
 );
 
