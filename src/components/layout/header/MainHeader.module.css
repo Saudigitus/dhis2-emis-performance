@@ -94,9 +94,9 @@
 
 .percentContainer {
     display: grid;
-    grid-template-columns: 70% 60%;
-    margin: 0 35px 0 0;
+    grid-template-columns: 60% 60%;
     font-weight: 500;
+    width: 15%;
 }
 
 .totals {
