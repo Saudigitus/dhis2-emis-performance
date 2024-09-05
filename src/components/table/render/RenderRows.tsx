@@ -65,7 +65,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
             >
                 <RowCell
                     className={classNames(classes.cell, classes.bodyCell)}
-                    colspan={headerData?.filter(x => x.visible)?.length}
+                    colspan={headerData?.filter(x => x?.visible)?.length}
                 >
                     {i18n.t('No data to display')}
                 </RowCell>
@@ -77,7 +77,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
         <React.Fragment>
             {
                 rowsData?.map((row, index) => {
-                    const cells = headerData?.filter(x => x.visible)?.map(column => (
+                    const cells = headerData?.filter(x => x?.visible)?.map(column => (
                         <RowCell
                             key={column.id}
                             className={classNames(classes.cell, classes.bodyCell)}

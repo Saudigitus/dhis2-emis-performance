@@ -44,12 +44,12 @@ function RenderHeader(props: RenderHeaderProps): React.ReactElement {
     const classes = useStyles()
 
     const headerCells = useMemo(() => {
-        return rowsHeader?.filter(x => x.visible)?.map((column) => (
+        return rowsHeader?.filter(x => x?.visible)?.map((column) => (
             <HeaderCell
                 key={column.id}
                 className={classNames(classes.cell, classes.headerCell)}
             >
-                {column.header}
+                {column?.header}
             </HeaderCell>
         ))
     }, [rowsHeader]);

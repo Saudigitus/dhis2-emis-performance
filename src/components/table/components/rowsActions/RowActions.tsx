@@ -67,7 +67,7 @@ export default function RowActions(props: RowActionsProps) {
 
   return (
     <div>
-      <Actions inactive={inactive} menuItems={menuItems} />
+      <Actions inactive={inactive} menuItems={menuItems} completing={completing} />
       {
         openEditionModal &&
         <ModalComponent title={title} open={openEditionModal} setOpen={setOpenEditionModal}>
