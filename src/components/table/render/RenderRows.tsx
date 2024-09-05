@@ -9,7 +9,7 @@ import { type FieldFeedbackProps } from '../../../types/table/MarksFieldsFeedbac
 import ShowFieldsBasedValueType from '../components/row/showFieldsBasedValueType';
 import { type RenderHeaderProps } from '../../../types/table/TableContentProps';
 import { useParams, usePostDataElement } from '../../../hooks';
-import { checkCanceled } from "../../../utils/table/rows/checkCanceled";
+import { checkCompleted } from "../../../utils/table/rows/checkCompleted";
 import RowActions from '../components/rowsActions/RowActions';
 import { getSelectedKey } from '../../../utils';
 import { ProgramConfig } from '../../../types/programConfig/ProgramConfig';
@@ -93,6 +93,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                         ...dataValues(currEvent?.dataValues ?? [], getDataStoreData?.monitoria?.programStage),
                         event: currEvent?.event
                     }
+
                     const cells = headerData?.filter(x => x.visible)?.map(column => (
                         <RowCell
                             key={column.id}
@@ -111,18 +112,25 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                     headers={headerData}
                                     prevValues={prevValues}
                                     setPrevValues={setPrevValues}
-                                    inactive={checkCanceled(row.eventStatus)}
+                                    inactive={checkCompleted(currEvent?.status)}
                                     disableInput={currEvent?.event ? false : true}
                                 />
                             </div>
-                            {(moduloAdministrativo && column.id === selected?.id) && <RowActions disabled={checkCanceled(row.eventStatus)} event={currEvent?.event} row={row} />}
+                            {((moduloAdministrativo && column.id === selected?.id) || column.id == 'complete') &&
+                                <RowActions
+                                    completed={checkCompleted(currEvent?.status)}
+                                    complete={column.id == 'complete'}
+                                    event={currEvent?.event}
+                                    row={row}
+                                />
+                            }
                         </RowCell>
                     ));
                     return (
                         <RowTable
                             key={index}
-                            className={classNames(classes.row, classes.dataRow, checkCanceled(row.eventStatus) && classes.opacity)}
-                            inactive={checkCanceled(row.eventStatus)}
+                            className={classNames(classes.row, classes.dataRow)}
+                            inactive={checkCompleted(currEvent?.status)}
                         >
                             {cells}
                         </RowTable>

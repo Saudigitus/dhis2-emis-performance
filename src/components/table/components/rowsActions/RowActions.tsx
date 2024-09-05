@@ -7,13 +7,14 @@ import { usePostEvent } from "../../../../hooks/events/useCreateEvents";
 import { useParams } from "../../../../hooks";
 import { getSelectedKey } from "../../../../utils";
 import { format } from "date-fns";
-import { useDeleteEvent } from "../../../../hooks/events/useDeleteEvents";
 import { CircularLoader, CenteredContent } from "@dhis2/ui";
-import { useGetEvents } from '../../../../hooks/events/useGetEvents';
 import { ConfirmationState } from '../../../../schema/confirmationDialog';
+import { IconButton } from '@material-ui/core';
+import CheckIcon from '@material-ui/icons/Check';
+import CloseIcon from '@material-ui/icons/Close';
 
 export default function RowActions(props: RowActionsProps) {
-  const { row, event, disabled } = props;
+  const { row, event, completed, complete } = props;
   const getProgram = useRecoilValue(ProgramConfigState);
   const { updateEvent } = usePostEvent()
   const { getDataStoreData } = getSelectedKey()
@@ -50,6 +51,10 @@ export default function RowActions(props: RowActionsProps) {
     }
   }
 
+  function completeEvent() {
+
+  }
+
   return (
     <div className={style.rowActionsContainer}>
       {
@@ -59,7 +64,19 @@ export default function RowActions(props: RowActionsProps) {
           </CenteredContent>
           :
           <CenteredContent>
-            <Switch disabled={disabled} onChange={(event: any) => Changing(event)} checked={event ? true : false} color="primary" />
+            {
+              complete ?
+                <IconButton onClick={() => { }} >
+                  {
+                    completed ?
+                      <CloseIcon color='error' />
+                      :
+                      <CheckIcon style={{ color: "green" }} />
+                  }
+                </IconButton>
+                :
+                <Switch disabled={completed} onChange={(event: any) => Changing(event)} checked={event ? true : false} color="primary" />
+            }
           </CenteredContent>
       }
     </div>

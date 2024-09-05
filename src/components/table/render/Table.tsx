@@ -29,9 +29,9 @@ const usetStyles = makeStyles({
         justifyContent: 'space-between'
     },
     h4: {
-        margin: '0px',
         fontSize: '22px',
-        fontWeigth: '500'
+        fontWeigth: '500',
+        padding: "10px 0 10px 0"
     }
 });
 
@@ -44,7 +44,7 @@ function Table() {
     const [pageSize, setpageSize] = useState(10)
     const [refetch] = useRecoilState(TeiRefetch)
     const { urlParamiters } = useParams()
-    const { school } = urlParamiters()
+    const { orgUnit } = urlParamiters()
     const setLoading = useSetRecoilState(TableDataLoadingState)
     const { getDataStoreData } = getSelectedKey()
     const { program } = getDataStoreKeys()
@@ -60,13 +60,13 @@ function Table() {
     }, [headerFieldsState])
 
     useEffect(() => {
-        if (school)
+        if (orgUnit)
             void getData(page, pageSize, getDataStoreData?.registration?.programStage, [])
     }, [headerFieldsState, page, pageSize])
 
     useEffect(() => {
-        if (school)
-            void getEvents(page, pageSize, program, getDataStoreData?.monitoria?.programStage, headerFieldsState.dataElements, headerFieldsState.attributes, school)
+        if (orgUnit)
+            void getEvents(page, pageSize, program, getDataStoreData?.monitoria?.programStage, headerFieldsState.dataElements, headerFieldsState.attributes, orgUnit)
     }, [headerFieldsState, refetch])
 
     const onPageChange = (newPage: number) => {
@@ -81,8 +81,8 @@ function Table() {
     return (
         <Paper>
             <div className={classes.workingListsContainer}>
-                <h4 className={classes.h4}>Performance</h4>
-                <WorkingLists />
+                <h4 className={classes.h4}>Monitoria das ASCAS</h4>
+                {/* <WorkingLists /> */}
             </div>
             <WithBorder type='bottom' />
             <WithPadding >

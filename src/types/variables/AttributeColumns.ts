@@ -13,6 +13,11 @@ export enum enrollmentStatus {
     CANCELLED = 'CANCELLED'
 }
 
+export enum eventStatus {
+    ACTIVE = 'ACTIVE',
+    COMPLETED = 'COMPLETED',
+}
+
 export interface CustomAttributeProps {
     id: string
     rawId?:string

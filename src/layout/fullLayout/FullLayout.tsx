@@ -9,7 +9,7 @@ import { LayoutProps } from '../../types/layout/LayoutProps';
 export default function FullLayout(props: LayoutProps) {
     const { children } = props;
     const { urlParamiters } = useParams();
-    const { school } = urlParamiters();
+    const { orgUnit } = urlParamiters();
     const { loading } = useGetProgramConfig();
 
 
@@ -27,7 +27,7 @@ export default function FullLayout(props: LayoutProps) {
             <div className={style.FullLayoutContainer}>
                 <MainHeader />
                 <main className={style.MainContentContainer}>
-                    {(school === null || school === undefined) ? <InfoPage /> : children}
+                    {(orgUnit === null || orgUnit === undefined) ? <InfoPage /> : children}
                 </main>
             </div>
         </div>

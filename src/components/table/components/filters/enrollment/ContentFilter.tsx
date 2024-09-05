@@ -21,10 +21,10 @@ function ContentFilter(props: ContentFilterProps) {
     const attributesQuerybuilder: any[][] = [];
     const dataElementsQuerybuilder: any[][] = [];
 
-    // useEffect(() => {
-    //     const copyHeader = [...headers]
-    //     setlocalFilters(copyHeader.slice(0, 4))
-    // }, [headers])
+    useEffect(() => {
+        const copyHeader = [...headers]
+        setlocalFilters(copyHeader.slice(0, 4))
+    }, [headers])
 
     const handleClick = (event: any) => {
         setAnchorEl(event.currentTarget);

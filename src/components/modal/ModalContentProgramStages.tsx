@@ -19,7 +19,7 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
   const getProgram = useRecoilValue(ProgramConfigState);
   const { useQuery } = useParams();
   const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
-  const orgUnit = useQuery().get("school");
+  const orgUnit = useQuery().get("orgUnit");
   const [, setClicked] = useRecoilState<boolean>(onSubmitClicked);
   const [values, setValues] = useState<Record<string, string>>({})
   const { postTei, loading, data } = usePostTei()

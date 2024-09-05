@@ -8,11 +8,11 @@ function headBarData(selectedOptions: SelectedOptionsTypes, dataStoreData: dataS
     return [
         {
             id: "c540ac7c",
-            label: "School",
-            value: selectedOptions?.schoolName ?? "Select a school",
-            placeholder: "Search for organisation unit",
+            label: "Unidade Organisacional",
+            value: selectedOptions?.orgUnitName ?? "Selecione a Unidade Organisacional",
+            placeholder: "Pesquise por uma Unidade Organisacional",
             component: "orgUnitTree",
-            selected: Boolean(selectedOptions?.schoolName),
+            selected: Boolean(selectedOptions?.orgUnitName),
         },
         ...headBarDataElements(selectedOptions, dataStoreData, programStageDataElements)
     ]

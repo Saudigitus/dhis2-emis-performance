@@ -17,7 +17,7 @@ import { TableDataLoadingState } from '../../../../schema/tableDataLoadingSchema
 
 function EnrollmentActionsButtons() {
   const { urlParamiters } = useParams();
-  const { school: orgUnit } = urlParamiters();
+  const { orgUnit: orgUnit } = urlParamiters();
   const selectedTerm = useRecoilValue(SubTabState)
   const { completeEvents, loading: completing } = useCompleteEvents()
   const allTeis = useRecoilValue(AllTeisSchema)

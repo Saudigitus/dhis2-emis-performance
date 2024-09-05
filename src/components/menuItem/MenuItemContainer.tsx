@@ -11,20 +11,20 @@ import { useParams } from '../../hooks/commons/useQueryParams';
 function MenuItemContainer(props: MenuItemContainerProps): React.ReactElement {
     const { dataElementId, onToggle } = props;
     const { urlParamiters } = useParams();
-    const { school } = urlParamiters()
+    const { orgUnit } = urlParamiters()
     const programConfigState = useRecoilValue(ProgramConfigState);
     const { monitoria } = getDataStoreKeys();
 
     const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
         variables: formatResponse(programConfigState, monitoria?.programStage, [], [], '', '')?.filter(element => element.rawId === dataElementId).map((x) => { return { ...x, name: x.rawId } }),
-        values: { orgUnit: school },
+        values: { orgUnit: orgUnit },
         type: "programStage",
         formatKeyValueType: formatKeyValueTypeHeader(formatResponse(programConfigState, monitoria?.programStage, [], [], '', '')?.filter(element => element.rawId === dataElementId)) || []
     })
 
     useEffect(() => {
         runRulesEngine()
-    }, [school])
+    }, [orgUnit])
 
     const options = updatedVariables?.find(element => element.rawId === dataElementId)?.options.optionSet.options ?? []
 

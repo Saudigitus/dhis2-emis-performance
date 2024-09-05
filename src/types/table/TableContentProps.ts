@@ -76,9 +76,10 @@ interface RowActionsType {
 interface RowActionsProps {
     row: any
     event: string
-    disabled: boolean
+    completed: boolean
     onSelectTei?: (arg: any) => void
-    onShowHistory?: () => void
+    onShowHistory?: () => void,
+    complete?: boolean
 }
 
 export type { TableComponentProps, HeaderCellProps, RowProps, RenderHeaderProps, TableSortProps, TableDataProps, ShowFieldsBasedValueTypeProps, RowActionsProps, RowActionsType }

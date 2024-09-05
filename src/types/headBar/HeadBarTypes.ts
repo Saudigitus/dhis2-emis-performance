@@ -13,7 +13,7 @@ interface SelectedOptionsTypes {
     academicYear: string | null
     class: string | null
     grade: string | null
-    school: string | null
-    schoolName: string | null
+    orgUnit: string | null
+    orgUnitName: string | null
 }
 export type { HeadBarTypes, SelectedOptionsTypes }

@@ -7,6 +7,7 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
     const originalData = ((data?.programStages?.find(programStge => programStge.id === programStageId)) ?? {} as unknown as ProgramConfig["programStages"][0])
     const programIndicatorsData = data?.programIndicators?.filter((x) => programIndicators?.map((x) => x.id).join(",").includes(x.id))
     const selected = data?.programStages?.find(x => x.id === programStageId)?.programStageDataElements?.find(de => de.dataElement.id === dataElementId)?.dataElement
+    const cols = [{ name: 'eventDate', label: "Data de Registo", valueType: "DATE", type: VariablesTypes.Performance }, { name: "complete", label: "Completar", valueType: "TEXT", type: VariablesTypes.Custom }]
 
     function getProgramStageDataElement(): [] {
         return (Object.keys(originalData).length > 0 && moduloAdministrativo != null && moduloAdministrativo != undefined)
@@ -52,26 +53,28 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
                         type: VariablesTypes.Performance
                     }
                 }) as unknown as []
-            ).concat([{
-                id: 'eventDate',
-                displayName: 'Event Date',
-                header: 'Event Date',
-                required: false,
-                name: 'eventDate',
-                labelName: 'Event Date',
-                valueType: Attribute.valueType.DATE as unknown as CustomAttributeProps["valueType"],
-                options: undefined,
-                initialOptions: undefined,
-                visible: true,
-                disabled: false,
-                pattern: '',
-                searchable: false,
-                error: false,
-                content: '',
-                key: '',
-                displayInFilters: false,
-                type: VariablesTypes.Performance
-            }]) as []
+            ).concat(cols.map((x: any) => {
+                return {
+                    id: x.name,
+                    displayName: x.label,
+                    header: x.label,
+                    required: false,
+                    name: x.name,
+                    labelName: x.label,
+                    valueType: x.valueType,
+                    options: undefined,
+                    initialOptions: undefined,
+                    visible: true,
+                    disabled: false,
+                    pattern: '',
+                    searchable: false,
+                    error: false,
+                    content: '',
+                    key: '',
+                    displayInFilters: false,
+                    type: x.type
+                }
+            }) as unknown as []) as unknown as []
             : []
     }
 
