@@ -40,7 +40,6 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
   })
 
   useEffect(() => {
-    console.log(data);
     if (data && data["status" as unknown as keyof typeof data] === "OK") {
       setOpen(false)
       setClicked(false)

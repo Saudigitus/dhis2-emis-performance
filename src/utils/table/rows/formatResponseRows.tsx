@@ -1,4 +1,3 @@
-import { useGetNextActions } from "../../../hooks/programStages/useGetNextActions"
 import { attributesProps } from "../../../types/api/WithRegistrationProps"
 import { dataValuesProps } from "../../../types/api/WithoutRegistrationProps"
 import { FormatResponseRowsMarksProps, FormatResponseRowsProps, RowsDataProps } from "../../../types/utils/FormatRowsDataProps"

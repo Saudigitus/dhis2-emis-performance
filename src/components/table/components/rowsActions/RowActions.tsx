@@ -57,7 +57,6 @@ export default function RowActions(props: RowActionsProps) {
       disabled: completing,
       onClick: () => {
         setOpenEditionModal(!openEditionModal)
-        console.log(action);
         buildFormData(row?.trackedEntity, action?.programStage!)
         setActionPStage(action.programStage)
       },

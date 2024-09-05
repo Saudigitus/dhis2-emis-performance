@@ -52,7 +52,6 @@ export function useTableData() {
     const { getOrgUnitCode } = useGetOrgUnitCode()
     const { getEvents } = useGetEvents()
     const { nextAction = [] } = useGetNextActions()
-    // const [nextPstageEvents, setNextPstageEvents] = useState()
 
     async function getData(page: number, pageSize: number, selectedProgramStage: string, selectedProgramIndicators: string[]) {
         setLoading(true)
@@ -120,18 +119,21 @@ export function useTableData() {
         }
 
         const promises = []
-        const nextPstageEvents: any[] = []
+        const nextPstageEvents: any = {
+            results : []
+        }
+
         for (const action of nextAction) {
             for (const tei of allTeis) {
-                promises.push(await getEvents(1, 1, program, action.programStage, [], [], orgUnit, tei))
+                promises.push(getEvents(1, 1, program, action.programStage, [], [], orgUnit, tei))
             }
         }
 
-        Promise.all(promises)
+        await Promise.all(promises)
             .then((responses) => {
                 for (const response of responses) {
-                    if (response?.results?.instances[0])
-                        nextPstageEvents.push(response?.results?.instances[0])
+                    if (response?.results?.instances.length)
+                        nextPstageEvents.results.push(response?.results?.instances[0])
                 }
             })
 
@@ -142,6 +144,7 @@ export function useTableData() {
         //     }
         // }
 
+        // console.log(nextPstageEvents, ...nextPstageEvents)
         const programIndicatorsInstances = []
 
         if (selectedProgramIndicators?.length) {
@@ -159,7 +162,7 @@ export function useTableData() {
             programIndicatorsInstances: programIndicatorsInstances as any,
             setImmutableTeiData,
             programStage: selectedProgramStage,
-            nextPstageEvents: teiHasEvents(nextAction, nextPstageEvents, allTeis)
+            nextPstageEvents: teiHasEvents(nextAction, nextPstageEvents.results, allTeis)
         })
 
         for (const row of localData) {
