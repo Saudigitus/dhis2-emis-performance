@@ -11,6 +11,7 @@ import { useGetProgramIndicators } from "../programIndicators/useGetProgramIndic
 import { formatAttributesFilter } from "../../utils/tei/formatAttributesFilter";
 import { returnTeiProgramIndicators } from "../../utils/tei/returnTeiProgramIndicators";
 import { AllTeisSchema } from "../../schema/allTeisSchema";
+import { useGetOrgUnitName } from "../organisationUnit/useGetOrgUnitName";
 
 const EVENT_QUERY = (queryProps: EventQueryProps) => ({
     results: {
@@ -45,6 +46,7 @@ export function useTableData() {
     const [, setAllEvents] = useRecoilState(EventsState);
     const { school } = urlParamiters()
     const { getProgramIndicators } = useGetProgramIndicators()
+    const { getOrgUnitName } = useGetOrgUnitName()
 
     const fetchMarks = async (tei: string, programStageId: string) => {
         return await engine.query(EVENT_QUERY({
