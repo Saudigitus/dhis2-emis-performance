@@ -15,7 +15,6 @@ function TableComponent() {
   const { assessment } = getDataStoreKeys()
   const [open, setOpen] = useState(false);
   const { formData } = useGetGroupForm();
-
   
   return (
     <>
