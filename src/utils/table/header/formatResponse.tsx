@@ -10,29 +10,49 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
 
     function getProgramStageDataElement(): [] {
         return (Object.keys(originalData).length > 0 && moduloAdministrativo != null && moduloAdministrativo != undefined)
-            ? originalData?.programStageDataElements?.map((programStageDataElement) => {
-
-                return {
-                    id: programStageDataElement.dataElement.id + "_" + programStageId,
-                    rawId: programStageDataElement.dataElement.id,
-                    displayName: programStageDataElement.dataElement.displayName,
-                    header: programStageDataElement.dataElement.displayName,
-                    required: programStageDataElement.compulsory,
-                    name: programStageDataElement.dataElement.displayName,
-                    labelName: programStageDataElement.dataElement.displayName,
-                    valueType: programStageDataElement.dataElement.optionSet?.options?.length > 0 ? Attribute.valueType.LIST as unknown as CustomAttributeProps["valueType"] : programStageDataElement.dataElement.valueType as unknown as CustomAttributeProps["valueType"],
-                    options: { optionSet: programStageDataElement.dataElement.optionSet },
-                    initialOptions: { optionSet: programStageDataElement.dataElement.optionSet },
-                    visible: programStageDataElement.displayInReports,
-                    disabled: false,
-                    pattern: '',
-                    searchable: false,
-                    error: false,
-                    content: '',
-                    key: programStageDataElement.dataElement.id + "_" + programStageId,
-                    type: VariablesTypes.Performance
-                }
-            }).concat([{
+            ? [{
+                id: selected?.id,
+                displayName: selected?.optionSet.options.find(x => x.value === moduloAdministrativo)?.label,
+                header: selected?.optionSet.options.find(x => x.value === moduloAdministrativo)?.label,
+                required: false,
+                name: selected?.id,
+                labelName: selected?.optionSet.options.find(x => x.value === moduloAdministrativo)?.label,
+                valueType: '',
+                options: undefined,
+                initialOptions: undefined,
+                visible: true,
+                disabled: false,
+                pattern: '',
+                searchable: false,
+                error: false,
+                content: '',
+                key: '',
+                displayInFilters: false,
+                type: VariablesTypes.Custom
+            }].concat(
+                originalData?.programStageDataElements?.map((programStageDataElement) => {
+                    return {
+                        id: programStageDataElement.dataElement.id + "_" + programStageId,
+                        rawId: programStageDataElement.dataElement.id,
+                        displayName: programStageDataElement.dataElement.displayName,
+                        header: programStageDataElement.dataElement.displayName,
+                        required: programStageDataElement.compulsory,
+                        name: programStageDataElement.dataElement.displayName,
+                        labelName: programStageDataElement.dataElement.displayName,
+                        valueType: programStageDataElement.dataElement.optionSet?.options?.length > 0 ? Attribute.valueType.LIST as unknown as CustomAttributeProps["valueType"] : programStageDataElement.dataElement.valueType as unknown as CustomAttributeProps["valueType"],
+                        options: { optionSet: programStageDataElement.dataElement.optionSet },
+                        initialOptions: { optionSet: programStageDataElement.dataElement.optionSet },
+                        visible: programStageDataElement.displayInReports,
+                        disabled: false,
+                        pattern: '',
+                        searchable: false,
+                        error: false,
+                        content: '',
+                        key: programStageDataElement.dataElement.id + "_" + programStageId,
+                        type: VariablesTypes.Performance
+                    }
+                }) as unknown as []
+            ).concat([{
                 id: 'eventDate',
                 displayName: 'Event Date',
                 header: 'Event Date',
@@ -114,27 +134,6 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
         })
             .concat(getProgramStageDataElement())
             .concat(getProgramIndicatorsHeaders())
-            .concat([{
-                id: selected?.id,
-                displayName: selected?.optionSet.options.find(x => x.value === moduloAdministrativo)?.label,
-                header: selected?.optionSet.options.find(x => x.value === moduloAdministrativo)?.label,
-                required: false,
-                name: selected?.id,
-                labelName: selected?.optionSet.options.find(x => x.value === moduloAdministrativo)?.label,
-                valueType: '',
-                options: undefined,
-                initialOptions: undefined,
-                visible: true,
-                disabled: false,
-                pattern: '',
-                searchable: false,
-                error: false,
-                content: '',
-                key: '',
-                displayInFilters: false,
-                type: VariablesTypes.Custom
-            }]) as []
-
     }, [data, programStageId, tableColumns, programIndicators, moduloAdministrativo]);
 
     return headerResponse;

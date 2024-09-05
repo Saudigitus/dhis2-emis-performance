@@ -4,7 +4,7 @@ import { useDataEngine } from "@dhis2/app-runtime";
 import { useParams } from "../commons/useQueryParams";
 import { HeaderFieldsState } from "../../schema/headersSchema";
 import useShowAlerts from "../commons/useShowAlert";
-import { EventsState, SubTabState } from "../../schema/termMarksSchema";
+import { EventsState } from "../../schema/termMarksSchema";
 import { type TableDataProps, type EventQueryProps, type TeiQueryProps, type MarksQueryResults, type EventQueryResults, type TeiQueryResults } from "../../types/table/TableData";
 import { formatResponseRowsMarks, formatResponseRows, getDataStoreKeys } from "../../utils";
 import { useGetProgramIndicators } from "../programIndicators/useGetProgramIndicators";
@@ -27,7 +27,7 @@ const TEI_QUERY = (queryProps: TeiQueryProps) => ({
     results: {
         resource: "tracker/trackedEntities",
         params: {
-            fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,status,orgUnit,enrolledAt]",
+            fields: "trackedEntity,createdAt,orgUnit,attributes[attribute,value],enrollments[enrollment,status,orgUnit,enrolledAt,program]",
             ...queryProps
         }
     }
@@ -42,7 +42,7 @@ export function useTableData() {
     const [immutableTeiData, setImmutableTeiData] = useState<any[]>([]) // this variable receives the attributes and dataElements of the registragion programStage
     const { hide, show } = useShowAlerts()
     const [allTeis, setAllTeis] = useRecoilState(AllTeisSchema)
-    const { program } = getDataStoreKeys()
+    const { program, assessment } = getDataStoreKeys()
     const [, setAllEvents] = useRecoilState(EventsState);
     const { school } = urlParamiters()
     const { getProgramIndicators } = useGetProgramIndicators()
@@ -142,6 +142,22 @@ export function useTableData() {
         const marskEvents: MarksQueryResults = {
             results: {
                 instances: []
+            }
+        }
+
+        if (teiResults?.results?.instances) {
+            let counter = 0
+            for (const tei of teiResults?.results?.instances) {
+                const attId = assessment?.programs.find((x: any) => x?.program === tei.enrollments[0]?.program)?.attributes.find((x: any) => x.attributeName == 'parentId')?.attribute
+                const ouId = tei.attributes.find(x => x.attribute === attId)?.value
+
+                if (ouId) {
+                    const teiName: any = await getOrgUnitName(ouId as unknown as string)
+                    teiResults.results?.instances[counter].attributes.map((x: any) => {
+                        if (x.attribute === attId) x.value = teiName?.results?.name
+                    })
+                }
+                counter++
             }
         }
 
