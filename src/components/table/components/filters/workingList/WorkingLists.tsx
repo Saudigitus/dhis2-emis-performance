@@ -21,7 +21,7 @@ function WorkingLists() {
   const [selectedValue, setSelectedValue] = useRecoilState(TabsState);
   const [totals, setTotals] = useState<any>({});
   const [, setSelectedTerm] = useRecoilState(SubTabState);
-  const { getTotals } = useGetTotalCompleted({ setTotals })
+  const { getTotalToAllStage } = useGetTotalCompleted({ setTotals })
   const [refetch,] = useRecoilState<boolean>(TeiRefetch)
 
   useEffect(() => {
@@ -39,6 +39,12 @@ function WorkingLists() {
     setSelectedTerm(items[0])
   }, [tab])
 
+  useEffect(() => {
+    if(orgUnit){
+      void getTotalToAllStage()
+    }
+  }, [orgUnit])
+
   return (
     <WithPadding>
       <div className="d-flex justify-content-between align-items-center">
@@ -46,6 +52,7 @@ function WorkingLists() {
           elements={tabsElements}
           selectedValue={selectedValue}
           setSelectedValue={setSelectedValue}
+          totals={totals}
         />
       </div>
     </WithPadding>

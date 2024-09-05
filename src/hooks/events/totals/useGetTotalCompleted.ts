@@ -21,5 +21,16 @@ export function useGetTotalCompleted({ setTotals }: { setTotals: (args: any) => 
         setTotals(totals)
     }
 
-    return { getTotals }
+    async function getTotalToAllStage(){
+        let totals: any = {}
+
+        for (const stage of getDataStoreData.assessment.tabGroups) {
+            const response = await getEvents(1, 1, getDataStoreData.program, stage.programStage, [], [], orgUnit, '', "")
+            totals[stage.label] = response?.results?.total
+        }
+
+        setTotals(totals)
+    }
+
+    return { getTotals, getTotalToAllStage }
 }
