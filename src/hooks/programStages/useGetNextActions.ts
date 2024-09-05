@@ -9,5 +9,5 @@ export const useGetNextActions = () => {
 
     const nextAction = dataStore[0]?.assessment?.tabGroups?.find((x) => x.programStage == selectedTab.programStage)?.nextAction as nextProgramStageType[]
 
-    return { nextAction }
+    return { nextAction, currentProgramStage: dataStore[0]?.assessment?.tabGroups?.find((x) => x.programStage == selectedTab.programStage)?.programStage }
 }

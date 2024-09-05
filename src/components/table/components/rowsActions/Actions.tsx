@@ -3,6 +3,7 @@ import { CircularLoader, CenteredContent } from '@dhis2/ui'
 import { ListItemText, Menu, MenuItem } from '@material-ui/core';
 import { IconButton } from '@material-ui/core';
 import { MoreVert } from '@material-ui/icons';
+import { ListItemIcon } from '@material-ui/core';
 
 interface BasicMenuProps {
     menuItems: any[]
@@ -23,7 +24,6 @@ export default function Actions(props: BasicMenuProps) {
         setAnchorEl(null);
     };
 
-
     return (
         <>
             <CenteredContent>
@@ -34,7 +34,7 @@ export default function Actions(props: BasicMenuProps) {
                         onClick={handleClick}
                         aria-expanded={open ? 'true' : undefined}
                         aria-controls={open ? 'basic-menu' : undefined}
-                        style={{ color: "#000"}}
+                        style={{ color: "#000" }}
                     >
                         < MoreVert />
                     </IconButton>
@@ -48,16 +48,24 @@ export default function Actions(props: BasicMenuProps) {
                 MenuListProps={{
                     'aria-labelledby': 'basic-button',
                 }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center',
+                }}
             >
                 {menuItems?.map((item: any, index: any) => (
                     <MenuItem
                         dense
                         key={index}
+                        disabled={item.disabled}
                         onClick={() => {
                             item.onClick();
                             handleClose();
                         }}
                     >
+                        <ListItemIcon>
+                            {item.icon}
+                        </ListItemIcon>
                         <ListItemText>{item.label}</ListItemText>
                     </MenuItem>
                 ))}

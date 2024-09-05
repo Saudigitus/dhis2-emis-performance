@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import style from './rowActions.module.css'
 import { Button, IconCheckmarkCircle24 } from "@dhis2/ui";
 import { RowActionsProps, RowActionsType } from '../../../../types/table/TableContentProps';
-import { CancelOutlined } from '@material-ui/icons';
+import { CancelOutlined, Edit, Gavel } from '@material-ui/icons';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { DataStoreState } from '../../../../schema/dataStoreSchema';
 import { TabsState } from '../../../../schema/tabSchema';
@@ -26,7 +26,7 @@ export default function RowActions(props: RowActionsProps) {
   const title = getProgram?.programStages?.filter((x: any) => x.id === actionPStage)?.[0]?.displayName || ""
   const eventsIsCompleted = checkCompleted(row?.eventStatus as string)
   const { buildFormData, error, loading, initialValues, setInitialValues } = useGetEventUpdateFormData()
-  const { nextAction } = useGetNextActions()
+  const { nextAction, currentProgramStage } = useGetNextActions()
 
   useEffect(() => {
     if (error)
@@ -40,6 +40,17 @@ export default function RowActions(props: RowActionsProps) {
 
   const menuItems: RowActionsType[] = [
     {
+      icon: <Edit />,
+      color: '#d64d4d',
+      disabled: eventsIsCompleted ? true : completing ? true : false,
+      label: 'Editar',
+      onClick: () => {
+        setOpenEditionModal(!openEditionModal)
+        buildFormData(row?.trackedEntity, currentProgramStage!)
+        setActionPStage(currentProgramStage)
+      },
+    },
+    {
       icon: eventsIsCompleted ? <CancelOutlined /> : <IconCheckmarkCircle24 />,
       color: eventsIsCompleted ? '#277314' : '#d64d4d',
       disabled: completing,
@@ -51,7 +62,7 @@ export default function RowActions(props: RowActionsProps) {
       },
     },
     ...nextAction?.map((action) => ({
-      icon: <CancelOutlined />,
+      icon: <Gavel />,
       color: '#d64d4d',
       label: action?.displayName,
       disabled: completing,
