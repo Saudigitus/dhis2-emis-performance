@@ -5,26 +5,30 @@ import useShowAlerts from '../commons/useShowAlert'
 
 const GET_OU_CODE_QUERY = {
     results: {
-        fields: "code",
+        params: {
+            fields: "code,name",
+        },
         id: ({ id }: any) => id,
         resource: "organisationUnits",
     }
 }
 
-export const useGetOrgUnitCode = (orgUnit: string) => {
+export const useGetOrgUnitCode = (orgUnit?: string) => {
     const engine = useDataEngine()
     const { show } = useShowAlerts()
     const [objects, setobjects] = useState<string>()
     const [loading, setloading] = useState<boolean>(false)
 
-    const getOrgUnitCode = async (orgUnit: string) => {
+    const getOrgUnitCode = async (orgUnit: string, updateSate = false) => {
         setloading(true)
-        await engine.query(GET_OU_CODE_QUERY, {
+        return await engine.query(GET_OU_CODE_QUERY, {
             variables: { id: orgUnit },
 
             onComplete: ((resp: { results: { code: string } }) => {
-                setobjects(resp?.results?.code ? resp?.results?.code + Math.random().toString().substring(2, 7) : Math.random().toString().substring(2, 12))
                 setloading(false)
+                if (!updateSate)
+                    setobjects(resp?.results?.code ? resp?.results?.code + Math.random().toString().substring(2, 7) : Math.random().toString().substring(2, 12))
+                else return resp?.results
             }),
 
             onError: (() => {
@@ -36,8 +40,8 @@ export const useGetOrgUnitCode = (orgUnit: string) => {
 
 
     useEffect(() => {
-        getOrgUnitCode(orgUnit)
+        getOrgUnitCode(orgUnit as unknown as string)
     }, [orgUnit])
 
-    return { orgUnitCode: objects, loadingOrgUnitCode: loading }
+    return { orgUnitCode: objects, loadingOrgUnitCode: loading, getOrgUnitCode }
 }

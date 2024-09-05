@@ -10,6 +10,7 @@ import { SubTabState } from "../../../../../schema/termMarksSchema";
 import { useGetProgramStageTerms } from "../../../../../hooks";
 import { useGetTabsElements } from "../../../../../utils/tabs/tabsElements";
 import { useGetTotalCompleted } from "../../../../../hooks/events/totals/useGetTotalCompleted";
+import { TeiRefetch } from "../../../../../schema/refecthTeiSchema";
 
 function WorkingLists() {
   const { add, urlParamiters } = useParams()
@@ -21,6 +22,7 @@ function WorkingLists() {
   const [totals, setTotals] = useState<any>({});
   const [, setSelectedTerm] = useRecoilState(SubTabState);
   const { getTotals } = useGetTotalCompleted({ setTotals })
+  const [refetch,] = useRecoilState<boolean>(TeiRefetch)
 
   useEffect(() => {
     const selectedTab = tabsElements.find((x: any) => x.value == tab) ?? tabsElements[0]
@@ -38,8 +40,9 @@ function WorkingLists() {
   }, [tab])
 
   useEffect(() => {
-    void getTotals()
-  }, [orgUnit])
+    if (orgUnit)
+      void getTotals()
+  }, [orgUnit, refetch])
 
   return (
     <WithPadding>
@@ -50,11 +53,6 @@ function WorkingLists() {
           setSelectedValue={setSelectedValue}
           totals={totals}
         />
-
-        {/* <WithPadding p="10px">
-          <EnrollmentActionsButtons />
-        </WithPadding> */}
-
       </div>
     </WithPadding>
   )

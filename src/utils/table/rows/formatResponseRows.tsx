@@ -8,6 +8,9 @@ export function formatResponseRows({ eventsInstances, teiInstances, marksInstanc
     for (const event of eventsInstances) {
         const teiDetails = teiInstances.find(tei => tei.trackedEntity === event.trackedEntity)
         const marksDetails = marksInstances.find(mark => (mark.trackedEntity === event.trackedEntity) && (mark?.enrollment === event?.enrollment))
+
+        console.log(teiDetails, event)
+
         setImmutableTeiData((prevState: any) => [...prevState, {
             ...dataValues(event.dataValues), ...(attributes((teiDetails?.attributes) ?? [])),
             trackedEntity: event.trackedEntity,
@@ -15,8 +18,8 @@ export function formatResponseRows({ eventsInstances, teiInstances, marksInstanc
             status: teiDetails?.enrollments?.[0]?.status
         }])
         allRows.push({
-            ...dataValues(event.dataValues), 
-            ...(marksDetails !== undefined ? { ...dataValues(marksDetails.dataValues, programStage) } : {}), 
+            ...dataValues(event.dataValues),
+            ...(marksDetails !== undefined ? { ...dataValues(marksDetails.dataValues, programStage) } : {}),
             ...(attributes((teiDetails?.attributes) ?? [])),
             ...(programIndicators(programIndicatorsInstances?.find(x => x.trackedEntity === event.trackedEntity)?.programIndicators ?? [])),
             trackedEntity: event.trackedEntity,
