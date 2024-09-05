@@ -19,6 +19,7 @@ export function useGetEvent() {
                 programStage,
                 orgUnit,
                 trackedEntity,
+                ouMode: "DESCENDANTS"
             })) as unknown as EventQueryResults;
     }
 

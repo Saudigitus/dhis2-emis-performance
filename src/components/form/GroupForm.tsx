@@ -8,7 +8,7 @@ import { GroupFormProps } from "../../types/form/GroupFormProps";
 import styles from './groupform.module.css'
 
 function GroupForm(props: GroupFormProps) {
-    const { name, fields, description } = props
+    const { name, fields, description, disabled } = props
 
     return (
         <div style={{ marginBottom: 10 }}>
@@ -28,7 +28,7 @@ function GroupForm(props: GroupFormProps) {
                                     <div className="col-12 col-md-6">
                                         <GenericFields
                                             attribute={x}
-                                            disabled={x.disabled}
+                                            disabled={x.disabled || disabled}
                                             valueType={x.valueType}
                                         />
                                         <span className={styles.content}>
