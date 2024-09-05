@@ -2,14 +2,15 @@ import React from 'react';
 import { IconMore24 } from '@dhis2/ui'
 import { Button, ListItemText, Menu, MenuItem } from '@material-ui/core';
 import { IconButton } from '@material-ui/core';
-import { MoreHorizOutlined, MoreVert } from '@material-ui/icons';
+import { MoreHorizOutlined, MoreVert, Opacity } from '@material-ui/icons';
 
 interface BasicMenuProps {
     menuItems: any[]
+    inactive: boolean
 }
 
 export default function Actions(props: BasicMenuProps) {
-    const { menuItems } = props;
+    const { menuItems, inactive } = props;
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
 
@@ -30,6 +31,7 @@ export default function Actions(props: BasicMenuProps) {
                 onClick={handleClick}
                 aria-expanded={open ? 'true' : undefined}
                 aria-controls={open ? 'basic-menu' : undefined}
+                style={inactive ? { background: "#ffffffb9", color: "#000", Opacity: "1",height:"42px", width: "42px", } : {height:"42px", width: "42px" }}
             >
                 <MoreVert />
             </IconButton>

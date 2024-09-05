@@ -76,6 +76,7 @@ interface RowActionsProps {
     row: any
     onSelectTei?: (arg: any) => void
     onShowHistory?: () => void
+    inactive: boolean
 }
 
 export type { TableComponentProps, HeaderCellProps, RowProps, RenderHeaderProps, TableSortProps, TableDataProps, ShowFieldsBasedValueTypeProps, RowActionsProps, RowActionsType }

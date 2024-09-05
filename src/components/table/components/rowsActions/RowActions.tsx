@@ -15,7 +15,7 @@ import { useGetEventUpdateFormData } from "../../../../hooks/form/useGetEventUpd
 import Actions from "./Actions";
 
 export default function RowActions(props: RowActionsProps) {
-  const { row } = props;
+  const { row, inactive } = props;
   const selectedTab = useRecoilValue(TabsState)
   const dataStore = useRecoilValue(DataStoreState)
   const getProgram = useRecoilValue(ProgramConfigState);
@@ -67,8 +67,7 @@ export default function RowActions(props: RowActionsProps) {
 
   return (
     <div>
-      <Actions menuItems={menuItems}/>
-
+      <Actions inactive={inactive} menuItems={menuItems} />
       {
         openEditionModal &&
         <ModalComponent title={title} open={openEditionModal} setOpen={setOpenEditionModal}>

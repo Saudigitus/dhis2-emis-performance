@@ -98,9 +98,8 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                     inactive={checkCompleted(row.eventStatus)}
                                 />
                             </div>
-                            {(column.displayName == "Actions") && <RowActions row={row} />}
+                            {(column.displayName == "Actions") && <RowActions row={row} inactive={checkCompleted(row.eventStatus)} />}
                             {(column.id == "gNkskijk6Hx" || column.id == "XtBUmvMpFRx") && <RemoveCircleOutline />}
-
                         </RowCell>
                     ));
                     return (
