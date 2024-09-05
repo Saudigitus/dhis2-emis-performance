@@ -17,7 +17,6 @@ export default function HeaderItem(props: HeadBarTypes): React.ReactElement {
     const Component = (component != null) ? componentMapping[component] : null;
     const [openDropDown, setOpenDropDown] = useState<boolean>(false);
     const [, setStringQuery] = useRecoilState(OuQueryString);
-    const { getDataStoreData } = getSelectedKey()
 
     const onToggle = () => {
         setStringQuery(undefined)

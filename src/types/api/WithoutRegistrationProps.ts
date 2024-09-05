@@ -13,6 +13,7 @@ interface EventQueryProps {
     programStage: string
     orgUnit: string
     filter?: string[]
+    totalPages: boolean
     filterAttributes?: string[]
 }
 

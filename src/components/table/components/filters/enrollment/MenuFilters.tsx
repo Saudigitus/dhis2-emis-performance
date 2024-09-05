@@ -22,7 +22,7 @@ export default function MenuFilters(props: MenuFiltersProps) {
                 transformOrigin={{ vertical: 'top', horizontal: 'center' }}
             >
                 {options?.map((option, i) =>
-                    <MenuItem key={i} onClick={(e) => { addSearchableHeaders(option); setAnchorEl(null) }}>{option.header}</MenuItem>
+                    <MenuItem key={i} onClick={(e) => { addSearchableHeaders(option); setAnchorEl(null) }}>{option?.header}</MenuItem>
                 )}
             </Menu>
         </>
