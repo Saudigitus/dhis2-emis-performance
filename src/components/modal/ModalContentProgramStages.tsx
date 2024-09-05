@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ModalActions, Button, ButtonStrip, CircularLoader, CenteredContent } from "@dhis2/ui";
+import { NoticeBox } from '@dhis2/ui'
 import WithPadding from "../template/WithPadding";
 import { Form } from "react-final-form";
 import GroupForm from "../form/GroupForm";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { ProgramConfigState } from "../../schema/programSchema";
 import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
 import { ModalContentProgramStageProps, ModalContentProps } from "../../types/modal/ModalProps";
@@ -14,6 +15,7 @@ import classNames from "classnames";
 import { formatResponseDataElements, formEvents } from "../../utils/events/formatResponseDataElements";
 import { removeFalseKeys } from "../../utils/commons/removeFalseKeys";
 import { usePostEvent } from "../../hooks/events/useCreateEvents";
+import { TeiRefetch } from "../../schema/refecthTeiSchema";
 
 function ModalContentProgramStages(props: ModalContentProgramStageProps): React.ReactElement {
   const { setOpen, nexProgramStage, loading: loadingEvents, formInitialValues, row, mapping } = props;
@@ -25,6 +27,8 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
   const [values, setValues] = useState<Record<string, string>>({})
   const { updateEvent, loadUpdateEvent: loading, data } = usePostEvent()
   const [clickedButton, setClickedButton] = useState<string>("");
+  const [disabled, setdisabled] = useState(true)
+  const setRefetch = useSetRecoilState(TeiRefetch)
 
   const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
     variables: [
@@ -36,12 +40,12 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
   })
 
   useEffect(() => {
+    console.log(data);
     if (data && data["status" as unknown as keyof typeof data] === "OK") {
-      if (clickedButton === "save") {
-        setOpen(false)
-      }
+      setOpen(false)
       setClicked(false)
       formRef.current.restart()
+      setRefetch(true)
     }
   }, [data])
 
@@ -56,28 +60,35 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
     { id: "saveandcontinue", type: "submit", label: "Salvar", primary: true, disabled: loading, onClick: () => { setClickedButton("saveandcontinue"); setClicked(true) } }
   ];
 
-  function onSubmit() {
-    const exclude = ["nomeAsca", "event", "orgUnit", "eventDate"]
-    const transformedArray = Object.entries(values).map(([key, value]) => ({
-      dataElement: key,
-      value: value
-    }));
+  const modalActionsEdit = [
+    { id: "cancel", type: "button", label: "Cancelar", disabled: loading, onClick: () => { setClickedButton("cancel"); setOpen(false); } },
+    { id: "edit", label: "Editar", primary: true, disabled: loading, onClick: () => { setdisabled(false) } }
+  ];
 
-    const formToPost = {
-      orgUnit: row.orgUnit,
-      status: "ACTIVE",
-      programStage: nexProgramStage,
-      program: getProgram.id,
-      notes: [],
-      enrollment: row.enrollment,
-      trackedEntity: row.trackedEntity,
-      event: transformedArray.filter((x) => x.dataElement === "event")?.[0].value,
-      occurredAt: transformedArray.filter((x) => x.dataElement === "eventDate")?.[0].value,
-      scheduledAt: transformedArray.filter((x) => x.dataElement === "eventDate")?.[0].value,
-      createdAt: transformedArray.filter((x) => x.dataElement === "eventDate")?.[0].value,
-      dataValues: transformedArray.filter((x) => !exclude.includes(x.dataElement))
+  function onSubmit() {
+    if (clickedButton === "saveandcontinue") {
+      const exclude = ["nomeAsca", "event", "orgUnit", "eventDate"]
+      const transformedArray = Object.entries(values).map(([key, value]) => ({
+        dataElement: key,
+        value: value
+      }));
+
+      const formToPost = {
+        orgUnit: row.orgUnit,
+        status: "ACTIVE",
+        programStage: nexProgramStage,
+        program: getProgram.id,
+        notes: [],
+        enrollment: row.enrollment,
+        trackedEntity: row.trackedEntity,
+        event: transformedArray.filter((x) => x.dataElement === "event")?.[0].value,
+        occurredAt: transformedArray.filter((x) => x.dataElement === "eventDate")?.[0].value,
+        scheduledAt: transformedArray.filter((x) => x.dataElement === "eventDate")?.[0].value,
+        createdAt: transformedArray.filter((x) => x.dataElement === "eventDate")?.[0].value,
+        dataValues: transformedArray.filter((x) => !exclude.includes(x.dataElement))
+      }
+      updateEvent({ data: { events: [formToPost] } })
     }
-    updateEvent({ data: { events: [formToPost] } })
   }
 
   function onChange(e: any): void {
@@ -94,6 +105,14 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
 
   return (
     <WithPadding>
+      {(formInitialValues.event && disabled) &&
+        <div>
+          <NoticeBox warning title="Registo existente">
+            Este grupo já possue o evento registado, se deseja editar pressione em "Editar".
+          </NoticeBox>
+        </div>
+      }
+      <WithPadding />
       <Form initialValues={{ orgUnit, ...formInitialValues }} onSubmit={onSubmit}>
         {({ handleSubmit, values, form }) => {
           formRef.current = form;
@@ -109,7 +128,7 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
                     description={field.description}
                     key={index}
                     fields={field.fields}
-                    disabled={row.event ? true : false}
+                    disabled={(formInitialValues.event && disabled) ? true : false}
                   />
                 )
               })
@@ -117,22 +136,42 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
             <br />
             <ModalActions>
               <ButtonStrip end className={classNames(styles.modalButtonsStrip)}>
-                {modalActions.map((action, i) => {
-                  return (
-                    <>
-                      {
-                        <Button
-                          key={i}
-                          {...action}
-                          className={styles.modalButtons}
-                          loading={(loading && action.id === clickedButton)}
-                        >
-                          {action.label}
-                        </Button>
-                      }
-                    </>
-                  )
-                })}
+                {
+                  !(formInitialValues.event && disabled) ?
+                    modalActions.map((action, i) => {
+                      return (
+                        <>
+                          {
+                            <Button
+                              key={i}
+                              {...action}
+                              className={styles.modalButtons}
+                              loading={(loading && action.id === clickedButton)}
+                            >
+                              {action.label}
+                            </Button>
+                          }
+                        </>
+                      )
+                    })
+                    :
+                    modalActionsEdit.map((action, i) => {
+                      return (
+                        <>
+                          {
+                            <Button
+                              key={i}
+                              {...action}
+                              className={styles.modalButtons}
+                              loading={(loading && action.id === clickedButton)}
+                            >
+                              {action.label}
+                            </Button>
+                          }
+                        </>
+                      )
+                    })
+                }
               </ButtonStrip>
             </ModalActions>
           </form>

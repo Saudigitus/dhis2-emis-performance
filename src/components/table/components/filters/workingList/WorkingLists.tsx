@@ -39,11 +39,6 @@ function WorkingLists() {
     setSelectedTerm(items[0])
   }, [tab])
 
-  useEffect(() => {
-    if (orgUnit)
-      void getTotals()
-  }, [orgUnit, refetch])
-
   return (
     <WithPadding>
       <div className="d-flex justify-content-between align-items-center">
@@ -51,7 +46,6 @@ function WorkingLists() {
           elements={tabsElements}
           selectedValue={selectedValue}
           setSelectedValue={setSelectedValue}
-          totals={totals}
         />
       </div>
     </WithPadding>

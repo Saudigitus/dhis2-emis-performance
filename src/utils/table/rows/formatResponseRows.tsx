@@ -16,6 +16,7 @@ export function formatResponseRows({ eventsInstances, teiInstances, marksInstanc
             enrollment: event?.enrollment,
             status: teiDetails?.enrollments?.[0]?.status
         }])
+        
         allRows.push({
             ...dataValues(event.dataValues),
             ...(marksDetails !== undefined ? { ...dataValues(marksDetails.dataValues, programStage) } : {}),
