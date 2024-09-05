@@ -22,7 +22,7 @@ export default function MainHeader(): React.ReactElement {
     const [totals, setTotals] = useState<any>({ Total: 0, COMPLETED: 0 });
     const { getTotals } = useGetTotalCompleted({ setTotals })
     const refetch = useRecoilValue<boolean>(TeiRefetch)
-    const percent = ((100 * totals.COMPLETED) / totals.Total).toFixed(1)
+    const percent = ((100 * totals.COMPLETED) / totals.Total).toFixed(0)
 
     useEffect(() => {
         if (orgUnit)
