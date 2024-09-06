@@ -90,7 +90,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                     const copyRow = {
                         ...row,
                         eventDate: currEvent?.occurredAt && format(new Date(currEvent?.occurredAt), "yyyy-MM-dd"),
-                        ...dataValues(currEvent?.dataValues ?? [], getDataStoreData?.monitoria?.programStage),
+                        ...(dataValues(currEvent?.dataValues ?? [], getDataStoreData?.monitoria?.programStage) ?? {}),
                         event: currEvent?.event
                     }
 
@@ -119,7 +119,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                             {((moduloAdministrativo && column.id === selected?.id) || column.id == 'complete') &&
                                 <RowActions
                                     completed={checkCompleted(currEvent?.status)}
-                                    complete={column.id == 'complete'}
+                                    complete={column.id === 'complete'}
                                     event={currEvent}
                                     row={row}
                                 />

@@ -1,6 +1,6 @@
 import style from './rowActions.module.css'
 import { RowActionsProps } from '../../../../types/table/TableContentProps';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { ProgramConfigState } from "../../../../schema/programSchema";
 import { Switch } from "@material-ui/core";
 import { usePostEvent } from "../../../../hooks/events/useCreateEvents";
@@ -62,37 +62,30 @@ export default function RowActions(props: RowActionsProps) {
       ]
     }
     void updateEvent({ data: data })
-    setConfirmState({ open: false, event: event?.event, tei: row.trackedEntity, loading: true })
+    setConfirmState({ open: false, event: event?.event, tei: row.trackedEntity, loadingComplete: true })
   }
 
   return (
     <div className={style.rowActionsContainer}>
-      {
-        (confirmSate.loading && confirmSate.tei === row.trackedEntity) ?
-          <CenteredContent>
-            <CircularLoader small />
-          </CenteredContent>
-          :
-          <CenteredContent>
-            {
-              complete ?
-                <>
-                  {
-                    completed ?
-                      <IconButton disabled={disabled} onClick={() => { completeEvent('ACTIVE') }} >
-                        <CloseIcon style={{ color: disabled ? "#eee" : "red" }} />
-                      </IconButton> :
-
-                      <IconButton disabled={disabled} onClick={() => { completeEvent('COMPLETED') }} >
-                        <CheckIcon style={{ color: disabled ? "#eee" : "green" }} />
-                      </IconButton>
-                  }
-                </>
+      <CenteredContent>
+        {
+          complete ?
+            confirmSate.loadingComplete && confirmSate.tei === row.trackedEntity ?
+              <CircularLoader small /> :
+              completed ?
+                <IconButton disabled={disabled} onClick={() => { completeEvent('ACTIVE') }} >
+                  <CloseIcon style={{ color: disabled ? "#eee" : "red" }} />
+                </IconButton>
                 :
-                <Switch disabled={completed} onChange={(event: any) => Changing(event)} checked={event?.event ? true : false} color="primary" />
-            }
-          </CenteredContent>
-      }
+                <IconButton disabled={disabled} onClick={() => { completeEvent('COMPLETED') }} >
+                  <CheckIcon style={{ color: disabled ? "#eee" : "green" }} />
+                </IconButton>
+            :
+            confirmSate.loading && confirmSate.tei === row.trackedEntity ?
+              <CircularLoader small /> :
+              <Switch disabled={completed} onChange={(event: any) => Changing(event)} checked={event ? true : false} color="primary" />
+        }
+      </CenteredContent>
     </div>
   );
 }

@@ -33,7 +33,7 @@ export function useGetEvents() {
             orgUnit: orgUnit as unknown as string,
         })).then((resp: any) => {
             setAllEvents(resp.results.instances)
-            setConfirmState((cd) => ({ ...cd, loading: false, open: false }))
+            setConfirmState((cd) => ({ ...cd, loading: false, open: false, loadingComplete: false }))
         })
             .catch((error) => {
                 show({
