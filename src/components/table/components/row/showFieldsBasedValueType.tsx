@@ -49,9 +49,10 @@ export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueType
     }
 
     const onSubmit = (event: any, pristine: boolean) => {
+        console.log(event.target.value);
         if (event.target.value && !pristine && prevValues[column.id] !== event.target.value) {
-            setPrevValues((prevValues: any) => ({ ...prevValues, [column.id]: event.target.value }))
-            save(event.target.value)
+            setPrevValues((prevValues: any) => ({ ...prevValues, [column.id]: event?.target?.value }))
+            save(event?.target?.value)
         }
     }
 

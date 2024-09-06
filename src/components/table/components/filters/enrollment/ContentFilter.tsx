@@ -154,7 +154,7 @@ function ContentFilter(props: ContentFilterProps) {
             <div style={{ marginTop: 0 }}>
                 {headers?.filter(x => !localFilters.includes(x)).length > 0 &&
                     <Button className={styles.moreFilters} variant='outlined' onClick={handleClick}>
-                        More filters
+                        Mais filtros
                     </Button>
                 }
                 <MenuFilters

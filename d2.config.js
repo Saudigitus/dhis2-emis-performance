@@ -1,7 +1,7 @@
 const config = {
     type: 'app',
-    name: 'SEMIS-Performance',
-    description:"SEMIS-Performance",
+    name: 'Fortalecimento das ASCAS',
+    description: "Fortalecimento das ASCAS",
 
     entryPoints: {
         app: './src/app/App.tsx',

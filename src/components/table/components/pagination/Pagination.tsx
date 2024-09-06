@@ -14,7 +14,7 @@ function Pagination(props: PaginationProps): React.ReactElement {
             <div />
 
             <div className={styles.rootPagination}>
-                {TextPagination("Rows per page")}
+                {TextPagination("Linhas por página")}
 
                 <Select
                     className={styles.textPagination}
@@ -26,20 +26,20 @@ function Pagination(props: PaginationProps): React.ReactElement {
                     onChange={onRowsPerPageChange}
                     menuContainerStyle={{ top: 'auto', bottom: '100%' }}
                 />
-                {TextPagination(`Page ${page}`)}
+                {TextPagination(`Página ${page}`)}
 
                 <div className={styles.separator} />
 
                 <IconButtonPagination
                     Icon={<KeyboardArrowLeft />}
-                    ariaLabel='Previous Page'
+                    ariaLabel='Página Anterior'
                     disabled={page <= 1 || loading}
                     onPageChange={() => { onPageChange(page - 1); }}
                 />
 
                 <IconButtonPagination
                     Icon={<KeyboardArrowRight />}
-                    ariaLabel='Next Page'
+                    ariaLabel='Próxima Página'
                     disabled={disableNextPage({ rowsPerPage, totalPerPage }) || loading}
                     onPageChange={() => { onPageChange(page + 1); }}
                 />

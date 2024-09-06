@@ -81,7 +81,7 @@ function Table() {
     return (
         <Paper>
             <div className={classes.workingListsContainer}>
-                <h4 className={classes.h4}>Monitoria das ASCAS</h4>
+                <h4 className={classes.h4}>Fortalecimento das ASCAS</h4>
                 {/* <WorkingLists /> */}
             </div>
             <WithBorder type='bottom' />

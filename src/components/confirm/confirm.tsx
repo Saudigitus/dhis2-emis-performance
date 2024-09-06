@@ -31,16 +31,16 @@ export default function AlertDialog() {
             >
                 <div style={{ width: "500px" }}>
                     <DialogTitle id="alert-dialog-title">
-                        {"Are you sure?"}
+                        {"Confirme a operação"}
                     </DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
-                            This will unenroll the selected group from the seleted module
+                            Esta operação irá remover o módulo do grupo associado!
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose} primary>Disagree</Button>
-                        <Button onClick={handleAgree} destructive>Agree</Button>
+                        <Button onClick={handleClose} primary>Cancelar</Button>
+                        <Button onClick={handleAgree} destructive>Aceitar</Button>
                     </DialogActions>
                 </div>
             </Dialog>
