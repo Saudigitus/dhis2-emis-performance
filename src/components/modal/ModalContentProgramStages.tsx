@@ -107,7 +107,28 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
       {(formInitialValues.event && disabled) &&
         <div>
           <NoticeBox warning title="Registo existente">
-            Este grupo já possue o evento registado, se deseja editar pressione em "Editar".
+            <div>
+              Este grupo já possue o evento registado, se deseja editar pressione em "Editar".
+            </div>
+            <br />
+            {
+              modalActionsEdit.map((action, i) => {
+                return (
+                  <span style={{ marginRight: 10 }}>
+                    {
+                      <Button
+                        small
+                        key={i}
+                        {...action}
+                        loading={(loading && action.id === clickedButton)}
+                      >
+                        {action.label}
+                      </Button>
+                    }
+                  </span>
+                )
+              })
+            }
           </NoticeBox>
         </div>
       }
@@ -136,40 +157,23 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
             <ModalActions>
               <ButtonStrip end className={classNames(styles.modalButtonsStrip)}>
                 {
-                  !(formInitialValues.event && disabled) ?
-                    modalActions.map((action, i) => {
-                      return (
-                        <>
-                          {
-                            <Button
-                              key={i}
-                              {...action}
-                              className={styles.modalButtons}
-                              loading={(loading && action.id === clickedButton)}
-                            >
-                              {action.label}
-                            </Button>
-                          }
-                        </>
-                      )
-                    })
-                    :
-                    modalActionsEdit.map((action, i) => {
-                      return (
-                        <>
-                          {
-                            <Button
-                              key={i}
-                              {...action}
-                              className={styles.modalButtons}
-                              loading={(loading && action.id === clickedButton)}
-                            >
-                              {action.label}
-                            </Button>
-                          }
-                        </>
-                      )
-                    })
+                  !(formInitialValues.event && disabled) &&
+                  modalActions.map((action, i) => {
+                    return (
+                      <>
+                        {
+                          <Button
+                            key={i}
+                            {...action}
+                            className={styles.modalButtons}
+                            loading={(loading && action.id === clickedButton)}
+                          >
+                            {action.label}
+                          </Button>
+                        }
+                      </>
+                    )
+                  })
                 }
               </ButtonStrip>
             </ModalActions>
