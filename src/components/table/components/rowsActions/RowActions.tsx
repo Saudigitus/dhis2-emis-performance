@@ -22,6 +22,7 @@ export default function RowActions(props: RowActionsProps) {
   const { moduloAdministrativo } = urlParamiters()
   const selected = getProgram?.programStages?.find(x => x.id === getDataStoreData.monitoria.programStage)?.programStageDataElements?.find(de => de.dataElement.id === getDataStoreData.monitoria?.filters?.dataElements[0].dataElement)?.dataElement
   const [confirmSate, setConfirmState] = useRecoilState(ConfirmationState)
+  const disabled = event?.event ? false : true
 
   function Changing(changeEvent: any) {
     if (changeEvent.target.checked) {
@@ -45,14 +46,23 @@ export default function RowActions(props: RowActionsProps) {
         ]
       }
       void updateEvent({ data: data })
-      setConfirmState({ open: false, event: event, tei: row.trackedEntity, loading: true })
+      setConfirmState({ open: false, event: event?.event, tei: row.trackedEntity, loading: true })
     } else {
-      setConfirmState({ open: true, event: event, tei: row.trackedEntity })
+      setConfirmState({ open: true, event: event?.event, tei: row.trackedEntity })
     }
   }
 
-  function completeEvent() {
-
+  function completeEvent(status: string) {
+    const data: any = {
+      events: [
+        {
+          ...event,
+          status: status
+        }
+      ]
+    }
+    void updateEvent({ data: data })
+    setConfirmState({ open: false, event: event?.event, tei: row.trackedEntity, loading: true })
   }
 
   return (
@@ -66,16 +76,20 @@ export default function RowActions(props: RowActionsProps) {
           <CenteredContent>
             {
               complete ?
-                <IconButton onClick={() => { }} >
+                <>
                   {
                     completed ?
-                      <CloseIcon color='error' />
-                      :
-                      <CheckIcon style={{ color: "green" }} />
+                      <IconButton disabled={disabled} onClick={() => { completeEvent('ACTIVE') }} >
+                        <CloseIcon style={{ color: disabled ? "#eee" : "red" }} />
+                      </IconButton> :
+
+                      <IconButton disabled={disabled} onClick={() => { completeEvent('COMPLETED') }} >
+                        <CheckIcon style={{ color: disabled ? "#eee" : "green" }} />
+                      </IconButton>
                   }
-                </IconButton>
+                </>
                 :
-                <Switch disabled={completed} onChange={(event: any) => Changing(event)} checked={event ? true : false} color="primary" />
+                <Switch disabled={completed} onChange={(event: any) => Changing(event)} checked={event?.event ? true : false} color="primary" />
             }
           </CenteredContent>
       }

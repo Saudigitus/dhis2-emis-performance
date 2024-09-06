@@ -120,7 +120,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                 <RowActions
                                     completed={checkCompleted(currEvent?.status)}
                                     complete={column.id == 'complete'}
-                                    event={currEvent?.event}
+                                    event={currEvent}
                                     row={row}
                                 />
                             }

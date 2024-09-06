@@ -75,7 +75,7 @@ interface RowActionsType {
 }
 interface RowActionsProps {
     row: any
-    event: string
+    event: any
     completed: boolean
     onSelectTei?: (arg: any) => void
     onShowHistory?: () => void,
