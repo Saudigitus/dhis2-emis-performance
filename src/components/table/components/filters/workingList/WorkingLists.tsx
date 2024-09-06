@@ -40,10 +40,10 @@ function WorkingLists() {
   }, [tab])
 
   useEffect(() => {
-    if(orgUnit){
+    if (orgUnit) {
       void getTotalToAllStage()
     }
-  }, [orgUnit])
+  }, [orgUnit, refetch])
 
   return (
     <WithPadding>

@@ -42,6 +42,8 @@ export default function MainHeader(): React.ReactElement {
             </div>
 
             <div className={style.percentContainer}>
+                <span style={{ display: "flex", alignItems: "center" }}>{tab}</span>
+
                 <div className={style.totals}>
                     <span>Registados: {totals.Total ?? 0}</span>
                     <span>Completos: &nbsp;{totals.COMPLETED ?? 0}</span>

@@ -11,8 +11,6 @@ import { type RenderHeaderProps } from '../../../types/table/TableContentProps';
 import { usePostDataElement } from '../../../hooks';
 import { checkCompleted } from "../../../utils/table/rows/checkCanceled";
 import RowActions from '../components/rowsActions/RowActions';
-import { VariablesTypes } from '../../../types/variables/AttributeColumns';
-import { showValueBasedOnColumn } from '../../../utils/commons/tableRowsColumns';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

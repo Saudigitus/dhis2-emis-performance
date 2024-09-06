@@ -93,10 +93,8 @@
 }
 
 .percentContainer {
-    display: grid;
-    grid-template-columns: 60% 60%;
+    display: flex;
     font-weight: 500;
-    width: 15%;
 }
 
 .totals {
@@ -105,12 +103,13 @@
     flex-direction: column;
     border-right: solid 2px #eee;
     font-size: 14px;
-    padding: 2px 0 3px 3px;
+    margin: 0px 10px 0px 10px;
 }
 
 .totals span:last-child {
     margin-top: 5px;
     color: #3b7b41;
+    margin-right: 10px;
 }
 
 .totals span:nth-child(1) {
