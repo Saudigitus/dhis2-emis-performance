@@ -7,7 +7,9 @@ export const useGetNextActions = () => {
     const selectedTab = useRecoilValue(TabsState)
     const dataStore = useRecoilValue(DataStoreState)
 
+    const tableStatus = dataStore[0]?.assessment.tableStatus
+    const currentProgramStage = dataStore[0]?.assessment?.tabGroups?.find((x) => x.programStage == selectedTab.programStage)?.programStage
     const nextAction = dataStore[0]?.assessment?.tabGroups?.find((x) => x.programStage == selectedTab.programStage)?.nextAction as nextProgramStageType[]
 
-    return { nextAction, currentProgramStage: dataStore[0]?.assessment?.tabGroups?.find((x) => x.programStage == selectedTab.programStage)?.programStage }
+    return { nextAction, tableStatus, currentProgramStage }
 }

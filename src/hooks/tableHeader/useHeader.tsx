@@ -5,11 +5,11 @@ import { TableColumnState } from "../../schema/columnSchema";
 import { useGetNextActions } from "../programStages/useGetNextActions";
 
 export function useHeader() {
-    const { nextAction } = useGetNextActions()
+    const { tableStatus } = useGetNextActions()
     const tableColumns = useRecoilValue(TableColumnState)
     const programConfigState = useRecoilValue(ProgramConfigState);
 
     return {
-        columns: formatResponse(programConfigState, '', tableColumns, [], nextAction)
+        columns: formatResponse(programConfigState, '', tableColumns, [], tableStatus)
     }
 }

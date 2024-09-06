@@ -72,6 +72,7 @@ interface assessment {
     trackedEntityTypes: {
         groups: string,
     },
+    tableStatus: nextProgramStageType[]
 }
 
 interface dataStoreRecord {

@@ -51,7 +51,7 @@ export function useTableData() {
     const { getProgramIndicators } = useGetProgramIndicators()
     const { getOrgUnitCode } = useGetOrgUnitCode()
     const { getEvents } = useGetEvents()
-    const { nextAction = [] } = useGetNextActions()
+    const { nextAction = [], tableStatus = [] } = useGetNextActions()
 
     async function getData(page: number, pageSize: number, selectedProgramStage: string, selectedProgramIndicators: string[]) {
         setLoading(true)
@@ -120,10 +120,10 @@ export function useTableData() {
 
         const promises = []
         const nextPstageEvents: any = {
-            results : []
+            results: []
         }
 
-        for (const action of nextAction) {
+        for (const action of tableStatus) {
             for (const tei of allTeis) {
                 promises.push(getEvents(1, 1, program, action.programStage, [], [], orgUnit, tei))
             }
