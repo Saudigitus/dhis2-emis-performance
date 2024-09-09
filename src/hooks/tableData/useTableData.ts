@@ -162,7 +162,7 @@ export function useTableData() {
             programIndicatorsInstances: programIndicatorsInstances as any,
             setImmutableTeiData,
             programStage: selectedProgramStage,
-            nextPstageEvents: teiHasEvents(nextAction, nextPstageEvents.results, allTeis)
+            nextPstageEvents: teiHasEvents(tableStatus, nextPstageEvents.results, allTeis)
         })
 
         for (const row of localData) {
