@@ -6,7 +6,7 @@ const OU_CODE_QUERY: any = (code: string) => ({
     results: {
         resource: "organisationUnits",
         params: {
-            filter: `code:eq:${code}`,
+            filter: `name:eq:${code}`,
             fields: ""
         }
     }
@@ -23,7 +23,7 @@ const useValidateOuName = () => {
 
         engine.query(OU_CODE_QUERY(code), {
             onComplete: (res: any) => {
-                res?.results?.pager?.total ? setvalidationObject({ validationText: 'Este código já está a ser usado.', warning: false, error: true })
+                res?.results?.pager?.total ? setvalidationObject({ validationText: 'Este nome já está a ser usado.', warning: false, error: true })
                     :
                     setvalidationObject({ validationText: '', warning: false, error: false })
                 setValidating(false)

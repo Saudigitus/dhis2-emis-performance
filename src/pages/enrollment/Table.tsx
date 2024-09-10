@@ -20,7 +20,7 @@ function TableComponent() {
     <>
       <Table />
 
-      <Fab disabled={(orgUnitLevel !== null && assessment?.groupsLevel !== undefined && parseInt(orgUnitLevel) !== parseInt(assessment?.groupsLevel) - 1)} color='primary' className={styles['float-button__container']} onClick={() => { setOpen(true) }}>
+      <Fab disabled={(orgUnitLevel !== assessment?.groupsLevel - 1 && assessment?.groupsLevel !== undefined && parseInt(orgUnitLevel) !== parseInt(assessment?.groupsLevel) - 1)} color='primary' className={styles['float-button__container']} onClick={() => { setOpen(true) }}>
         <Tooltip title="Criar grupo">
           <AddIcon />
         </Tooltip>

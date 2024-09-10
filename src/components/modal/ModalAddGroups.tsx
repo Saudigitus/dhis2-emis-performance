@@ -78,7 +78,7 @@ function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
 
 
   const modalActions = [
-    { id: "cancel", type: "button", label: "Cancelar", disabled: loading, onClick: () => { setOpen(false) }, loading:loadingOrgUnitCode || loading },
+    { id: "cancel", type: "button", label: "Cancelar", disabled: loading, onClick: () => { setOpen(false) } },
     { id: "saveandcontinue", type: "submit", label: "Salvar", primary: true, disabled: loading || validating || ouNameValidationObject?.error, loading:loadingOrgUnitCode || loading }
   ];
 
