@@ -31,6 +31,7 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
                     error: false,
                     content: '',
                     key: programStageDataElement.dataElement.id + "_" + programStageId,
+                    displayInFilters: programStageDataElement.displayInReports,
                     type: VariablesTypes.Performance
                 }
             }) as []
@@ -57,6 +58,7 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
                 error: false,
                 content: '',
                 key: programIndicator.id + "_" + programStageId,
+                displayInFilters: false,
                 type: VariablesTypes.Performance
             }
         }) as []
@@ -118,6 +120,7 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
                 error: false,
                 content: '',
                 key: item.trackedEntityAttribute.id,
+                displayInFilters: item.displayInList,
                 type: VariablesTypes.Attribute
             }
         })

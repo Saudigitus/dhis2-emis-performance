@@ -152,7 +152,7 @@ function ContentFilter(props: ContentFilterProps) {
                 ))
             }
             <div style={{ marginTop: 0 }}>
-                {headers?.filter(x => !localFilters.includes(x)).length > 0 &&
+                {headers?.filter(x => x.displayInFilters)?.filter(x => !localFilters.includes(x)).length > 0 &&
                     <Button className={styles.moreFilters} variant='outlined' onClick={handleClick}>
                         Mais filtros
                     </Button>
@@ -160,7 +160,7 @@ function ContentFilter(props: ContentFilterProps) {
                 <MenuFilters
                     anchorEl={anchorEl}
                     setAnchorEl={setAnchorEl}
-                    options={headers?.filter(x => !localFilters.includes(x))}
+                    options={headers?.filter(x => x.displayInFilters)?.filter(x => !localFilters.includes(x))}
                     addSearchableHeaders={addSearchableHeaders}
                 />
             </div>
