@@ -87,7 +87,7 @@ function Table() {
             <WithBorder type='bottom' />
             <WithPadding >
                 <WithBorder type='all' >
-                    <HeaderFilters />
+                    <HeaderFilters tableData={tableData} />
                     <div className={classes.tableContainer}>
                         {loading ?
                             <CenteredContent className="p-4">
@@ -101,6 +101,7 @@ function Table() {
                                         order='asc'
                                         orderBy='desc'
                                         rowsHeader={columns}
+                                        rowsData={tableData}
                                     />
                                     <RenderRows
                                         loader={loading}

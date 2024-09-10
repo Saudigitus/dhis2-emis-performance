@@ -64,6 +64,9 @@ interface assessment {
 interface monitoria {
     filters: filters
     programStage: string
+    facilitadores: {
+        treinador: string
+    }
 }
 
 interface dataStoreRecord {

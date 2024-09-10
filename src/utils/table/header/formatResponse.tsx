@@ -41,7 +41,7 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
                         displayName: programStageDataElement.dataElement.formName,
                         header: programStageDataElement.dataElement.formName,
                         required: programStageDataElement.compulsory,
-                        name: programStageDataElement.dataElement.formName,
+                        name: programStageDataElement.dataElement.id,
                         labelName: programStageDataElement.dataElement.formName,
                         valueType: programStageDataElement.dataElement.optionSet?.options?.length > 0 ? Attribute.valueType.LIST as unknown as CustomAttributeProps["valueType"] : programStageDataElement.dataElement.valueType as unknown as CustomAttributeProps["valueType"],
                         options: { optionSet: programStageDataElement.dataElement.optionSet },

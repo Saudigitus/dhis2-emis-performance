@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ConfigTableColumns from "../configTableColumns/ConfigTableColumns";
 import EnrollmentFilters from "../filters/enrollment/EnrollmentFilters";
 import styles from './HeaderFilters.module.css'
@@ -7,11 +7,14 @@ import { useRecoilState } from "recoil";
 import { TableColumnState } from "../../../../schema/columnSchema";
 import { Button, IconAdd16 } from '@dhis2/ui';
 import { RowSelectorState } from "../../../../schema/rowSelectorSchema";
+import { ModalComponent } from "../../../modal";
+import ModalEdit from "../../../modal/ModalUpdateDataElements";
 
-function HeaderFilters() {
+function HeaderFilters(props: any) {
   const { columns } = useHeader();
   const [updatedCols, setTableColumns] = useRecoilState(TableColumnState)
   let [selectedRows,] = useRecoilState(RowSelectorState)
+  const [open, setOpen] = useState(false)
 
   const setTableHeaders = (tableHeaders: any) => setTableColumns(tableHeaders)
 
@@ -23,12 +26,15 @@ function HeaderFilters() {
         {/* <RowActions row={{}}/> */}
         {/* <SwitchButtonView /> */}
         {/* <EnrollmentActionsButtons/> */}
-        <Button disabled={Object.keys(selectedRows).length === 0} onClick={() => { }} icon={<IconAdd16 />}>
+        <Button disabled={Object.keys(selectedRows).length <= 1} onClick={() => { setOpen(!open) }} icon={<IconAdd16 />}>
           <span className={styles.work_buttons_text}>Atribuir Treinador</span>
         </Button>
 
         <ConfigTableColumns filteredHeaders={updatedCols} headers={columns} updateVariables={setTableHeaders} />
       </div>
+      {open && <ModalComponent title={`Actualização da data e do nome do formador`} open={open} setOpen={setOpen}>
+        <ModalEdit setOpen={setOpen} tableData={props?.tableData} />
+      </ModalComponent>}
     </div>
   );
 }

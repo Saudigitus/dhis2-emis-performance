@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function RenderHeader(props: RenderHeaderProps): React.ReactElement {
-    const { rowsHeader } = props
+    const { rowsHeader, rowsData } = props
     const classes = useStyles()
     const monitoriaEvents = useRecoilValue(EventsState);
     let [selectedEvents, SetSelectedRows] = useRecoilState(RowSelectorState)
@@ -67,7 +67,7 @@ function RenderHeader(props: RenderHeaderProps): React.ReactElement {
             const validEvents = monitoriaEvents.filter(x => x != undefined)
 
             for (const event of validEvents) {
-                if (event.event && checkCompleted(event?.status) === false)
+                if (rowsData?.find(x => x.trackedEntity === event.trackedEntity) && event.event && checkCompleted(event?.status) === false)
                     events[event.event] = event
             }
 

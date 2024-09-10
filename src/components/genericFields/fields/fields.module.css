@@ -3,7 +3,7 @@
 }
 
 .inputField {
-    width: 120px;
+    min-width: 120px;
 }
 
 .auto-complete__container {
