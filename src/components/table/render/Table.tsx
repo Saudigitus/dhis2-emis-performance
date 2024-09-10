@@ -62,12 +62,12 @@ function Table() {
     useEffect(() => {
         if (orgUnit)
             void getData(page, pageSize, getDataStoreData?.registration?.programStage, [])
-    }, [headerFieldsState, page, pageSize])
+    }, [headerFieldsState, page, pageSize, orgUnit])
 
     useEffect(() => {
         if (orgUnit)
             void getEvents(page, pageSize, program, getDataStoreData?.monitoria?.programStage, headerFieldsState.dataElements, headerFieldsState.attributes, orgUnit)
-    }, [headerFieldsState, refetch])
+    }, [headerFieldsState, refetch, orgUnit])
 
     const onPageChange = (newPage: number) => {
         setpage(newPage)
@@ -88,9 +88,7 @@ function Table() {
             <WithPadding >
                 <WithBorder type='all' >
                     <HeaderFilters />
-                    <div
-                        className={classes.tableContainer}
-                    >
+                    <div className={classes.tableContainer}>
                         {loading ?
                             <CenteredContent className="p-4">
                                 <CircularLoader />

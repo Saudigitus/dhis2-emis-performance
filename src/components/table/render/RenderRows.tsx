@@ -3,7 +3,7 @@ import i18n from '@dhis2/d2-i18n';
 import classNames from 'classnames';
 import { makeStyles, type Theme, createStyles } from '@material-ui/core/styles';
 import { RowCell, RowTable } from '../components';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { EventsState, SubTabState } from '../../../schema/termMarksSchema';
 import { type FieldFeedbackProps } from '../../../types/table/MarksFieldsFeedback';
 import ShowFieldsBasedValueType from '../components/row/showFieldsBasedValueType';
@@ -16,6 +16,8 @@ import { ProgramConfig } from '../../../types/programConfig/ProgramConfig';
 import { ProgramConfigState } from '../../../schema/programSchema';
 import { dataValues } from '../../../utils/table/rows/formatResponseRows';
 import { format } from 'date-fns';
+import { Checkbox } from '@material-ui/core';
+import { RowSelectorState } from '../../../schema/rowSelectorSchema';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -54,6 +56,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
     const selected = programConfig?.programStages?.find(x => x.id === getDataStoreData?.monitoria?.programStage)?.programStageDataElements?.find(de => de.dataElement.id === getDataStoreData?.monitoria?.filters?.dataElements[0].dataElement)?.dataElement
     const { saveMarks } = usePostDataElement()
     const [prevValues, setPrevValues] = useState<Object>({})
+    let [selectedRows, setSelectedRows] = useRecoilState(RowSelectorState)
     const [showFeedBack, setShowFeedBack] = useState<FieldFeedbackProps>({
         dataElement: '',
         feedbackType: ''
@@ -65,6 +68,16 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
             feedbackType: ''
         })
     }, [selectedTerm])
+
+    function onCheck(event: any) {
+        if (selectedRows?.[event.event]) {
+            const copy = { ...selectedRows }
+            delete copy[event.event]
+            setSelectedRows({ ...copy })
+        } else {
+            setSelectedRows((prevSelected: any) => ({ ...prevSelected, [event.event]: event }))
+        }
+    }
 
     if (rowsData?.length === 0) {
         return (
@@ -132,6 +145,19 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                             className={classNames(classes.row, classes.dataRow)}
                             inactive={checkCompleted(currEvent?.status)}
                         >
+                            <RowCell
+                                className={classNames(classes.cell, classes.bodyCell)}
+                            >
+                                <div onClick={(event) => { event.stopPropagation(); }}>
+                                    <Checkbox
+                                        checked={selectedRows[currEvent?.event] ? true : false}
+                                        name="Ex"
+                                        onChange={() => onCheck(currEvent)}
+                                        color="primary"
+                                        disabled={currEvent?.event ? checkCompleted(currEvent?.status) === true ? true : false : true}
+                                    />
+                                </div>
+                            </RowCell>
                             {cells}
                         </RowTable>
                     );

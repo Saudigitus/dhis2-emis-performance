@@ -2,6 +2,10 @@
     border-radius: 3px;
 }
 
+.inputField {
+    width: 120px;
+}
+
 .auto-complete__container {
     display: flex;
     align-items: center !important;

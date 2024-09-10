@@ -13,7 +13,7 @@ export const headBarDataElements = (selectedOptions: SelectedOptionsTypes, getDa
             const dataElement = programStageDataElements?.find((psDataElement: any) => psDataElement?.dataElement?.id === filter?.dataElement)?.dataElement;
 
             const value = dataElement?.optionSet.options.find(x => x.value === selectedOptions[filter.code as unknown as keyof typeof selectedOptions])?.label
-            if (dataElement) headBarFilterName = dataElement.displayName;
+            if (dataElement) headBarFilterName = dataElement.formName;
 
             headBarFilters.push({
                 disabled: !(selectedOptions?.orgUnit && selectedOptions?.orgUnitName),

@@ -7,7 +7,10 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
     const originalData = ((data?.programStages?.find(programStge => programStge.id === programStageId)) ?? {} as unknown as ProgramConfig["programStages"][0])
     const programIndicatorsData = data?.programIndicators?.filter((x) => programIndicators?.map((x) => x.id).join(",").includes(x.id))
     const selected = data?.programStages?.find(x => x.id === programStageId)?.programStageDataElements?.find(de => de.dataElement.id === dataElementId)?.dataElement
-    const cols = [{ name: 'eventDate', label: "Data de Registo", valueType: "DATE", type: VariablesTypes.Performance }, { name: "complete", label: "Completar", valueType: "TEXT", type: VariablesTypes.Custom }]
+    const cols = [
+        { name: 'eventDate', label: "Data da formação", valueType: "DATE", type: VariablesTypes.Performance },
+        { name: "complete", label: "Completar", valueType: "TEXT", type: VariablesTypes.Custom }
+    ]
 
     function getProgramStageDataElement(): [] {
         return (Object.keys(originalData).length > 0 && moduloAdministrativo != null && moduloAdministrativo != undefined)
@@ -35,11 +38,11 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
                     return {
                         id: programStageDataElement.dataElement.id + "_" + programStageId,
                         rawId: programStageDataElement.dataElement.id,
-                        displayName: programStageDataElement.dataElement.displayName,
-                        header: programStageDataElement.dataElement.displayName,
+                        displayName: programStageDataElement.dataElement.formName,
+                        header: programStageDataElement.dataElement.formName,
                         required: programStageDataElement.compulsory,
-                        name: programStageDataElement.dataElement.displayName,
-                        labelName: programStageDataElement.dataElement.displayName,
+                        name: programStageDataElement.dataElement.formName,
+                        labelName: programStageDataElement.dataElement.formName,
                         valueType: programStageDataElement.dataElement.optionSet?.options?.length > 0 ? Attribute.valueType.LIST as unknown as CustomAttributeProps["valueType"] : programStageDataElement.dataElement.valueType as unknown as CustomAttributeProps["valueType"],
                         options: { optionSet: programStageDataElement.dataElement.optionSet },
                         initialOptions: { optionSet: programStageDataElement.dataElement.optionSet },
