@@ -13,7 +13,7 @@ const GET_OU_CODE_QUERY = {
     }
 }
 
-export const useGetOrgUnitCode = (orgUnit?: string) => {
+export const useGetOrgUnitCode = () => {
     const engine = useDataEngine()
     const { show } = useShowAlerts()
     const [objects, setobjects] = useState<string>()
@@ -37,11 +37,6 @@ export const useGetOrgUnitCode = (orgUnit?: string) => {
             })
         })
     }
-
-
-    useEffect(() => {
-        getOrgUnitCode(orgUnit as unknown as string)
-    }, [orgUnit])
 
     return { orgUnitCode: objects, loadingOrgUnitCode: loading, getOrgUnitCode }
 }

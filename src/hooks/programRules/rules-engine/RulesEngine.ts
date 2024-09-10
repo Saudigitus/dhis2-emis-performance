@@ -23,9 +23,9 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
     const programConfig = useRecoilValue(ProgramConfigState)
 
     useEffect(() => {
-        if (updatedVariables.length === 0) {
+        // if (updatedVariables.length === 0) {
             setupdatedVariables([...variables])
-        }
+        // }
     }, [variables])
 
     function runRulesEngine() {

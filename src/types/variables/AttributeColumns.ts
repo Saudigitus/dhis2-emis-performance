@@ -47,6 +47,7 @@ export interface CustomAttributeProps {
     description?: string
     displayInFilters: boolean
     type: VariablesTypes
+    info: string
 }
 
 export interface OptionsProps {

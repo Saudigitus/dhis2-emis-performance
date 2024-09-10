@@ -6,6 +6,7 @@ import GenericFields from "../genericFields/GenericFields";
 import Subtitle from "../text/subtitle";
 import { GroupFormProps } from "../../types/form/GroupFormProps";
 import styles from './groupform.module.css'
+import { NoticeBox } from '@dhis2/ui'
 
 function GroupForm(props: GroupFormProps) {
     const { name, fields, description, disabled } = props
@@ -19,7 +20,7 @@ function GroupForm(props: GroupFormProps) {
                         {fields?.filter(x => x.visible)?.map((x, i) => {
                             return (
                                 <div className="row d-flex align-items-center" key={i}
-                                    style={{ display: "flex", padding: (x.error ?? false) ? "8px 8px 8px 12px" : "8px 8px 8px 5px", backgroundColor: (x.error === true) ? "#FBEAE5" : i % 2 === 0 ? "#ebf0f6" : "#FFFF", height: (x.error ?? false) ? 102 : "auto" }}>
+                                    style={{ display: "flex", padding: (x.error ?? false) ? "8px 8px 8px 12px" : "8px 8px 8px 5px", backgroundColor: (x.error === true) ? "#FBEAE5" : i % 2 === 0 ? "#ebf0f6" : "#FFFF", height: (x.error ?? false) ? x.info ? 130 : 102 : "auto" }}>
                                     <div className="col-12 col-md-6 d-flex">
                                         <Label className={styles.label}>
                                             {x.labelName} {x.required ? " *" : ""}
@@ -31,10 +32,19 @@ function GroupForm(props: GroupFormProps) {
                                             disabled={x.disabled || disabled}
                                             valueType={x.valueType}
                                         />
-                                        <span className={styles.content}>
+                                        {/* <span className={styles.content}>
                                             {x.content}
-                                        </span>
+                                        </span> */}
                                     </div>
+                                    {
+                                        x.error ?
+                                            <div className="mt-2">
+                                                <NoticeBox error>
+                                                    {x.info}
+                                                </NoticeBox>
+                                            </div>
+                                            : null
+                                    }
                                 </div>
                             )
                         }

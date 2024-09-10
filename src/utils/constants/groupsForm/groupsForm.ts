@@ -5,6 +5,7 @@ import type { ValidationNameType } from "../../../types/form/validateOuNameObjec
 import { CustomAttributeProps, VariablesTypes } from "../../../types/variables/AttributeColumns";
 import { FormSectionProps } from "../../../types/fields/FieldsTypes";
 import { format } from "date-fns";
+import { useMemo } from "react";
 
 
 const staticForm = () => {
@@ -53,9 +54,9 @@ const staticForm = () => {
 }
 
 function formFields(validationObj: ValidationNameType, formData: any): FormSectionProps[] {
-  const [ mapeamentoFields = [] ] = formData
+  const [mapeamentoFields = []] = formData
 
-  return [
+  return useMemo(() => [
     {
       section: "Detalhes gerais",
       description: "Detalhes gerais",
@@ -104,8 +105,10 @@ function formFields(validationObj: ValidationNameType, formData: any): FormSecti
           visible: true,
           description: "Description for the field",
           helpText: validationObj.validationText,
+          content: validationObj.validationText,
           error: validationObj.error,
-          warning: validationObj.warning
+          warning: validationObj.warning,
+          info: "Se não puder alterar o nome do grupo, combine o nome com o bairro ou distrito do grupo."
         },
         {
           id: "meetingAddress",
@@ -152,9 +155,9 @@ function formFields(validationObj: ValidationNameType, formData: any): FormSecti
       section: "Mapeamento e Saúde da ASCA",
       description: "Mapeamento e Saúde da ASCA",
       fields: mapeamentoFields
-      
+
     },
-  ];
+  ], [validationObj])
 }
 
 export { formFields };

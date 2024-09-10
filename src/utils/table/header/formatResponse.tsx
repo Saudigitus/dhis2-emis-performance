@@ -153,5 +153,5 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
             )
     }, [data, programStageId, tableColumns, programIndicators]);
 
-    return headerResponse;
+    return headerResponse as CustomAttributeProps[];
 }

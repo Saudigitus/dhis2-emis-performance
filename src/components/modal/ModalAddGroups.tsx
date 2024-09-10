@@ -22,7 +22,7 @@ function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
   const closeModal = () => setOpen(false);
   const { validateOuname, ouNameValidationObject, validating } = useValidateOuName()
   const { createGroup, loading } = useCreateGroup()
-  const { orgUnitCode, loadingOrgUnitCode } = useGetOrgUnitCode(parentId)
+  const { orgUnitCode, loadingOrgUnitCode, getOrgUnitCode } = useGetOrgUnitCode()
   const [initialValues] = useState({ registrationDate: format(new Date(), "yyyy-MM-dd") })
   const debouncedValue = useDebounce(values["ouName" as keyof typeof values], 400)
   const setRefetch = useSetRecoilState(TeiRefetch)
@@ -38,6 +38,10 @@ function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
   useEffect(() => {
     setRefetch(false)
   }, [])
+
+  useEffect(() => {
+    getOrgUnitCode(parentId)
+  }, [parentId])
 
   useEffect(() => {
     if (values["ouName" as keyof typeof values])
