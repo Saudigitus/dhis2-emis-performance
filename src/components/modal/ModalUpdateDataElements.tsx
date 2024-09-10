@@ -1,7 +1,7 @@
 import { useHeader } from "../../hooks";
 import GroupForm from "../form/GroupForm";
 import { ModalTable } from "./ModalTable";
-import React, { useState } from "react";
+import React from "react";
 import { Button, ButtonStrip, CenteredContent, CircularLoader } from "@dhis2/ui";
 import { Form } from "react-final-form";
 import { getSelectedKey } from "../../utils";
@@ -13,20 +13,20 @@ export default function ModalEdit({ tableData, setOpen }: { setOpen: (args: bool
     const { columns } = useHeader();
     const { getDataStoreData } = getSelectedKey()
     const selectedEvents = useRecoilValue(RowSelectorState)
-    const cols = columns.filter(x => x.rawId === getDataStoreData.monitoria.facilitadores.treinador || x.id === 'eventDate')
     const { updateEvents, loading } = useUpdateEvent({ setOpen })
+    const cols = columns.filter(x => x.rawId === getDataStoreData.monitoria.facilitadores.treinador || x.id === 'eventDate')
 
     function save(values: any) {
         let events: any[] = []
-
         Object.keys(selectedEvents).map((event: any) => {
             events.push({
-                ...selectedEvents?.[event], dataValues: [...selectedEvents?.[event].dataValues,
+                ...selectedEvents?.[event], dataValues: [...selectedEvents?.[event].dataValues.filter((x: any) => x.dataElement != getDataStoreData.monitoria.facilitadores.treinador),
                 {
                     dataElement: getDataStoreData.monitoria.facilitadores.treinador,
                     value: values[getDataStoreData.monitoria.facilitadores.treinador]
                 }],
-                eventDate: values.eventDate
+                eventDate: values.eventDate,
+                occurredAt: values.eventDate
             })
         })
 
@@ -35,7 +35,7 @@ export default function ModalEdit({ tableData, setOpen }: { setOpen: (args: bool
 
     return (
         <div style={{ maxHeight: "70vh" }} >
-            <span>ASCAS que serão afectadas:</span>
+            <span> {Object.keys(selectedEvents).length} ASCAS selecionadas serão afectadas:</span>
             <ModalTable tableData={tableData} />
             <br />
             <Form onSubmit={() => { }} >
@@ -45,13 +45,9 @@ export default function ModalEdit({ tableData, setOpen }: { setOpen: (args: bool
                         <br />
                         <ButtonStrip end>
                             <Button onClick={() => setOpen(false)}>Cancelar</Button>
-                            <Button disabled={loading || pristine} onClick={() => save(values)} primary>
-                                {loading ? <CenteredContent>
-                                    <CircularLoader small />
-                                </CenteredContent>
-                                    :
-                                    "Actualizar"
-                                }
+                            <Button icon={loading && <CircularLoader small />} disabled={loading || pristine} onClick={() => save(values)} primary>
+
+                                Actualizar
                             </Button>
                         </ButtonStrip>
                     </form>

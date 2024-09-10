@@ -2,6 +2,7 @@ import { useDataMutation } from "@dhis2/app-runtime";
 import useShowAlerts from "../commons/useShowAlert";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { TeiRefetch } from "../../schema/refecthTeiSchema";
+import { RowSelectorState } from "../../schema/rowSelectorSchema";
 
 const putEvent: any = {
     resource: 'tracker',
@@ -18,9 +19,11 @@ const putEvent: any = {
 const useUpdateEvent = ({ setOpen }: { setOpen: (args: boolean) => void }) => {
     const { hide, show } = useShowAlerts()
     const [refetch, setRefetch] = useRecoilState(TeiRefetch)
+    const setSelectedEvents = useSetRecoilState(RowSelectorState)
 
     const [update, { loading }] = useDataMutation(putEvent, {
         onComplete(data) {
+            setSelectedEvents({})
             setOpen(false)
             setRefetch(!refetch)
             show({

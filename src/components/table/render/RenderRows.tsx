@@ -3,8 +3,8 @@ import i18n from '@dhis2/d2-i18n';
 import classNames from 'classnames';
 import { makeStyles, type Theme, createStyles } from '@material-ui/core/styles';
 import { RowCell, RowTable } from '../components';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { EventsState, SubTabState } from '../../../schema/termMarksSchema';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { SubTabState } from '../../../schema/termMarksSchema';
 import { type FieldFeedbackProps } from '../../../types/table/MarksFieldsFeedback';
 import ShowFieldsBasedValueType from '../components/row/showFieldsBasedValueType';
 import { type RenderHeaderProps } from '../../../types/table/TableContentProps';
@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function RenderRows(props: RenderHeaderProps): React.ReactElement {
-    const { rowsData, headerData, loader, events } = props
+    const { rowsData, headerData, loader, events, allChecked, setAllChecked } = props
     const classes = useStyles()
     const [selectedTerm] = useRecoilState(SubTabState);
     const { getDataStoreData } = getSelectedKey()
@@ -71,6 +71,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
 
     function onCheck(event: any) {
         if (selectedRows?.[event.event]) {
+            if (allChecked) setAllChecked(false)
             const copy = { ...selectedRows }
             delete copy[event.event]
             setSelectedRows({ ...copy })

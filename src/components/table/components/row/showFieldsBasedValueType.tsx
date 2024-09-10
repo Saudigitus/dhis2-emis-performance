@@ -37,7 +37,7 @@ export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueType
                 status: currentEvent?.status,
                 trackedEntity: currentEvent?.trackedEntity,
                 programStage: currentEvent?.programStage,
-                ...(dataElement === 'eventDate' && { eventDate: newMark })
+                ...(dataElement === 'eventDate' && { eventDate: newMark, occurredAt: newMark })
             },
             id: `${currentEvent?.event}/${dataElement}`
         }).then(() => {

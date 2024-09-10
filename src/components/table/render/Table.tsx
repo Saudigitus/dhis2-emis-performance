@@ -48,8 +48,8 @@ function Table() {
     const setLoading = useSetRecoilState(TableDataLoadingState)
     const { getDataStoreData } = getSelectedKey()
     const { program } = getDataStoreKeys()
-    const { getEvents } = useGetEvents()
-    const monitoriaEvents = useRecoilValue(EventsState);
+    const { getEvents, events } = useGetEvents()
+    const [allChecked, setAllChecked] = useState(false)
 
     useEffect(() => {
         setLoading(loading)
@@ -102,12 +102,16 @@ function Table() {
                                         orderBy='desc'
                                         rowsHeader={columns}
                                         rowsData={tableData}
+                                        allChecked={allChecked}
+                                        setAllChecked={setAllChecked}
                                     />
                                     <RenderRows
                                         loader={loading}
                                         headerData={columns}
                                         rowsData={tableData}
-                                        events={monitoriaEvents}
+                                        events={events}
+                                        allChecked={allChecked}
+                                        setAllChecked={setAllChecked}
                                     />
                                 </>
                             </TableComponent>

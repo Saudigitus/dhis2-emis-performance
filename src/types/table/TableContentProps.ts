@@ -39,6 +39,8 @@ interface RenderHeaderProps {
     rowsData?: any[]
     headerData?: CustomAttributeProps[]
     events?: any[]
+    setAllChecked: any
+    allChecked?: any
 }
 
 interface TableSortProps {

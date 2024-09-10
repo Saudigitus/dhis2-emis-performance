@@ -21,6 +21,7 @@ export function useGetEvents() {
     const { hide, show } = useShowAlerts()
     const setAllEvents = useSetRecoilState(EventsState);
     const setConfirmState = useSetRecoilState(ConfirmationState)
+    const [data, setData] = useState([])
 
     const getEvents = async (page: number, pageSize: number, program: string, programStage: string, filter: any[], filterAttributes: any[], orgUnit: any) => {
         await engine.query(EVENT_QUERY({
@@ -33,6 +34,7 @@ export function useGetEvents() {
             filterAttributes: filterAttributes,
             orgUnit: orgUnit as unknown as string,
         })).then((resp: any) => {
+            setData(resp.results.instances)
             setAllEvents(resp.results.instances)
             setConfirmState((cd) => ({ ...cd, loading: false, open: false, loadingComplete: false }))
         })
@@ -47,5 +49,5 @@ export function useGetEvents() {
     }
 
 
-    return { getEvents }
+    return { getEvents, events: data }
 }

@@ -5,7 +5,7 @@ import { makeStyles, createStyles, type Theme } from '@material-ui/core/styles';
 import HeaderCell from '../components/head/HeaderCell';
 import { RenderHeaderProps } from '../../../types/table/TableContentProps';
 import { Checkbox } from '@material-ui/core';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { RowSelectorState } from '../../../schema/rowSelectorSchema';
 import { EventsState } from '../../../schema/termMarksSchema';
 import { checkCompleted } from '../../../utils/table/rows/checkCompleted';
@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function RenderHeader(props: RenderHeaderProps): React.ReactElement {
-    const { rowsHeader, rowsData } = props
+    const { rowsHeader, rowsData, allChecked, setAllChecked } = props
     const classes = useStyles()
     const monitoriaEvents = useRecoilValue(EventsState);
     let [selectedEvents, SetSelectedRows] = useRecoilState(RowSelectorState)
@@ -63,6 +63,7 @@ function RenderHeader(props: RenderHeaderProps): React.ReactElement {
 
     function checkAll(inputEvent: any) {
         if (inputEvent.target.checked) {
+            setAllChecked(true)
             let events: any = {}
             const validEvents = monitoriaEvents.filter(x => x != undefined)
 
@@ -73,6 +74,7 @@ function RenderHeader(props: RenderHeaderProps): React.ReactElement {
 
             SetSelectedRows(events)
         } else {
+            setAllChecked(false)
             SetSelectedRows({})
         }
     }
@@ -86,8 +88,9 @@ function RenderHeader(props: RenderHeaderProps): React.ReactElement {
                     className={classNames(classes.cell, classes.bodyCell)}
                 >
                     <div onClick={(event) => { event.stopPropagation(); }}>
+                        Selecionar Todas
                         <Checkbox
-                            checked={monitoriaEvents.filter(x => x != undefined && checkCompleted(x?.status) === false).length === Object.keys(selectedEvents).length}
+                            checked={allChecked}
                             name="Ex"
                             onChange={(event: any) => checkAll(event)}
                             color="primary"

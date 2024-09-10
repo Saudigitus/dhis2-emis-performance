@@ -9,3 +9,9 @@
     align-items: center !important;
     justify-content: space-between !important;
 }
+
+.noticeBox{
+    height: 37px;
+    justify-content: center;
+    align-items: center;
+}

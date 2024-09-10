@@ -9,6 +9,7 @@ import { Button, IconAdd16 } from '@dhis2/ui';
 import { RowSelectorState } from "../../../../schema/rowSelectorSchema";
 import { ModalComponent } from "../../../modal";
 import ModalEdit from "../../../modal/ModalUpdateDataElements";
+import { NoticeBox } from '@dhis2/ui';
 
 function HeaderFilters(props: any) {
   const { columns } = useHeader();
@@ -26,7 +27,10 @@ function HeaderFilters(props: any) {
         {/* <RowActions row={{}}/> */}
         {/* <SwitchButtonView /> */}
         {/* <EnrollmentActionsButtons/> */}
-        <Button disabled={Object.keys(selectedRows).length <= 1} onClick={() => { setOpen(!open) }} icon={<IconAdd16 />}>
+        {
+          Object.keys(selectedRows).length > 0 && <NoticeBox className={styles.noticeBox} title={`${Object.keys(selectedRows).length} ASCA(S) selecionada(s)`} />
+        }
+        <Button disabled={Object.keys(selectedRows).length === 0} onClick={() => { setOpen(!open) }} icon={<IconAdd16 />}>
           <span className={styles.work_buttons_text}>Atribuir Treinador</span>
         </Button>
 
