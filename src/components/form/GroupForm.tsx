@@ -39,7 +39,7 @@ function GroupForm(props: GroupFormProps) {
                                     {
                                         x.error ?
                                             <div className="mt-2">
-                                                <NoticeBox error>
+                                                <NoticeBox error className={styles.infoBox}>
                                                     {x.info}
                                                 </NoticeBox>
                                             </div>

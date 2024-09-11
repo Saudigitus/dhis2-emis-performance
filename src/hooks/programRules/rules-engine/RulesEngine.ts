@@ -23,9 +23,9 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
     const programConfig = useRecoilValue(ProgramConfigState)
 
     useEffect(() => {
-        // if (updatedVariables.length === 0) {
+        if (updatedVariables.length === 0) {
             setupdatedVariables([...variables])
-        // }
+        }
     }, [variables])
 
     function runRulesEngine() {
@@ -72,6 +72,10 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
 
     // apply rules to variables
     function applyRulesToVariable(variable: any) {
+        for (let data of variable) {
+            data = variable
+        }
+
         for (const programRule of newProgramRules.filter(x => x.variable === variable.name) || []) {
             switch (programRule.type) {
                 case "attribute":

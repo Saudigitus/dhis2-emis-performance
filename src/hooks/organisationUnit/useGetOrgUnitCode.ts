@@ -25,18 +25,19 @@ export const useGetOrgUnitCode = () => {
             variables: { id: orgUnit },
 
             onComplete: ((resp: { results: { code: string } }) => {
-                setloading(false)
                 if (!updateSate)
                     setobjects(resp?.results?.code ? resp?.results?.code + Math.random().toString().substring(2, 7) : Math.random().toString().substring(2, 12))
                 else return resp?.results
+                setloading(false)
             }),
 
             onError: (() => {
-                setloading(false)
                 show({ message: "Erro inesperado", type: { critical: true } })
+                setloading(false)
             })
         })
     }
+    
 
     return { orgUnitCode: objects, loadingOrgUnitCode: loading, getOrgUnitCode }
 }

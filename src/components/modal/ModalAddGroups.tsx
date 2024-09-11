@@ -31,16 +31,17 @@ function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
   const [fieldsWithValue, setFieldsWitValues] = useState<any[]>([formData])
   const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({ variables: formFields(ouNameValidationObject, formData), values, type: "programStageSection", formatKeyValueType: formatKeyValueType(formData) })
 
-  // useEffect(() => {
-  //   runRulesEngine()
-  // }, [values])
+  useEffect(() => {
+    runRulesEngine()
+  }, [values])
 
   useEffect(() => {
     setRefetch(false)
   }, [])
 
   useEffect(() => {
-    getOrgUnitCode(parentId)
+    if (parentId)
+      void getOrgUnitCode(parentId)
   }, [parentId])
 
   useEffect(() => {
@@ -79,16 +80,16 @@ function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
 
   const modalActions = [
     { id: "cancel", type: "button", label: "Cancelar", disabled: loading, onClick: () => { setOpen(false) } },
-    { id: "saveandcontinue", type: "submit", label: "Salvar", primary: true, disabled: loading || validating || ouNameValidationObject?.error, loading:loadingOrgUnitCode || loading }
+    { id: "saveandcontinue", type: "submit", label: "Salvar", primary: true, disabled: loading || validating || ouNameValidationObject?.error, loading: loadingOrgUnitCode || loading }
   ];
 
-  // if (loadingOrgUnitCode || loading) {
-  //   return (
-  //     <CenteredContent >
-  //       <CircularLoader />
-  //     </CenteredContent>
-  //   )
-  // }
+  if (loadingOrgUnitCode || loading) {
+    return (
+      <CenteredContent >
+        <CircularLoader />
+      </CenteredContent>
+    )
+  }
 
   return (
     <WithPadding p="0px">
