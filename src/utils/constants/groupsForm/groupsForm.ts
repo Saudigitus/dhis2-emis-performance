@@ -5,7 +5,6 @@ import type { ValidationNameType } from "../../../types/form/validateOuNameObjec
 import { CustomAttributeProps, VariablesTypes } from "../../../types/variables/AttributeColumns";
 import { FormSectionProps } from "../../../types/fields/FieldsTypes";
 import { format } from "date-fns";
-import { useMemo } from "react";
 
 
 const staticForm = () => {
@@ -56,7 +55,7 @@ const staticForm = () => {
 function formFields(validationObj: ValidationNameType, formData: any): FormSectionProps[] {
   const [mapeamentoFields = []] = formData
 
-  return useMemo(() => [
+  return [
     {
       section: "Detalhes gerais",
       description: "Detalhes gerais",
@@ -157,7 +156,7 @@ function formFields(validationObj: ValidationNameType, formData: any): FormSecti
       fields: mapeamentoFields
 
     },
-  ], [validationObj])
+  ]
 }
 
 export { formFields };

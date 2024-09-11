@@ -31,9 +31,10 @@ function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
   const [fieldsWithValue, setFieldsWitValues] = useState<any[]>([formData])
   const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({ variables: formFields(ouNameValidationObject, formData), values, type: "programStageSection", formatKeyValueType: formatKeyValueType(formData) })
 
+
   useEffect(() => {
-    runRulesEngine()
-  }, [values])
+    runRulesEngine(formFields(ouNameValidationObject, formData))
+  }, [values, validating])
 
   useEffect(() => {
     setRefetch(false)
@@ -102,7 +103,7 @@ function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
             onChange={onChange(values) as unknown as () => void}
           >
             {
-              updatedVariables?.map((field, index,) => (
+              updatedVariables?.map((field, index) => (
                 <div className="my-3">
                   <GroupForm
                     name={field.section}
