@@ -64,8 +64,10 @@ function Table() {
     }, [page, pageSize, orgUnit])
 
     useEffect(() => {
-        if (orgUnit)
+        if (orgUnit) {
+            if (allChecked) setAllChecked(false)
             void getEvents(page, pageSize, program, getDataStoreData?.monitoria?.programStage, headerFieldsState.dataElements, headerFieldsState.attributes, orgUnit)
+        }
     }, [refetch, orgUnit, moduloAdministrativo])
 
     const onPageChange = (newPage: number) => {
