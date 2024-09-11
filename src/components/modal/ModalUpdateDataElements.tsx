@@ -2,7 +2,7 @@ import { useHeader } from "../../hooks";
 import GroupForm from "../form/GroupForm";
 import { ModalTable } from "./ModalTable";
 import React from "react";
-import { Button, ButtonStrip, CenteredContent, CircularLoader } from "@dhis2/ui";
+import { Button, ButtonStrip, CircularLoader } from "@dhis2/ui";
 import { Form } from "react-final-form";
 import { getSelectedKey } from "../../utils";
 import { RowSelectorState } from "../../schema/rowSelectorSchema";

@@ -3,25 +3,25 @@ import { DataTable, DataTableBody, DataTableCell, DataTableRow, } from '@dhis2/u
 import { useRecoilValue } from 'recoil';
 import { ProgramConfigState } from '../../schema/programSchema';
 import { RowSelectorState } from '../../schema/rowSelectorSchema';
-
-interface SummaryRowProps {
-    data: any
-    reference: string
-    tab: string
-    index: number
-}
+import { Pagination } from '../table/components';
+import WithPadding from '../template/WithPadding';
 
 export const ModalTable = ({ tableData }: { tableData: any }): React.ReactElement => {
     const programConfigState = useRecoilValue(ProgramConfigState);
     const selectedEvents = useRecoilValue(RowSelectorState)
     const [page, setPage] = useState(1)
-    let selectedRowsData: any = []
+    const [data, setData] = useState([])
 
-    Object.keys(selectedEvents ?? {})?.map((rowEventID) => {
-        const asca = tableData?.find((x: any) => x.trackedEntity === selectedEvents?.[rowEventID].trackedEntity)
+    useEffect(() => {
+        let selectedRowsData: any = []
+        Object.keys(selectedEvents ?? {})?.map((rowEventID) => {
+            const asca = tableData?.find((x: any) => x.trackedEntity === selectedEvents?.[rowEventID].trackedEntity)
+            if (asca) selectedRowsData.push(asca)
+        })
 
-        if (asca) selectedRowsData.push(asca)
-    })
+        setData(selectedRowsData.slice((page - 1) * 5, page * 5))
+    }, [page])
+
 
     const headers = programConfigState?.programTrackedEntityAttributes?.filter(x => x.displayInList).map((item) => {
         return {
@@ -29,6 +29,10 @@ export const ModalTable = ({ tableData }: { tableData: any }): React.ReactElemen
             displayName: item.trackedEntityAttribute.displayName,
         }
     })
+
+    const onPageChange = (newPage: number) => {
+        setPage(newPage)
+    }
 
     return (
         <div style={{ maxHeight: "220px", overflowY: "auto" }} >
@@ -44,7 +48,7 @@ export const ModalTable = ({ tableData }: { tableData: any }): React.ReactElemen
                 </thead>
                 <DataTableBody>
                     {
-                        selectedRowsData?.map((row: any) => {
+                        data?.map((row: any) => {
                             return (
                                 <DataTableRow >
                                     {
@@ -54,8 +58,23 @@ export const ModalTable = ({ tableData }: { tableData: any }): React.ReactElemen
                             )
                         })
                     }
+                    {data.length === 0 && <DataTableRow>
+                        <WithPadding p='10px' >
+                            Sem mais dados para mostrar
+                        </WithPadding>
+                    </DataTableRow>}
                 </DataTableBody>
             </DataTable >
+
+            <Pagination
+                loading={false}
+                onPageChange={onPageChange}
+                onRowsPerPageChange={() => { }}
+                page={page}
+                rowsPerPage={5}
+                totalPerPage={data?.length}
+                option={[{ value: 5, label: 5 }]}
+            />
         </div>
     )
 }

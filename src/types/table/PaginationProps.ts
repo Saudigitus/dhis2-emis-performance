@@ -5,6 +5,7 @@ interface PaginationProps {
     onRowsPerPageChange: (rowsPerPage: number) => void
     loading: boolean
     totalPerPage: number
+    option?: any
 }
 
 

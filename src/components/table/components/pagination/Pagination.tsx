@@ -8,7 +8,7 @@ import { PaginationProps } from '../../../../types/table/PaginationProps';
 import { disableNextPage, rowsPerPages } from '../../../../utils';
 
 function Pagination(props: PaginationProps): React.ReactElement {
-    const { page, rowsPerPage, onPageChange, onRowsPerPageChange, loading, totalPerPage } = props;
+    const { page, rowsPerPage, onPageChange, onRowsPerPageChange, loading, totalPerPage, option } = props;
     return (
         <div className={styles.pagination}>
             <div />
@@ -20,7 +20,7 @@ function Pagination(props: PaginationProps): React.ReactElement {
                     className={styles.textPagination}
                     value={rowsPerPage}
                     clearValueText={false}
-                    options={rowsPerPages}
+                    options={option ? option : rowsPerPages}
                     clearable={false}
                     searchable={false}
                     onChange={onRowsPerPageChange}

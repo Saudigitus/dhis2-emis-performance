@@ -15,7 +15,6 @@ import { TableDataLoadingState } from '../../../schema/tableDataLoadingSchema';
 import { getDataStoreKeys, getSelectedKey } from '../../../utils';
 import { useGetEvents } from '../../../hooks/events/useGetEvents';
 import AlertDialog from '../../confirm/confirm';
-import { RowSelectorState } from '../../../schema/rowSelectorSchema';
 
 const usetStyles = makeStyles({
     tableContainer: {
