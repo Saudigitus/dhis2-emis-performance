@@ -29,12 +29,13 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
   const [clickedButton, setClickedButton] = useState<string>("");
   const [disabled, setdisabled] = useState(true)
   const setRefetch = useSetRecoilState(TeiRefetch)
+  const varibales = [
+    ...formEvents(getProgram.programStages.find((x) => x.id === nexProgramStage)?.executionDateLabel),
+    ...getProgram.programStages.find((x) => x.id === nexProgramStage)?.programStageSections.map((x) => { return { ...x, fields: formatResponseDataElements(x.dataElements) } })!
+  ]
 
   const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
-    variables: [
-      ...formEvents(getProgram.programStages.find((x) => x.id === nexProgramStage)?.executionDateLabel),
-      ...getProgram.programStages.find((x) => x.id === nexProgramStage)?.programStageSections.map((x) => { return { ...x, fields: formatResponseDataElements(x.dataElements) } })!
-    ],
+    variables: varibales,
     values, type: "programStageSection",
     formatKeyValueType: {}
   })
@@ -66,7 +67,7 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
 
   function onSubmit() {
     if (clickedButton === "saveandcontinue") {
-      const exclude = ["nomeAsca", "event", "orgUnit", "eventDate"]
+      const exclude = ["nomeAsca", "event", "orgUnit", "event_date"]
       const transformedArray = Object.entries(values).map(([key, value]) => ({
         dataElement: key,
         value: value
@@ -81,9 +82,9 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
         enrollment: row.enrollment,
         trackedEntity: row.trackedEntity,
         event: transformedArray.filter((x) => x.dataElement === "event")?.[0].value,
-        occurredAt: transformedArray.filter((x) => x.dataElement === "eventDate")?.[0].value,
-        scheduledAt: transformedArray.filter((x) => x.dataElement === "eventDate")?.[0].value,
-        createdAt: transformedArray.filter((x) => x.dataElement === "eventDate")?.[0].value,
+        occurredAt: transformedArray.filter((x) => x.dataElement === "event_date")?.[0].value,
+        scheduledAt: transformedArray.filter((x) => x.dataElement === "event_date")?.[0].value,
+        createdAt: transformedArray.filter((x) => x.dataElement === "event_date")?.[0].value,
         dataValues: transformedArray.filter((x) => !exclude.includes(x.dataElement))
       }
       updateEvent({ data: { events: [formToPost] } })

@@ -23,7 +23,7 @@ export const useGetEventUpdateFormData = () => {
                 setInitialValues({
                     ...dataValues(event?.results?.instances?.[0]?.dataValues ?? []),
                     event: event?.results?.instances?.[0]?.event,
-                    eventDate: event?.results?.instances?.[0]?.occurredAt? format(new Date(event?.results?.instances?.[0]?.occurredAt) as unknown as Date , "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd")
+                    event_date: event?.results?.instances?.[0]?.occurredAt? format(new Date(event?.results?.instances?.[0]?.occurredAt) as unknown as Date , "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd")
                 })
             })
             .catch((error) => {

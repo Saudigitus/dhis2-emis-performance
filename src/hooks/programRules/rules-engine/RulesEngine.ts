@@ -47,7 +47,6 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
 
     // rules engine function for programStageSections
     function rulesEngineSections(data: any[] = []) {
-        console.log(data, values)
         const localVariablesSections = data?.length > 0 ? data : [...updatedVariables]
         const updatedVariablesCopy = localVariablesSections?.map(section => {
             const updatedSection = { ...section };
@@ -78,17 +77,23 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
                     switch (programRule.programRuleActionType) {
                         case "ASSIGN":
                             if (variable.name === programRule.variable) {
-                                const firstCondition = existValue(programRule.condition, values, formatKeyValueType);
+                                const firstCondition = executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType));
                                 const value = executeFunctionName(programRule.functionName, existValue(programRule.data, values, formatKeyValueType))
 
-                                if (eval(firstCondition)) {
-                                    if (!isNaN(value) && isFinite(value) && value !== undefined) {
-                                        values[variable.name] = value
-                                    } else {
-                                        values[variable.name] = ""
+                                try {
+                                    if (eval(firstCondition ?? "")) {
+                                        if (!isFinite(value) && value !== undefined) {
+                                            values[variable.name] = value
+                                            variable.value = value
+                                        } else {
+                                            values[variable.name] = ""
+                                            variable.value = ""
+                                        }
                                     }
+                                    variable.disabled = true
+                                } catch (error) {
+                                    variable.disabled = true
                                 }
-                                variable.disabled = true
                             }
                             break;
                         case "SHOWOPTIONGROUP":
@@ -215,11 +220,25 @@ export function replaceEspecifValue(values: Record<string, any>, variables: Reco
     return false;
 }
 
+function isDate(str: string) {
+    // Remove os parênteses se existirem
+    if (typeof str === 'string') {
+        const cleanedStr = str?.replace(/[()]/g, '');
+
+        // Tenta criar um objeto Date
+        const date = new Date(cleanedStr);
+
+        // Verifica se a data é válida
+        return !isNaN(date.getTime());
+    }
+    return str;
+}
+
 // execute function
 function executeFunctionName(functionName: string | undefined, condition: string | undefined) {
     switch (functionName) {
         case "hasValue":
-            return eval(condition ?? "");
+            return isDate(condition!) ? condition : eval(condition ?? "");
         case "yearsBetween":
             return eval(d2YearsBetween(condition, condition?.split(")")) ?? "");
 
@@ -312,6 +331,8 @@ export function existValue(condition: string | undefined, values: Record<string,
                     localCondition = localCondition.replaceAll(value, `${values[value]}`)
                     break;
             }
+        } else {
+            localCondition = condition as string
         }
     }
 

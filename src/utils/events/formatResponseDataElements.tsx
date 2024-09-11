@@ -39,7 +39,7 @@ export function formEvents(executionDateLabel = "Data do Evento") {
             fields: [
                 {
                     required: true,
-                    name: "eventDate",
+                    name: "event_date",
                     labelName: executionDateLabel,
                     valueType: Attribute.valueType.DATE as unknown as CustomAttributeProps["valueType"],
                     options: { optionSet: undefined },
@@ -52,7 +52,7 @@ export function formEvents(executionDateLabel = "Data do Evento") {
                     error: false,
                     programStage: "programStageObject.id",
                     content: "",
-                    id: "eventDate",
+                    id: "event_date",
                     displayName: executionDateLabel,
                     header: executionDateLabel,
                     type: VariablesTypes.DataElement,
