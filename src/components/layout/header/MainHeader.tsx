@@ -9,6 +9,7 @@ import { ProgramConfigState } from '../../../schema/programSchema';
 import { useRecoilValue } from 'recoil';
 import { initializeRulesEngine } from '../../../hooks/programRules/rules-engine/InitializeRulesEngine';
 import { useGtTotals } from '../../../hooks/getTotals/useGetTotals';
+import { TeiRefetch } from '../../../schema/refecthTeiSchema';
 
 export default function MainHeader(): React.ReactElement {
     const { urlParamiters } = useParams();
@@ -19,7 +20,8 @@ export default function MainHeader(): React.ReactElement {
     const { initialize } = initializeRulesEngine()
     const [totals, setTotals] = useState<any>({})
     const { getTotals } = useGtTotals({ setTotals })
-    const percentagem = (100 * totals?.formados / totals?.grupos).toFixed(0)
+    const percentagem: any = (totals?.formados && totals?.grupos) ? 100 * totals?.formados / totals?.grupos : 0
+    const refetch = useRecoilValue<boolean>(TeiRefetch)
 
     useEffect(() => {
         initialize()
@@ -28,7 +30,7 @@ export default function MainHeader(): React.ReactElement {
     useEffect(() => {
         if (selectedOptions.moduloAdministrativo)
             void getTotals()
-    }, [selectedOptions.moduloAdministrativo])
+    }, [selectedOptions.moduloAdministrativo, refetch])
 
     return (
         <nav className={style.nav}>
@@ -44,7 +46,7 @@ export default function MainHeader(): React.ReactElement {
                     <span>Grupos: &nbsp;&nbsp; &nbsp; {totals?.grupos ?? 0} </span>
                 </div>
                 <div className={style.percent}>
-                    {percentagem == 'NaN' ? 0 : percentagem}%
+                    {percentagem == 100 ? percentagem.toFixed(0) : percentagem.toFixed(1)}%
                 </div>
             </div>
         </nav>

@@ -7,16 +7,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
 import WithBorder from '../../template/WithBorder';
 import WithPadding from '../../template/WithPadding';
-import WorkingLists from '../components/filters/workingList/WorkingLists';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { HeaderFieldsState } from '../../../schema/headersSchema';
-import { EventsState } from '../../../schema/termMarksSchema';
 import { useHeader, useParams, useTableData } from '../../../hooks';
 import { TeiRefetch } from '../../../schema/refecthTeiSchema';
 import { TableDataLoadingState } from '../../../schema/tableDataLoadingSchema';
 import { getDataStoreKeys, getSelectedKey } from '../../../utils';
 import { useGetEvents } from '../../../hooks/events/useGetEvents';
 import AlertDialog from '../../confirm/confirm';
+import { RowSelectorState } from '../../../schema/rowSelectorSchema';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -60,6 +59,7 @@ function Table() {
     }, [headerFieldsState])
 
     useEffect(() => {
+        setAllChecked(false)
         if (orgUnit)
             void getData(page, pageSize, getDataStoreData?.registration?.programStage, [])
     }, [page, pageSize, orgUnit])
@@ -104,6 +104,7 @@ function Table() {
                                         rowsData={tableData}
                                         allChecked={allChecked}
                                         setAllChecked={setAllChecked}
+                                        events={events}
                                     />
                                     <RenderRows
                                         loader={loading}
