@@ -44,11 +44,11 @@ function Table() {
     const [pageSize, setpageSize] = useState(10)
     const [refetch] = useRecoilState(TeiRefetch)
     const { urlParamiters } = useParams()
-    const { orgUnit } = urlParamiters()
+    const { orgUnit, moduloAdministrativo } = urlParamiters()
     const setLoading = useSetRecoilState(TableDataLoadingState)
     const { getDataStoreData } = getSelectedKey()
     const { program } = getDataStoreKeys()
-    const { getEvents, events } = useGetEvents()
+    const { getEvents, events, loadingMonitoriaEvents } = useGetEvents()
     const [allChecked, setAllChecked] = useState(false)
 
     useEffect(() => {
@@ -62,12 +62,12 @@ function Table() {
     useEffect(() => {
         if (orgUnit)
             void getData(page, pageSize, getDataStoreData?.registration?.programStage, [])
-    }, [headerFieldsState, page, pageSize, orgUnit])
+    }, [page, pageSize, orgUnit])
 
     useEffect(() => {
         if (orgUnit)
             void getEvents(page, pageSize, program, getDataStoreData?.monitoria?.programStage, headerFieldsState.dataElements, headerFieldsState.attributes, orgUnit)
-    }, [headerFieldsState, refetch, orgUnit])
+    }, [refetch, orgUnit, moduloAdministrativo])
 
     const onPageChange = (newPage: number) => {
         setpage(newPage)
@@ -89,7 +89,7 @@ function Table() {
                 <WithBorder type='all' >
                     <HeaderFilters tableData={tableData} />
                     <div className={classes.tableContainer}>
-                        {loading ?
+                        {(loading || loadingMonitoriaEvents) ?
                             <CenteredContent className="p-4">
                                 <CircularLoader />
                             </CenteredContent>

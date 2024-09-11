@@ -16,11 +16,11 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
         return (Object.keys(originalData).length > 0 && moduloAdministrativo != null && moduloAdministrativo != undefined)
             ? [{
                 id: selected?.id,
-                displayName: selected?.optionSet.options.find(x => x.value === moduloAdministrativo)?.label,
-                header: selected?.optionSet.options.find(x => x.value === moduloAdministrativo)?.label,
+                displayName: 'Associado ao Módulo',
+                header: 'Associado ao Módulo',
                 required: false,
                 name: selected?.id,
-                labelName: selected?.optionSet.options.find(x => x.value === moduloAdministrativo)?.label,
+                labelName: 'Associado ao Módulo',
                 valueType: '',
                 options: undefined,
                 initialOptions: undefined,

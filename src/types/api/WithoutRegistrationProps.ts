@@ -15,6 +15,7 @@ interface EventQueryProps {
     orgUnit: string
     filter?: string[]
     filterAttributes?: string[]
+    totalPages?: boolean
 }
 
 interface GetDataElementsProps {
