@@ -161,8 +161,7 @@ export function useTableData() {
             marksInstances: marskEvents?.results?.instances,
             programIndicatorsInstances: programIndicatorsInstances as any,
             setImmutableTeiData,
-            programStage: selectedProgramStage,
-            nextPstageEvents: teiHasEvents(tableStatus, nextPstageEvents.results, allTeis)
+            programStage: selectedProgramStage
         })
 
         for (const row of localData) {

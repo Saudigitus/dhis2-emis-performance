@@ -96,6 +96,9 @@ interface dataStoreRecord {
         "mulheresAdultas": string
         "mulheresJovens": string
     }
+    financiamento: {
+        programStage: string
+    }
 }
 
 

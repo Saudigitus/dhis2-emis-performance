@@ -32,7 +32,6 @@ interface FormatResponseRowsProps {
     }]
     programStage: string | null
     setImmutableTeiData: (immutableTeiData: any) => void
-    nextPstageEvents: any[]
 }
 
 interface FormatResponseRowsMarksProps {

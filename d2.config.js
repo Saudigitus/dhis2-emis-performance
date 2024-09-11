@@ -1,7 +1,7 @@
 const config = {
     type: 'app',
-    name: "Mapeamento das ASCAS",
-    discription: "Mapeamento das ASCAS",
+    name: "Financiamento das ASCAS",
+    discription: "Financiamento das ASCAS",
 
     entryPoints: {
         app: './src/app/App.tsx',

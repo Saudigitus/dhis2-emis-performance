@@ -47,13 +47,8 @@ function WorkingLists() {
 
   return (
     <WithPadding>
-      <div className="d-flex justify-content-between align-items-center">
-        <TabComponent
-          elements={tabsElements}
-          selectedValue={selectedValue}
-          setSelectedValue={setSelectedValue}
-          totals={totals}
-        />
+      <div className="d-flex justify-content-between align-items-center m-4">
+       
       </div>
     </WithPadding>
   )

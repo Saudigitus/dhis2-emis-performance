@@ -122,8 +122,8 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
             }
         })
             .concat(getProgramStageDataElement())
-            .concat(getProgramIndicatorsHeaders())
-            .concat(getNextProgramStagesColumns())
+            // .concat(getProgramIndicatorsHeaders())
+            // .concat(getNextProgramStagesColumns())
             .concat(
                 columns?.map((column) => {
                     return {

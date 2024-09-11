@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import style from './rowActions.module.css'
 import { Button, IconCheckmarkCircle24 } from "@dhis2/ui";
 import { RowActionsProps, RowActionsType } from '../../../../types/table/TableContentProps';
-import { CancelOutlined, Edit, Gavel } from '@material-ui/icons';
+import { AddCircleOutline, Assignment, CancelOutlined, Edit, Gavel, History, Pages } from '@material-ui/icons';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { DataStoreState } from '../../../../schema/dataStoreSchema';
 import { TabsState } from '../../../../schema/tabSchema';
@@ -14,9 +14,11 @@ import { UpdatingEventState } from "../../../../schema/updateEventSchema";
 import { useGetEventUpdateFormData } from "../../../../hooks/form/useGetEventUpdateFormData";
 import Actions from "./Actions";
 import { useGetNextActions } from "../../../../hooks/programStages/useGetNextActions";
+import { useNavigate } from "react-router-dom";
 
 export default function RowActions(props: RowActionsProps) {
   const { row, inactive } = props;
+  const navigate = useNavigate()
   const dataStore = useRecoilValue(DataStoreState)
   const getProgram = useRecoilValue(ProgramConfigState);
   const [openEditionModal, setOpenEditionModal] = useState<boolean>(false);
@@ -40,44 +42,40 @@ export default function RowActions(props: RowActionsProps) {
 
   const menuItems: RowActionsType[] = [
     {
-      icon: <Edit />,
+      icon: <AddCircleOutline />,
       color: '#d64d4d',
-      disabled: eventsIsCompleted ? true : completing ? true : false,
-      label: 'Editar',
+      label: "Registar Financiamento",
+      disabled: false,
       onClick: () => {
         setOpenEditionModal(!openEditionModal)
-        buildFormData(row?.trackedEntity, currentProgramStage!)
-        setActionPStage(currentProgramStage)
+        buildFormData(row?.trackedEntity, dataStore[0].financiamento?.programStage!!)
+        setActionPStage(dataStore[0].financiamento?.programStage!)
       },
     },
     {
-      icon: eventsIsCompleted ? <CancelOutlined /> : <IconCheckmarkCircle24 />,
-      color: eventsIsCompleted ? '#277314' : '#d64d4d',
-      disabled: completing,
-      loading: loadingRow?.event === row?.event,
-      label: eventsIsCompleted ? 'Activar' : 'Completar',
+      icon: <History />,
+      color: '#d64d4d',
+      label: "Histórico de Financiamentos",
+      disabled: false,
       onClick: () => {
-        setLoadingRow({ event: row?.event, loading: true })
-        completeEvents(eventsIsCompleted ? "ACTIVE" : "COMPLETED", [row?.trackedEntity])
+        navigate("/history")
       },
     },
-    ...nextAction?.map((action) => ({
-      icon: <Gavel />,
+    {
+      icon: <Assignment />,
       color: '#d64d4d',
-      label: action?.displayName,
-      disabled: completing,
+      disabled:  false,
+      label: 'Visualizar Último Financiamento',
       onClick: () => {
-        setOpenEditionModal(!openEditionModal)
-        buildFormData(row?.trackedEntity, action?.programStage!)
-        setActionPStage(action.programStage)
+        navigate("/view")
       },
-    })) || [],
+    },
   ];
 
 
   return (
     <div>
-      <Actions inactive={inactive} menuItems={menuItems} completing={completing} />
+      <Actions inactive={inactive} menuItems={menuItems} completing={false} />
       {
         openEditionModal &&
         <ModalComponent title={title} open={openEditionModal} setOpen={setOpenEditionModal}>

@@ -2,7 +2,7 @@ import { attributesProps } from "../../../types/api/WithRegistrationProps"
 import { dataValuesProps } from "../../../types/api/WithoutRegistrationProps"
 import { FormatResponseRowsMarksProps, FormatResponseRowsProps, RowsDataProps } from "../../../types/utils/FormatRowsDataProps"
 
-export function formatResponseRows({ eventsInstances, teiInstances, marksInstances, programIndicatorsInstances, setImmutableTeiData, programStage, nextPstageEvents }: FormatResponseRowsProps): RowsDataProps[] {
+export function formatResponseRows({ eventsInstances, teiInstances, marksInstances, programIndicatorsInstances, setImmutableTeiData, programStage }: FormatResponseRowsProps): RowsDataProps[] {
 
     const allRows: RowsDataProps[] = []
     for (const event of eventsInstances) {
@@ -27,7 +27,6 @@ export function formatResponseRows({ eventsInstances, teiInstances, marksInstanc
             eventStatus: event?.status as unknown as any,
             event: event?.event as unknown as any,
             orgUnit: teiDetails?.enrollments?.[0]?.orgUnit,
-            ...(getNextProgramStages(nextPstageEvents, event.trackedEntity))
         })
     }
     return allRows;
