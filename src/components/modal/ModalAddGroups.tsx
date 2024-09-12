@@ -26,7 +26,6 @@ function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
   const { createGroup, loading } = useCreateGroup()
   const { orgUnitCode, loadingOrgUnitCode, getOrgUnitCode } = useGetOrgUnitCode()
   const [initialValues] = useState({ registrationDate: format(new Date(), "yyyy-MM-dd") })
-  const debouncedValue = useDebounce(values["ouName" as keyof typeof values], 400)
   const setRefetch = useSetRecoilState(TeiRefetch)
   const { urlParamiters } = useParams()
   const { orgUnitName } = urlParamiters()
@@ -52,10 +51,10 @@ function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
       void getOrgUnitCode(parentId)
   }, [parentId])
 
-  useEffect(() => {
-    if (values["ouName" as keyof typeof values])
+  function onBlur(event: any) {
+    if (event?.target?.name == "ouName")
       validateOuname(values["ouName" as keyof typeof values])
-  }, [debouncedValue])
+  }
 
   function onSubmit() {
     const allFields = fieldsWithValue.flat()
@@ -108,6 +107,7 @@ function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
           return <form
             onSubmit={handleSubmit}
             onChange={onChange(values) as unknown as () => void}
+            onBlur={(e) => onBlur(e) as unknown as () => void}
           >
             {
               updatedVariables?.map((field: any, index: number) => (
