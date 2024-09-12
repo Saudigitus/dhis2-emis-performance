@@ -1,4 +1,4 @@
-import { useDataMutation } from "@dhis2/app-runtime"
+import { useDataEngine, useDataMutation } from "@dhis2/app-runtime"
 
 const USERQUERY: any = {
     resource: "users",
@@ -15,7 +15,7 @@ interface createUserProps {
 export const useGenerateUsers = () => {
     const usernameBase = "g"
     const passwordStandart = "POUPAR"
-    const [create, { loading }] = useDataMutation(USERQUERY)
+    const engine = useDataEngine()
 
     function generateUsers(groupAutoGenerate: string) {
         const randomNumberUsername = Math.floor(Math.random() * 100000)
@@ -45,13 +45,12 @@ export const useGenerateUsers = () => {
             "dataViewOrganisationUnits": [{ "id": groupId }],
             "teiSearchOrganisationUnits": [{ "id": groupId }]
         }
-        
-        await create({ data: user })
+
+        return await engine.mutate(USERQUERY, { variables: { data: user } })
     }
 
     return {
         generateUsers,
         createUser,
-        loading
     }
 }

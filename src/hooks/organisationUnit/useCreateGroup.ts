@@ -10,6 +10,7 @@ import { postTrackerBody } from '../../utils/tracker/formatDataForPost';
 import { useFormatDataStore } from '../dataStore/useFormatDataStore';
 import useDeleteOrgUnit from './useDeleteOrgUnit';
 import { TabsState } from '../../schema/tabSchema';
+import useDeleteTracker from '../tei/useDeleteTracker';
 
 
 const POST_OU: any = {
@@ -39,6 +40,7 @@ export default function useCreateGroup() {
     const { createUser, generateUsers } = useGenerateUsers()
     const setRefetch = useSetRecoilState(TeiRefetch)
     const { deleteOrgUnit } = useDeleteOrgUnit()
+    const { deleteTracker } = useDeleteTracker()
     const programStage = useRecoilValue(TabsState).programStage
 
     const { groupsAccess, groupsManagementProgram, groupsTEI } = useFormatDataStore()
@@ -49,31 +51,54 @@ export default function useCreateGroup() {
         try {
             const saveOrgUnitResponse: any = await engine.mutate(POST_OU, { variables: { data } })
             const currentUser = generateUsers(saveOrgUnitResponse?.response?.uid)
+            let createTrackerResponse: any
 
             try {
-                const addOuResponse = await addOuToProgram(groupsAccess, saveOrgUnitResponse?.response?.uid)
-                const createTrackerResponse = await createTracker({ data: postTrackerBody(formData, groupsManagementProgram, groupsTEI, saveOrgUnitResponse?.response?.uid, fieldsWithValue, values, programStage) })
-                const createUserResponse = await createUser({ username: currentUser.username, password: currentUser.password, groupId: saveOrgUnitResponse?.response?.uid })
+                await addOuToProgram(groupsAccess, saveOrgUnitResponse?.response?.uid)
+                createTrackerResponse = await createTracker({ data: postTrackerBody(formData, groupsManagementProgram, groupsTEI, saveOrgUnitResponse?.response?.uid, fieldsWithValue, values, programStage) })
 
-                setRefetch(true)
-            } catch (error: any) {
+            }
+            catch (error: any) {
                 show({
                     message: `Erro ao criar grupo: ${error.message}`,
                     type: { critical: true }
                 });
                 setTimeout(hide, 5000);
                 deleteOrgUnit(saveOrgUnitResponse?.response?.uid)
+                setLoading(false)
             }
+
+            try {
+                await createUser({ username: currentUser.username, password: currentUser.password, groupId: saveOrgUnitResponse?.response?.uid })
+            }
+            catch (error: any) {
+                show({
+                    message: `Erro ao criar grupo: ${error.message}`,
+                    type: { critical: true }
+                });
+                await deleteTracker(createTrackerResponse?.bundleReport?.typeReportMap?.TRACKED_ENTITY?.objectReports[0]?.uid)
+                    .then(async () => {
+                        await deleteOrgUnit(saveOrgUnitResponse?.response?.uid)
+                    })
+
+                setLoading(false)
+            }
+
+
+
         }
+
         catch (error: any) {
             show({
                 message: `Erro ao criar grupo: ${error.message}`,
                 type: { critical: true }
             });
             setTimeout(hide, 5000);
+            setLoading(false)
         }
 
         finally {
+            setRefetch(true)
             setLoading(false)
             closeModal()
         }

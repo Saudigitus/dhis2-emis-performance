@@ -19,7 +19,7 @@ const useValidateOuName = () => {
 
     function validateOuname(code: string) {
         setValidating(true)
-        setvalidationObject({ validationText: 'Validando', warning: true, error: false })
+        setvalidationObject({ validationText: 'A validar...', warning: true, error: false })
 
         engine.query(OU_CODE_QUERY(code), {
             onComplete: (res: any) => {
