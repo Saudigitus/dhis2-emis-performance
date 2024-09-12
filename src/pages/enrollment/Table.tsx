@@ -14,8 +14,9 @@ function TableComponent() {
   const { orgUnitLevel, orgUnit } = urlParamiters()
   const { assessment } = getDataStoreKeys()
   const [open, setOpen] = useState(false);
-  const { formData } = useGetGroupForm();
-  
+  const { buildForm } = useGetGroupForm();
+  const formData = buildForm(assessment.tabGroups?.[0].programStage)
+
   return (
     <>
       <Table />

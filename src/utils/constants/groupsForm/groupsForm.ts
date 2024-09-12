@@ -150,12 +150,12 @@ function formFields(validationObj: ValidationNameType, formData: any): FormSecti
         }
       ]
     },
-    {
-      section: "Mapeamento e Saúde da ASCA",
-      description: "Mapeamento e Saúde da ASCA",
-      fields: mapeamentoFields
+    ...formData.map((field: any) => ({
+      section: field.displayName,
+      description: field.displayName,
+      fields: field.fields
 
-    },
+    })),
   ]
 }
 

@@ -16,6 +16,7 @@ import { formatResponseDataElements, formEvents } from "../../utils/events/forma
 import { removeFalseKeys } from "../../utils/commons/removeFalseKeys";
 import { usePostEvent } from "../../hooks/events/useCreateEvents";
 import { TeiRefetch } from "../../schema/refecthTeiSchema";
+import useGetGroupForm from "../../hooks/form/useGetGroupForm";
 
 function ModalContentProgramStages(props: ModalContentProgramStageProps): React.ReactElement {
   const { setOpen, nexProgramStage, loading: loadingEvents, formInitialValues, row, mapping } = props;
@@ -29,9 +30,12 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
   const [clickedButton, setClickedButton] = useState<string>("");
   const [disabled, setdisabled] = useState(true)
   const setRefetch = useSetRecoilState(TeiRefetch)
+  const { buildForm } = useGetGroupForm();
+  const formData = buildForm(nexProgramStage)
+  
   const varibales = [
     ...formEvents(getProgram.programStages.find((x) => x.id === nexProgramStage)?.executionDateLabel),
-    ...getProgram.programStages.find((x) => x.id === nexProgramStage)?.programStageSections.map((x) => { return { ...x, fields: formatResponseDataElements(x.dataElements) } })!
+    ...formData!
   ]
 
   const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({

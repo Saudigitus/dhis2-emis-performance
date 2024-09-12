@@ -7,6 +7,7 @@ interface programStageDataElements {
         displayInReports: boolean | undefined
         displayName: string
         id: string
+        formName: string
         valueType: string
         optionSet: {
             id: string
@@ -17,6 +18,7 @@ interface programStageDataElements {
 interface ProgramStageConfig {
     autoGenerateEvent: boolean
     displayName: string
+    formName: string
     id: string
     executionDateLabel?: string
     programStageDataElements: programStageDataElements[]
@@ -28,6 +30,7 @@ interface ProgramStageSectionConfig {
     dataElements: [{
         displayInReports: boolean | undefined
         displayName: string
+        formName: string
         id: string
         valueType: string
         optionSet: {

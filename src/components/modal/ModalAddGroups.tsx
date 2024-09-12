@@ -29,7 +29,7 @@ function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
   const { urlParamiters } = useParams()
   const { orgUnitName } = urlParamiters()
   const [fieldsWithValue, setFieldsWitValues] = useState<any[]>([formData])
-  const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({ variables: formFields(ouNameValidationObject, formData), values, type: "programStageSection", formatKeyValueType: formatKeyValueType(formData) })
+  const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({ variables: formFields(ouNameValidationObject, formData), values, type: "programStageSection", formatKeyValueType: {} })
 
 
   useEffect(() => {
