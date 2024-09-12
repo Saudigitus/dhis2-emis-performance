@@ -37,5 +37,15 @@ export default function useGetGroupForm() {
     }
 
 
-    return { buildForm, getAllDataElements }
+    function getAllDataElementsToPost(programStage: string) {
+        if (Object.keys(getDataStoreData)?.length && getProgram) {
+            const mapeamentoProgramStage = getProgram.programStages.find((x) => x.id === programStage)
+
+            const allDataElments = mapeamentoProgramStage?.programStageDataElements.flatMap((x) => x.dataElement)
+            return allDataElments
+
+        }
+    }
+
+    return { buildForm, getAllDataElements, getAllDataElementsToPost }
 }

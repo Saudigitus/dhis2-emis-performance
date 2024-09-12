@@ -4,11 +4,12 @@ import useShowAlerts from '../commons/useShowAlert';
 import useCreateTracker from '../tei/useCreateTracker';
 import useAddOrgUnitToProgram from './useAddOrgUnitToProgram';
 import { useGenerateUsers } from '../users/useGenerateUsers';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { TeiRefetch } from '../../schema/refecthTeiSchema';
 import { postTrackerBody } from '../../utils/tracker/formatDataForPost';
 import { useFormatDataStore } from '../dataStore/useFormatDataStore';
 import useDeleteOrgUnit from './useDeleteOrgUnit';
+import { TabsState } from '../../schema/tabSchema';
 
 
 const POST_OU: any = {
@@ -26,6 +27,7 @@ interface createGroupTypes {
     closeModal: () => void,
     // refetch: any,
     fieldsWithValue: any[]
+    values: any
 }
 
 export default function useCreateGroup() {
@@ -37,10 +39,11 @@ export default function useCreateGroup() {
     const { createUser, generateUsers } = useGenerateUsers()
     const setRefetch = useSetRecoilState(TeiRefetch)
     const { deleteOrgUnit } = useDeleteOrgUnit()
+    const programStage = useRecoilValue(TabsState).programStage
 
-    const { groupsAccess, groupsManagementProgram, groupsTEI, dataSet } = useFormatDataStore()
+    const { groupsAccess, groupsManagementProgram, groupsTEI } = useFormatDataStore()
 
-    const createGroup = async ({ data, formData, closeModal, fieldsWithValue }: createGroupTypes) => {
+    const createGroup = async ({ data, formData, closeModal, fieldsWithValue, values }: createGroupTypes) => {
         setLoading(true)
 
         try {
@@ -49,7 +52,7 @@ export default function useCreateGroup() {
 
             try {
                 const addOuResponse = await addOuToProgram(groupsAccess, saveOrgUnitResponse?.response?.uid)
-                const createTrackerResponse = await createTracker({ data: postTrackerBody(formData, groupsManagementProgram, [], saveOrgUnitResponse?.response?.uid, fieldsWithValue) })
+                const createTrackerResponse = await createTracker({ data: postTrackerBody(formData, groupsManagementProgram, groupsTEI, saveOrgUnitResponse?.response?.uid, fieldsWithValue, values, programStage) })
                 const createUserResponse = await createUser({ username: currentUser.username, password: currentUser.password, groupId: saveOrgUnitResponse?.response?.uid })
 
                 setRefetch(true)

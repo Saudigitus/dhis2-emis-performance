@@ -3,7 +3,7 @@ import { ModalActions, Button, ButtonStrip, CircularLoader, CenteredContent } fr
 import { Form } from "react-final-form";
 import format from "date-fns/format";
 import GroupForm from "../form/GroupForm.js";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import useValidateOuName from "../../hooks/organisationUnit/useValidateOrgUnitName";
 import useCreateGroup from "../../hooks/organisationUnit/useCreateGroup";
 import useDebounce from "../../utils/commons/useDebounce";
@@ -15,6 +15,8 @@ import { useGetOrgUnitCode } from "../../hooks/organisationUnit/useGetOrgUnitCod
 import { useParams } from "../../hooks/commons/useQueryParams";
 import { CustomDhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine.js";
 import { formatKeyValueType } from "../../utils/programRules/formatKeyValueType.js";
+import useGetGroupForm from "../../hooks/form/useGetGroupForm.js";
+import { TabsState } from "../../schema/tabSchema.js";
 
 function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
   const formRef = useRef<any>(null);
@@ -28,8 +30,13 @@ function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
   const setRefetch = useSetRecoilState(TeiRefetch)
   const { urlParamiters } = useParams()
   const { orgUnitName } = urlParamiters()
-  const [fieldsWithValue, setFieldsWitValues] = useState<any[]>([formData])
-  const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({ variables: formFields(ouNameValidationObject, formData), values, type: "programStageSection", formatKeyValueType: {} })
+  const tab = useRecoilValue(TabsState)
+  const [fieldsWithValue, setFieldsWitValues] = useState<any[]>([...formFields(ouNameValidationObject, formData)])
+  const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
+    variables: formFields(ouNameValidationObject, formData),
+    values, type: "programStageSection", formatKeyValueType: {}
+  })
+  const { getAllDataElementsToPost } = useGetGroupForm()
 
 
   useEffect(() => {
@@ -53,7 +60,7 @@ function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
   function onSubmit() {
     const allFields = fieldsWithValue.flat()
     if (allFields.filter((element: any) => (element?.assignedValue === undefined && element.required))?.length === 0) {
-      createGroup({ data: postBody(values, parentId).data, formData: { ...values, parentId: parentId }, closeModal, fieldsWithValue });
+      createGroup({ data: postBody(values, parentId).data, formData: { ...values, parentId: parentId }, closeModal, fieldsWithValue: getAllDataElementsToPost(tab.programStage)!, values });
     }
   }
 
@@ -81,7 +88,7 @@ function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
 
   const modalActions = [
     { id: "cancel", type: "button", label: "Cancelar", disabled: loading, onClick: () => { setOpen(false) } },
-    { id: "saveandcontinue", type: "submit", label: "Salvar", primary: true, disabled: loading || validating || ouNameValidationObject?.error  || loadingOrgUnitCode, loading: loading }
+    { id: "saveandcontinue", type: "submit", label: "Salvar", primary: true, disabled: loading || validating || ouNameValidationObject?.error || loadingOrgUnitCode, loading: loading }
   ];
 
   if (loadingOrgUnitCode) {

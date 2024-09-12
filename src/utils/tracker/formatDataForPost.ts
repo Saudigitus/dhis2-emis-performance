@@ -1,25 +1,21 @@
 import { programDataStoreType } from "../../schema/dataStoreSchema";
+import { ProgramConfig } from "../../types/programConfig/ProgramConfig";
+import { programStageDataElements } from "../../types/programStageConfig/ProgramStageConfig";
 import { reducer } from "../commons/formatDistinctValue";
 
-const postTrackerBody = (formData: Record<string, any>, program: programDataStoreType, trackedEntityType: string | undefined, orgUnit: string, fieldsWithValue: any[]) => {
-    const events : any = []
+const postTrackerBody = (formData: Record<string, any>, program: programDataStoreType, trackedEntityType: string | undefined, orgUnit: string, fieldsWithValue: programStageDataElements['dataElement'][], values: any, programStage: string) => {
+    const events: any = []
+    const dataValues: any = []
 
     for (const field of fieldsWithValue) {
-        for (const [key, value] of Object.entries(reducer(field))) {
-            events.push({
-                occurredAt: formData["registrationDate"],
-                notes: [],
-                status: "ACTIVE",
-                program: program?.program,
-                programStage: key,
-                orgUnit,
-                scheduledAt: formData["registrationDate"],
-                dataValues: value
+        if (values[field.id]) {
+            dataValues.push({
+                dataElement: field.id,
+                value: values[field.id]
             })
         }
     }
-    
-    
+
     return {
         trackedEntities: [{
             enrollments: [
@@ -34,7 +30,16 @@ const postTrackerBody = (formData: Record<string, any>, program: programDataStor
                         return null;
                     }).filter((attribute: any) => attribute != null),
                     status: "ACTIVE",
-                    events: events
+                    events: [{
+                        occurredAt: formData["registrationDate"],
+                        notes: [],
+                        status: "ACTIVE",
+                        program: program?.program,
+                        programStage: programStage,
+                        orgUnit,
+                        scheduledAt: formData["registrationDate"],
+                        dataValues: dataValues
+                    }]
                 }
             ],
             orgUnit: orgUnit,
