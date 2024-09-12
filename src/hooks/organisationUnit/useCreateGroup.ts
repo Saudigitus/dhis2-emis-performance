@@ -6,9 +6,9 @@ import useAddOrgUnitToProgram from './useAddOrgUnitToProgram';
 import { useGenerateUsers } from '../users/useGenerateUsers';
 import { useSetRecoilState } from 'recoil';
 import { TeiRefetch } from '../../schema/refecthTeiSchema';
-import useAddOrgUnitToDataSet from '../dataSets/useAddOrgUnitToDataSet';
 import { postTrackerBody } from '../../utils/tracker/formatDataForPost';
 import { useFormatDataStore } from '../dataStore/useFormatDataStore';
+import useDeleteOrgUnit from './useDeleteOrgUnit';
 
 
 const POST_OU: any = {
@@ -35,47 +35,46 @@ export default function useCreateGroup() {
     const { addOuToProgram } = useAddOrgUnitToProgram()
     const [loading, setLoading] = useState<boolean>(false)
     const { createUser, generateUsers } = useGenerateUsers()
-    const { addOuToDataSet } = useAddOrgUnitToDataSet()
     const setRefetch = useSetRecoilState(TeiRefetch)
+    const { deleteOrgUnit } = useDeleteOrgUnit()
 
     const { groupsAccess, groupsManagementProgram, groupsTEI, dataSet } = useFormatDataStore()
 
     const createGroup = async ({ data, formData, closeModal, fieldsWithValue }: createGroupTypes) => {
         setLoading(true)
 
-        await engine.mutate(POST_OU, { variables: { data } })
-            .then(async (saveOuresponse: any) => {
+        try {
+            const saveOrgUnitResponse: any = await engine.mutate(POST_OU, { variables: { data } })
+            const currentUser = generateUsers(saveOrgUnitResponse?.response?.uid)
 
-                await addOuToProgram(groupsAccess, saveOuresponse?.response?.uid)
-                    .then(async () => {
+            try {
+                const addOuResponse = await addOuToProgram(groupsAccess, saveOrgUnitResponse?.response?.uid)
+                const createTrackerResponse = await createTracker({ data: postTrackerBody(formData, groupsManagementProgram, [], saveOrgUnitResponse?.response?.uid, fieldsWithValue) })
+                const createUserResponse = await createUser({ username: currentUser.username, password: currentUser.password, groupId: saveOrgUnitResponse?.response?.uid })
 
-                        await addOuToDataSet([dataSet], saveOuresponse?.response?.uid).
-                            then(async () => {
-                                await createTracker({ data: postTrackerBody(formData, groupsManagementProgram, groupsTEI, saveOuresponse?.response?.uid, fieldsWithValue) })
-                                    .then(async () => {
-
-                                        const currentUser = generateUsers(saveOuresponse?.response?.uid)
-                                        await createUser({ username: currentUser.username, password: currentUser.password, groupId: saveOuresponse?.response?.uid })
-
-                                            .then(() => {
-                                                setLoading(false)
-                                                closeModal()
-                                                setRefetch(true)
-                                            })
-                                    });
-                            })
-                    })
-            })
-
-
-            .catch((error: any) => {
+                setRefetch(true)
+            } catch (error: any) {
                 show({
                     message: `Erro ao criar grupo: ${error.message}`,
                     type: { critical: true }
                 });
                 setTimeout(hide, 5000);
-                setLoading(false)
-            })
+                deleteOrgUnit(saveOrgUnitResponse?.response?.uid)
+            }
+        }
+        catch (error: any) {
+            show({
+                message: `Erro ao criar grupo: ${error.message}`,
+                type: { critical: true }
+            });
+            setTimeout(hide, 5000);
+        }
+
+        finally {
+            setLoading(false)
+            closeModal()
+        }
+
     }
 
     return { loading, createGroup }

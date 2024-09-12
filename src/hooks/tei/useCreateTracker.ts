@@ -18,7 +18,7 @@ export default function useCreateTracker () {
     const [ create, { loading, data }] = useDataMutation (POST_EVENT, {
         onError: (error: any) => {
             show({
-                message: `Couldn't save the Event: ${error.message}`,
+                message: `Erro ao registar grupo: ${error.message}`,
                 type: { critical: true }
             });
             setTimeout(hide, 5000);

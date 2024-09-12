@@ -81,10 +81,10 @@ function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
 
   const modalActions = [
     { id: "cancel", type: "button", label: "Cancelar", disabled: loading, onClick: () => { setOpen(false) } },
-    { id: "saveandcontinue", type: "submit", label: "Salvar", primary: true, disabled: loading || validating || ouNameValidationObject?.error, loading: loadingOrgUnitCode || loading }
+    { id: "saveandcontinue", type: "submit", label: "Salvar", primary: true, disabled: loading || validating || ouNameValidationObject?.error  || loadingOrgUnitCode, loading: loading }
   ];
 
-  if (loadingOrgUnitCode || loading) {
+  if (loadingOrgUnitCode) {
     return (
       <CenteredContent >
         <CircularLoader />
@@ -103,7 +103,7 @@ function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
             onChange={onChange(values) as unknown as () => void}
           >
             {
-              updatedVariables?.map((field, index) => (
+              updatedVariables?.map((field: any, index: number) => (
                 <div className="my-3">
                   <GroupForm
                     name={field.section}
