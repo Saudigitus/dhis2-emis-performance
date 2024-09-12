@@ -6,16 +6,20 @@ export default function InfoPage() {
     return (
         <div className={styles.containerInit}>
             <Paper elevation={1} className={styles.paperInit}>
-                <h2>SEMIS-Performance</h2>
-                <span>Follow the instructions to proceed:</span>
+                <h2>Fortalecimento das ASCAS</h2>
+                <span>Módulos Obrigatórios:</span>
                 <ul>
-                    <li className={styles.paperOtherText}>Select the  Organization unit you want to view data</li>
-                    <li className={styles.paperOtherText}>Use global filters(Class, Grade and Academic Year)</li>
+                    <li className={styles.paperOtherText}>Módulo de Educação Financeira</li>
+                    <li className={styles.paperOtherText}>Módulo de Produtos e Serviços Financeiros para ASCAs</li>
+                    <li className={styles.paperOtherText}>Módulo de Governação Eficaz, Liderança e Gestão das ASCAs</li>
+                    <li className={styles.paperOtherText}>Módulo de Gestão de Registos, Escrituração e Contabilidade para ASCAs</li>
                 </ul>
-                <span>How to perform operations:</span>
+                <span>Módulos Opcionais:</span>
                 <ul>
-                    <li className={styles.paperOtherText}><strong>Fill Performance:</strong> select the term you want and fill the inputs shown.</li>
-                    <li className={styles.paperOtherText}><strong>Bulk Performance:</strong> you can export/import students using the <strong>Bulk Performance button</strong></li>
+                    <li className={styles.paperOtherText}>Módulo de GALs</li>
+                    <li className={styles.paperOtherText}>Módulo de Nutrição</li>
+                    <li className={styles.paperOtherText}>Módulo de Mudanças Climáticas</li>
+                    <li className={styles.paperOtherText}>Módulo de Género, Juventude e inclusão Social</li>
                 </ul>
             </Paper>
         </div>
