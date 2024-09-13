@@ -83,8 +83,10 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
                                 try {
                                     if (eval(firstCondition ?? "")) {
                                         if (value !== undefined) {
+                                            values[variable.name] = value
                                             variable.value = value
                                         } else {
+                                            values[variable.name] = ""
                                             variable.value = ""
                                         }
                                     }
