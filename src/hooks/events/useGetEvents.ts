@@ -24,13 +24,13 @@ export function useGetEvents() {
     const [loading, setLoading] = useState<boolean>(false)
     const [data, setData] = useState<any>([])
 
-    const getEvents = async (page: number, pageSize: number, program: string, programStage: string, filter: any[], filterAttributes: any[], orgUnit: any, trackedEntity?: string, status?: string): Promise<EventQueryResults> => {
+    const getEvents = async (page: number, pageSize: number, program: string, programStage: string, filter: any[], filterAttributes: any[], orgUnit: any, trackedEntity?: string, status?: string, paging = true): Promise<EventQueryResults> => {
         setLoading(true)
         return await engine.query(EVENT_QUERY({
             totalPages: true,
             ouMode: "DESCENDANTS",
-            page,
-            pageSize,
+            ...(paging ? { page: page } : {}),
+            ...(paging ? { pageSize: pageSize } : {}),
             program: program,
             order: "createdAt:desc",
             programStage: programStage,

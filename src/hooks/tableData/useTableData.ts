@@ -117,6 +117,8 @@ export function useTableData() {
                 }
 
                 const totalFinancimanetos = await getEvents(1, 1, program, getDataStoreData.financiamento.programStage, [], [], tei.orgUnit, tei.trackedEntity)
+                const totalRecebido = await getEvents(1, 1, program, getDataStoreData.financiamento.programStage, [], [], tei.orgUnit, tei.trackedEntity, '', false)
+
                 teiResults.results.instances[counter].attributes = [...teiResults.results?.instances[counter].attributes, { attribute: 'totalFinancimanetos', value: totalFinancimanetos?.total > 0 ? totalFinancimanetos?.total : '0' }]
 
                 counter++
