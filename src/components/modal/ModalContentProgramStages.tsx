@@ -54,9 +54,9 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
 
   useEffect(() => { setClicked(false) }, [])
 
-  const modalActions = [
+  const modalActions = (pristine: any) => [
     { id: "cancel", type: "button", label: "Cancelar", disabled: loading, onClick: () => { setClickedButton("cancel"); setOpen(false); } },
-    { id: "saveandcontinue", type: "submit", label: "Salvar", primary: true, disabled: loading, onClick: () => { setClickedButton("saveandcontinue"); setClicked(true) } }
+    { id: "saveandcontinue", type: "submit", label: "Salvar", primary: true, disabled: (loading || pristine), onClick: () => { setClickedButton("saveandcontinue"); setClicked(true) } }
   ];
 
   const modalActionsEdit = [
@@ -134,7 +134,7 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
       }
       <WithPadding />
       <Form initialValues={{ orgUnit, ...formInitialValues }} onSubmit={onSubmit}>
-        {({ handleSubmit, values, form }) => {
+        {({ handleSubmit, values, form, pristine }) => {
           formRef.current = form;
           return <form
             onSubmit={handleSubmit}
@@ -158,7 +158,7 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
               <ButtonStrip end className={classNames(styles.modalButtonsStrip)}>
                 {
                   !(formInitialValues.event && disabled) &&
-                  modalActions.map((action, i) => {
+                  modalActions(pristine).map((action, i) => {
                     return (
                       <>
                         {

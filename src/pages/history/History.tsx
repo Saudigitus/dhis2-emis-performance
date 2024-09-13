@@ -14,6 +14,7 @@ import { WithPadding } from '../../components';
 import { Paper } from '@material-ui/core';
 import { useParams } from '../../hooks';
 import { format } from 'date-fns';
+import { TeiRefetch } from '../../schema/refecthTeiSchema';
 
 export default function History() {
   const [page, setpage] = useState(1)
@@ -25,11 +26,12 @@ export default function History() {
   const classes = usetStyles()
   const { getEvents, loading, data } = useGetEvents()
   const { urlParamiters } = useParams()
-  const { tei, teiOU, nome } = urlParamiters()
+  const { tei, teiOU, orgUnitName } = urlParamiters()
+  const refetch = useRecoilValue(TeiRefetch)
 
   useEffect(() => {
     void getEvents(page, pageSize, getDataStoreData?.program, getDataStoreData?.financiamento?.programStage, [], [], teiOU, tei as unknown as string)
-  }, [page, pageSize])
+  }, [page, pageSize, refetch])
 
   useEffect(() => {
     let formatedDataValues = []
@@ -54,7 +56,7 @@ export default function History() {
   return (
     <Paper>
       <WithPadding>
-        <h4 className={classes.h4}>Histórico de financiamento de {nome}</h4>
+        <h4 className={classes.h4}>Histórico de financiamento de {orgUnitName}</h4>
       </WithPadding>
 
       <WithPadding>
