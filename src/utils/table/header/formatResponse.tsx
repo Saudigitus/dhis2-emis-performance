@@ -5,10 +5,10 @@ import { VariablesTypes, type CustomAttributeProps } from "../../../types/variab
 import { useMemo } from "react";
 
 
-export function formatResponse(data: ProgramConfig, programStageId: string, tableColumns: CustomAttributeProps[] = [], programIndicators: any[], nextProgramStages: nextProgramStageType[]): CustomAttributeProps[] {
-    let columns = [{ label: 'Total de Financiamentos', id: 'totalFinancimanetos' }, { label: 'Actions', id: 'actions' }]
+export function formatResponse(data: ProgramConfig, programStageId: string, tableColumns: CustomAttributeProps[] = [], programIndicators: any[], nextProgramStages: nextProgramStageType[], programStage?: any): CustomAttributeProps[] {
+    let columns = [{ label: 'Total de Financiamentos', id: 'totalFinancimanetos' }, { label: 'Acções', id: 'actions' }]
 
-    const originalData = ((data?.programStages?.find(programStge => programStge.id === programStageId)) ?? {} as unknown as ProgramConfig["programStages"][0])
+    const originalData = ((data?.programStages?.find(programStge => programStge.id === programStageId)) ?? programStage ?? {}) as unknown as ProgramConfig["programStages"][0]
     const programIndicatorsData = data?.programIndicators?.filter((x) => programIndicators?.map((x) => x.id).join(",").includes(x.id))
 
     function getProgramStageDataElement(): [] {
@@ -17,11 +17,11 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
                 return {
                     id: programStageDataElement.dataElement.id + "_" + programStageId,
                     rawId: programStageDataElement.dataElement.id,
-                    displayName: programStageDataElement.dataElement.displayName,
-                    header: programStageDataElement.dataElement.displayName,
+                    displayName: programStageDataElement.dataElement.formName,
+                    header: programStageDataElement.dataElement.formName,
                     required: programStageDataElement.compulsory,
-                    name: programStageDataElement.dataElement.displayName,
-                    labelName: programStageDataElement.dataElement.displayName,
+                    name: programStageDataElement.dataElement.formName,
+                    labelName: programStageDataElement.dataElement.formName,
                     valueType: programStageDataElement.dataElement.optionSet?.options?.length > 0 ? Attribute.valueType.LIST as unknown as CustomAttributeProps["valueType"] : programStageDataElement.dataElement.valueType as unknown as CustomAttributeProps["valueType"],
                     options: { optionSet: programStageDataElement.dataElement.optionSet },
                     initialOptions: { optionSet: programStageDataElement.dataElement.optionSet },

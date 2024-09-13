@@ -7,7 +7,7 @@ import GroupForm from "../form/GroupForm";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { ProgramConfigState } from "../../schema/programSchema";
 import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
-import { ModalContentProgramStageProps, ModalContentProps } from "../../types/modal/ModalProps";
+import { ModalContentProgramStageProps } from "../../types/modal/ModalProps";
 import { useParams } from "../../hooks";
 import { CustomDhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine";
 import styles from "./modal.module.css";
@@ -18,16 +18,16 @@ import { usePostEvent } from "../../hooks/events/useCreateEvents";
 import { TeiRefetch } from "../../schema/refecthTeiSchema";
 
 function ModalContentProgramStages(props: ModalContentProgramStageProps): React.ReactElement {
-  const { setOpen, nexProgramStage, loading: loadingEvents, formInitialValues, row, mapping } = props;
+  const { setOpen, nexProgramStage, loading: loadingEvents, formInitialValues, row } = props;
   const getProgram = useRecoilValue(ProgramConfigState);
-  const { useQuery } = useParams();
+  const { urlParamiters } = useParams();
+  const { orgUnit, tei, teiOU, enrollment } = urlParamiters()
   const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
-  const orgUnit = useQuery().get("orgUnit");
   const [, setClicked] = useRecoilState<boolean>(onSubmitClicked);
   const [values, setValues] = useState<Record<string, string>>({})
   const { updateEvent, loadUpdateEvent: loading, data } = usePostEvent()
   const [clickedButton, setClickedButton] = useState<string>("");
-  const [disabled, setdisabled] = useState(true)
+  const [disabled, setdisabled] = useState(formInitialValues?.disabled ?? true)
   const setRefetch = useSetRecoilState(TeiRefetch)
 
   const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
@@ -66,20 +66,20 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
 
   function onSubmit() {
     if (clickedButton === "saveandcontinue") {
-      const exclude = ["nomeAsca", "event", "orgUnit", "eventDate"]
+      const exclude = ["nomeAsca", "event", "orgUnit", "eventDate", "occurredAt"]
       const transformedArray = Object.entries(values).map(([key, value]) => ({
         dataElement: key,
         value: value
       }));
 
       const formToPost = {
-        orgUnit: row.orgUnit,
+        orgUnit: row.orgUnit ?? teiOU,
         status: "ACTIVE",
         programStage: nexProgramStage,
         program: getProgram.id,
         notes: [],
-        enrollment: row.enrollment,
-        trackedEntity: row.trackedEntity,
+        enrollment: row.enrollment ?? enrollment,
+        trackedEntity: row.trackedEntity ?? tei,
         event: transformedArray.filter((x) => x.dataElement === "event")?.[0].value,
         occurredAt: transformedArray.filter((x) => x.dataElement === "eventDate")?.[0].value,
         scheduledAt: transformedArray.filter((x) => x.dataElement === "eventDate")?.[0].value,

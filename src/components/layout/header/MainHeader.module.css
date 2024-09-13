@@ -12,6 +12,10 @@
     justify-content: space-between;
 }
 
+.btn {
+    margin: 10px !important;
+}
+
 .MainHeaderContainer div:has(.j2e9b216) {
     margin-left: auto !important;
 }

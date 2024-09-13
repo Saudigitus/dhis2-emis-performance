@@ -1,29 +1,23 @@
 import { useState, useEffect } from "react";
-import style from './rowActions.module.css'
-import { Button, IconCheckmarkCircle24 } from "@dhis2/ui";
 import { RowActionsProps, RowActionsType } from '../../../../types/table/TableContentProps';
-import { AddCircleOutline, Assignment, CancelOutlined, Edit, Gavel, History, Pages } from '@material-ui/icons';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { AddCircleOutline, Assignment, History } from '@material-ui/icons';
+import { useRecoilValue } from 'recoil';
 import { DataStoreState } from '../../../../schema/dataStoreSchema';
-import { TabsState } from '../../../../schema/tabSchema';
 import { ModalComponent, ModalContentProgramStages } from '../../../modal';
 import { ProgramConfigState } from "../../../../schema/programSchema";
-import { useCompleteEvents } from '../../../../hooks/events/useCompleteEvents';
-import { checkCompleted } from "../../../../utils/table/rows/checkCanceled";
-import { UpdatingEventState } from "../../../../schema/updateEventSchema";
 import { useGetEventUpdateFormData } from "../../../../hooks/form/useGetEventUpdateFormData";
 import Actions from "./Actions";
-import { useGetNextActions } from "../../../../hooks/programStages/useGetNextActions";
 import { useNavigate } from "react-router-dom";
-import ModalHistory from "../../../modal/ModalHistory";
+import { useParams } from "../../../../hooks";
 
 export default function RowActions(props: RowActionsProps) {
-  const { row, inactive } = props;
+  const { row, inactive, editOption } = props;
+  const { urlParamiters } = useParams()
+  const { orgUnitName } = urlParamiters()
   const navigate = useNavigate()
   const dataStore = useRecoilValue(DataStoreState)
   const getProgram = useRecoilValue(ProgramConfigState);
   const [openEditionModal, setOpenEditionModal] = useState<boolean>(false);
-  const [openHistoryModal, setOpenHistoryModal] = useState<boolean>(false);
   const [actionPStage, setActionPStage] = useState<string>();
   const title = getProgram?.programStages?.filter((x: any) => x.id === actionPStage)?.[0]?.displayName || ""
   const { buildFormData, error, loading, initialValues, setInitialValues } = useGetEventUpdateFormData()
@@ -55,13 +49,13 @@ export default function RowActions(props: RowActionsProps) {
       label: "Histórico de Financiamentos",
       disabled: false,
       onClick: () => {
-        setOpenHistoryModal(true)
+        navigate(`/history?orgUnitName=${row?.[dataStore[0].mappingVariables.nomeAsca]}&tei=${row.trackedEntity}&teiOU=${row.orgUnit}&enrollment=${row.enrollment}`)
       },
     },
     {
       icon: <Assignment />,
       color: '#d64d4d',
-      disabled: !row?.event,
+      disabled: false,
       label: 'Visualizar Último Financiamento',
       onClick: () => {
         setOpenEditionModal(!openEditionModal)
@@ -71,9 +65,15 @@ export default function RowActions(props: RowActionsProps) {
     },
   ];
 
+  const openEdit = () => {
+    setOpenEditionModal(!openEditionModal)
+    setActionPStage(dataStore[0].financiamento?.programStage!)
+    setInitialValues({ ...row, disabled: false })
+  }
+
   return (
     <div>
-      <Actions inactive={inactive} menuItems={menuItems} completing={false} />
+      <Actions openEdit={openEdit} editOption={editOption} inactive={inactive} menuItems={menuItems} completing={false} />
       {
         openEditionModal &&
         <ModalComponent title={title} open={openEditionModal} setOpen={setOpenEditionModal}>
@@ -84,20 +84,10 @@ export default function RowActions(props: RowActionsProps) {
             loading={loading}
             formInitialValues={{
               ...initialValues,
-              "nomeAsca": row[dataStore[0].mappingVariables.nomeAsca]
+              "nomeAsca": row[dataStore[0].mappingVariables.nomeAsca] ?? orgUnitName
             }}
             row={row}
             mapping={dataStore[0].mappingVariables}
-          />
-        </ModalComponent>
-      }
-
-      {
-        openHistoryModal &&
-        <ModalComponent title={title} open={openHistoryModal} setOpen={setOpenHistoryModal}>
-          <ModalHistory
-            setOpen={setOpenHistoryModal}
-            row={row}
           />
         </ModalComponent>
       }

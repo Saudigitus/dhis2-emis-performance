@@ -27,7 +27,11 @@ const useParams = () => {
             employmentType: useQuery().get('employmentType'),
             programStage: useQuery().get('programStage'),
             tab: useQuery().get('tab'),
-            orgUnitLevel: useQuery().get('orgUnitLevel')
+            orgUnitLevel: useQuery().get('orgUnitLevel'),
+            teiOU: useQuery().get('teiOU'),
+            nome: useQuery().get('nome'),
+            tei: useQuery().get('tei'),
+            enrollment: useQuery().get('enrollment')
         }
     }
     return { add, remove, useQuery, urlParamiters }

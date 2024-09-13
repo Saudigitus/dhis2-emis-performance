@@ -4,11 +4,9 @@ import classNames from 'classnames';
 import { makeStyles, type Theme, createStyles } from '@material-ui/core/styles';
 import { RowCell, RowTable } from '../components';
 import { useRecoilState } from 'recoil';
-import { EventsState, SubTabState } from '../../../schema/termMarksSchema';
+import { SubTabState } from '../../../schema/termMarksSchema';
 import { type FieldFeedbackProps } from '../../../types/table/MarksFieldsFeedback';
-import ShowFieldsBasedValueType from '../components/row/showFieldsBasedValueType';
 import { type RenderHeaderProps } from '../../../types/table/TableContentProps';
-import { usePostDataElement } from '../../../hooks';
 import { checkCompleted } from "../../../utils/table/rows/checkCanceled";
 import RowActions from '../components/rowsActions/RowActions';
 
@@ -39,12 +37,9 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function RenderRows(props: RenderHeaderProps): React.ReactElement {
-    const { rowsData, headerData, loader } = props
+    const { rowsData, headerData, editOption } = props
     const classes = useStyles()
-    const [allEvents] = useRecoilState(EventsState);
     const [selectedTerm] = useRecoilState(SubTabState);
-    const { saveMarks } = usePostDataElement()
-    const [prevValues, setPrevValues] = useState<Object>({})
     const [showFeedBack, setShowFeedBack] = useState<FieldFeedbackProps>({
         dataElement: '',
         feedbackType: ''
@@ -72,23 +67,22 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
         );
     }
 
-    console.log(rowsData,headerData)
     return (
         <React.Fragment>
             {
                 rowsData?.map((row, index) => {
-                    const cells = headerData?.filter(x => x?.visible)?.map(column => (
-                        <RowCell
+                    const cells = headerData?.filter(x => x?.visible)?.map(column => {
+                        return <RowCell
                             key={column.id}
                             className={classNames(classes.cell, classes.bodyCell)}
                         >
-                            <div>
+                            {/* <div>
                                 <ShowFieldsBasedValueType
                                     loader={loader}
                                     column={column}
                                     currentEvent={allEvents[index]}
                                     saveMarks={saveMarks}
-                                    value={row[column.id]}
+                                    value={row[column.id] ?? row[column.rawId as unknown as string]}
                                     trackedEntity={row.trackedEntity}
                                     setShowFeedBack={setShowFeedBack}
                                     showFeedBack={showFeedBack}
@@ -97,10 +91,11 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                     setPrevValues={setPrevValues}
                                     inactive={checkCompleted(row.eventStatus)}
                                 />
-                            </div>
-                            {(column.displayName == "Actions") && <RowActions row={row} inactive={checkCompleted(row.eventStatus)} />}
+                            </div> */}
+                            {row[column.id] ?? row[column.rawId as unknown as string]}
+                            {(column.id == "actions") && <RowActions editOption={editOption} row={row} inactive={checkCompleted(row.eventStatus)} />}
                         </RowCell>
-                    ));
+                    });
                     return (
                         <RowTable
                             key={index}

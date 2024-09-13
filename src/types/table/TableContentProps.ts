@@ -38,6 +38,7 @@ interface RenderHeaderProps {
     createSortHandler?: (property: string) => any
     rowsData?: any[]
     headerData?: CustomAttributeProps[]
+    editOption?: boolean
 }
 
 interface TableSortProps {
@@ -77,6 +78,7 @@ interface RowActionsProps {
     onSelectTei?: (arg: any) => void
     onShowHistory?: () => void
     inactive: boolean
+    editOption?: boolean
 }
 
 export type { TableComponentProps, HeaderCellProps, RowProps, RenderHeaderProps, TableSortProps, TableDataProps, ShowFieldsBasedValueTypeProps, RowActionsProps, RowActionsType }

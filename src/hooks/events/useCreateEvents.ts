@@ -20,7 +20,7 @@ export function usePostEvent() {
     const [create, { loading, data, error }] = useDataMutation(POST_EVENT, {
         onComplete: () => {
             show({ message: "Operação realizada com sucesso", type: { success: true } })
-            // setRefetch(!refetch)
+            setRefetch(!refetch)
         },
         onError: (error) => {
             show({
