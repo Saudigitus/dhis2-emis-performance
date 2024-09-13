@@ -98,6 +98,7 @@ interface dataStoreRecord {
     }
     financiamento: {
         programStage: string
+        valorRecebido: string
     }
 }
 

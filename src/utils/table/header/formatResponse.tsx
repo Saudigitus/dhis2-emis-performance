@@ -6,7 +6,11 @@ import { useMemo } from "react";
 
 
 export function formatResponse(data: ProgramConfig, programStageId: string, tableColumns: CustomAttributeProps[] = [], programIndicators: any[], nextProgramStages: nextProgramStageType[], programStage?: any): CustomAttributeProps[] {
-    let columns = [{ label: 'Total de Financiamentos', id: 'totalFinancimanetos' }, { label: 'Acções', id: 'actions' }]
+    let columns = [
+        { label: 'Total de Financiamentos', id: 'totalFinancimanetos' },
+        { label: 'Valor Total Recebido', id: 'totalRecebido' },
+        { label: 'Acções', id: 'actions' }
+    ]
 
     const originalData = ((data?.programStages?.find(programStge => programStge.id === programStageId)) ?? programStage ?? {}) as unknown as ProgramConfig["programStages"][0]
     const programIndicatorsData = data?.programIndicators?.filter((x) => programIndicators?.map((x) => x.id).join(",").includes(x.id))
