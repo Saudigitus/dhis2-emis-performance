@@ -1,15 +1,17 @@
 import { Attribute } from "../../types/generated/models";
-import { ProgramStageSectionConfig } from "../../types/programStageConfig/ProgramStageConfig";
+import { programStageDataElements, ProgramStageSectionConfig } from "../../types/programStageConfig/ProgramStageConfig";
 import { CustomAttributeProps, VariablesTypes } from "../../types/variables/AttributeColumns";
 
-export function formatResponseDataElements(programStageObject: ProgramStageSectionConfig["dataElements"]): CustomAttributeProps[] {
+export function formatResponseDataElements(programStageObject: ProgramStageSectionConfig["dataElements"], dataElements: programStageDataElements[]): any[] {
     if (!programStageObject) return [];
+
+    console.log(programStageObject, dataElements)
 
     return programStageObject.map(dataElement => (
         {
-            required: false,
+            required: dataElements.find(element => element.dataElement.id === dataElement.id)?.compulsory,
             name: dataElement.id,
-            labelName: dataElement.displayName,
+            labelName: dataElements.find(element => element.dataElement.id === dataElement.id)?.dataElement.formName,
             valueType: dataElement?.optionSet
                 ? Attribute.valueType.LIST as unknown as CustomAttributeProps["valueType"]
                 : dataElement?.valueType as unknown as CustomAttributeProps["valueType"],
@@ -17,17 +19,17 @@ export function formatResponseDataElements(programStageObject: ProgramStageSecti
             initialOptions: { optionSet: dataElement?.optionSet },
             disabled: false,
             pattern: "",
-            visible: true,
-            description: dataElement.displayName,
+            visible: dataElements.find(element => element.dataElement.id === dataElement.id)?.displayInReports,
+            description: dataElements.find(element => element.dataElement.id === dataElement.id)?.dataElement.formName,
             searchable: dataElement.displayInReports,
             error: false,
             programStage: "programStageObject.id",
             content: "",
             id: dataElement?.id,
-            displayName: dataElement?.displayName,
-            header: dataElement?.displayName,
+            displayName: dataElements.find(element => element.dataElement.id === dataElement.id)?.dataElement.formName,
+            header: dataElements.find(element => element.dataElement.id === dataElement.id)?.dataElement.formName,
             type: VariablesTypes.DataElement,
-            assignedValue: undefined
+            value: undefined
         }
     ));
 }
