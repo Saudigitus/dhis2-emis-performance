@@ -33,9 +33,6 @@ function GroupForm(props: GroupFormProps) {
                                             disabled={x.disabled || disabled}
                                             valueType={x.valueType}
                                         />
-                                        <span className={styles.content}>
-                                            {x.content}
-                                        </span>
                                     </div>
                                     {
                                         x.error ?

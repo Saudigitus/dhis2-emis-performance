@@ -306,9 +306,9 @@ function d2YearsBetween(origin: string | undefined, condition: string[] | undefi
 
 // replace varieble by value from condition
 export function existValue(condition: string | undefined, values: Record<string, any> = {}, formatKeyValueType: any) {
-    let localCondition = `false`;
-    const dataArray = condition?.split(/[^a-zA-Z0-9_ ]+/)
-        .map(item => item.trim().replace(/^'(.*)'$/, '$1'))
+    let localCondition = condition as string;
+    const dataArray = condition?.split(/[^a-zA-Z0-9À-ÿ_ ]+/)
+        .map(item => item.trim().replace(/^'(.*)'$/, '$1')).filter(item => item.length > 0);
 
     for (const value of Object.keys(values) || []) {
         if (dataArray?.includes(value)) {
@@ -331,8 +331,6 @@ export function existValue(condition: string | undefined, values: Record<string,
                     localCondition = localCondition.replaceAll(value, `${values[value]}`)
                     break;
             }
-        } else {
-            localCondition = condition as string
         }
     }
 

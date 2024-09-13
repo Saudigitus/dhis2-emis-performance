@@ -17,6 +17,7 @@ import { removeFalseKeys } from "../../utils/commons/removeFalseKeys";
 import { usePostEvent } from "../../hooks/events/useCreateEvents";
 import { TeiRefetch } from "../../schema/refecthTeiSchema";
 import useGetGroupForm from "../../hooks/form/useGetGroupForm";
+import { formatKeyValueType } from "../../utils/programRules/formatKeyValueType";
 
 function ModalContentProgramStages(props: ModalContentProgramStageProps): React.ReactElement {
   const { setOpen, nexProgramStage, loading: loadingEvents, formInitialValues, row, mapping } = props;
@@ -41,7 +42,7 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
   const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
     variables: varibales,
     values, type: "programStageSection",
-    formatKeyValueType: {}
+    formatKeyValueType: formatKeyValueType(varibales as any)
   })
 
   useEffect(() => {
