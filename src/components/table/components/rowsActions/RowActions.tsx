@@ -23,12 +23,8 @@ export default function RowActions(props: RowActionsProps) {
   const getProgram = useRecoilValue(ProgramConfigState);
   const [openEditionModal, setOpenEditionModal] = useState<boolean>(false);
   const [actionPStage, setActionPStage] = useState<string>();
-  const { completeEvents, loading: completing } = useCompleteEvents()
-  const [loadingRow, setLoadingRow] = useRecoilState(UpdatingEventState)
   const title = getProgram?.programStages?.filter((x: any) => x.id === actionPStage)?.[0]?.displayName || ""
-  const eventsIsCompleted = checkCompleted(row?.eventStatus as string)
   const { buildFormData, error, loading, initialValues, setInitialValues } = useGetEventUpdateFormData()
-  const { nextAction, currentProgramStage } = useGetNextActions()
 
   useEffect(() => {
     if (error)
@@ -48,7 +44,6 @@ export default function RowActions(props: RowActionsProps) {
       disabled: false,
       onClick: () => {
         setOpenEditionModal(!openEditionModal)
-        buildFormData(row?.trackedEntity, dataStore[0].financiamento?.programStage!!)
         setActionPStage(dataStore[0].financiamento?.programStage!)
       },
     },
@@ -64,14 +59,15 @@ export default function RowActions(props: RowActionsProps) {
     {
       icon: <Assignment />,
       color: '#d64d4d',
-      disabled:  false,
+      disabled: !row?.event,
       label: 'Visualizar Último Financiamento',
       onClick: () => {
-        navigate("/view")
+        setOpenEditionModal(!openEditionModal)
+        buildFormData(row?.trackedEntity, dataStore[0].financiamento?.programStage!!)
+        setActionPStage(dataStore[0].financiamento?.programStage!)
       },
     },
   ];
-
 
   return (
     <div>

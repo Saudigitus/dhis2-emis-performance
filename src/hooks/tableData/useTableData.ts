@@ -118,24 +118,19 @@ export function useTableData() {
             }
         }
 
-        const promises = []
-        const nextPstageEvents: any = {
-            results: []
-        }
+        // for (const action of tableStatus) {
+        //     for (const tei of allTeis) {
+        //         promises.push(getEvents(1, 1, program, action.programStage, [], [], orgUnit, tei))
+        //     }
+        // }
 
-        for (const action of tableStatus) {
-            for (const tei of allTeis) {
-                promises.push(getEvents(1, 1, program, action.programStage, [], [], orgUnit, tei))
-            }
-        }
-
-        await Promise.all(promises)
-            .then((responses) => {
-                for (const response of responses) {
-                    if (response?.results?.instances.length)
-                        nextPstageEvents.results.push(response?.results?.instances[0])
-                }
-            })
+        // await Promise.all(promises)
+        //     .then((responses) => {
+        //         for (const response of responses) {
+        //             if (response?.results?.instances.length)
+        //                 nextPstageEvents.results.push(response?.results?.instances[0])
+        //         }
+        //     })
 
         // if (selectedProgramStage !== null && selectedProgramStage !== undefined && selectedProgramStage !== '') {
         //     for (const tei of allTeis) {
@@ -145,21 +140,20 @@ export function useTableData() {
         // }
 
         // console.log(nextPstageEvents, ...nextPstageEvents)
-        const programIndicatorsInstances = []
+        // const programIndicatorsInstances = []
 
-        if (selectedProgramIndicators?.length) {
-            for (const tei of teiResults?.results?.instances) {
-                const programIndicatorsResults = await getProgramIndicators(selectedProgramIndicators, orgUnit, program, formatAttributesFilter(tei.attributes))
+        // if (selectedProgramIndicators?.length) {
+        //     for (const tei of teiResults?.results?.instances) {
+        //         const programIndicatorsResults = await getProgramIndicators(selectedProgramIndicators, orgUnit, program, formatAttributesFilter(tei.attributes))
 
-                programIndicatorsInstances.push(returnTeiProgramIndicators(tei.trackedEntity, programIndicatorsResults))
-            }
-        }
+        //         programIndicatorsInstances.push(returnTeiProgramIndicators(tei.trackedEntity, programIndicatorsResults))
+        //     }
+        // }
 
         const localData = formatResponseRows({
             eventsInstances: events?.results?.instances ?? [],
             teiInstances: teiResults?.results?.instances,
             marksInstances: marskEvents?.results?.instances,
-            programIndicatorsInstances: programIndicatorsInstances as any,
             setImmutableTeiData,
             programStage: selectedProgramStage
         })

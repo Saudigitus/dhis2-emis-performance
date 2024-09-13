@@ -26,10 +26,10 @@ interface FormatResponseRowsProps {
         trackedEntity: string
         dataValues: dataValuesProps[]
     }]
-    programIndicatorsInstances:[{
-        trackedEntity: string
-        programIndicators: programIndicators[]
-    }]
+    // programIndicatorsInstances:[{
+    //     trackedEntity: string
+    //     programIndicators: programIndicators[]
+    // }]
     programStage: string | null
     setImmutableTeiData: (immutableTeiData: any) => void
 }

@@ -2,7 +2,7 @@ import { attributesProps } from "../../../types/api/WithRegistrationProps"
 import { dataValuesProps } from "../../../types/api/WithoutRegistrationProps"
 import { FormatResponseRowsMarksProps, FormatResponseRowsProps, RowsDataProps } from "../../../types/utils/FormatRowsDataProps"
 
-export function formatResponseRows({ eventsInstances, teiInstances, marksInstances, programIndicatorsInstances, setImmutableTeiData, programStage }: FormatResponseRowsProps): RowsDataProps[] {
+export function formatResponseRows({ eventsInstances, teiInstances, marksInstances, setImmutableTeiData, programStage }: FormatResponseRowsProps): RowsDataProps[] {
 
     const allRows: RowsDataProps[] = []
     for (const event of eventsInstances) {
@@ -20,11 +20,10 @@ export function formatResponseRows({ eventsInstances, teiInstances, marksInstanc
             ...dataValues(event.dataValues),
             ...(marksDetails !== undefined ? { ...dataValues(marksDetails.dataValues, programStage) } : {}),
             ...(attributes((teiDetails?.attributes) ?? [])),
-            ...(programIndicators(programIndicatorsInstances?.find(x => x.trackedEntity === event.trackedEntity)?.programIndicators ?? [])),
             trackedEntity: event.trackedEntity,
             enrollment: event?.enrollment,
             status: teiDetails?.enrollments?.[0]?.status,
-            eventStatus: event?.status as unknown as any,
+            eventStatus: false,
             event: event?.event as unknown as any,
             orgUnit: teiDetails?.enrollments?.[0]?.orgUnit,
         })

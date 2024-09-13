@@ -23,6 +23,7 @@ interface EventQueryByTeiProps {
     orgUnit: string
     trackedEntity: string
     ouMode: string
+    order: string
 }
 
 interface GetDataElementsProps {
