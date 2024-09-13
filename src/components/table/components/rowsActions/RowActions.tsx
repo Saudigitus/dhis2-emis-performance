@@ -47,7 +47,7 @@ export default function RowActions(props: RowActionsProps) {
       icon: <History />,
       color: '#d64d4d',
       label: "Histórico de Financiamentos",
-      disabled: false,
+      disabled: row?.totalFinancimanetos > 0 ? false : true,
       onClick: () => {
         navigate(`/history?orgUnitName=${row?.[dataStore[0].mappingVariables.nomeAsca]}&tei=${row.trackedEntity}&teiOU=${row.orgUnit}&enrollment=${row.enrollment}`)
       },
@@ -55,7 +55,7 @@ export default function RowActions(props: RowActionsProps) {
     {
       icon: <Assignment />,
       color: '#d64d4d',
-      disabled: false,
+      disabled:  row?.totalFinancimanetos > 0 ? false : true,
       label: 'Visualizar Último Financiamento',
       onClick: () => {
         setOpenEditionModal(!openEditionModal)
