@@ -80,7 +80,7 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
         notes: [],
         enrollment: row.enrollment,
         trackedEntity: row.trackedEntity,
-        event: transformedArray.filter((x) => x.dataElement === "event")?.[0].value,
+        event: transformedArray.filter((x) => x.dataElement === "event")?.[0]?.value,
         occurredAt: transformedArray.filter((x) => x.dataElement === "eventDate")?.[0].value,
         scheduledAt: transformedArray.filter((x) => x.dataElement === "eventDate")?.[0].value,
         createdAt: transformedArray.filter((x) => x.dataElement === "eventDate")?.[0].value,
