@@ -1,7 +1,7 @@
-export function formatKeyValueType(sections: any[]) {
+export function formatKeyValueType(sections: { fields: { name: any, valueType: any }[] }[]) {
     const keys: any = {}
     for (const iterator of sections) {
-        for (const variable of iterator) {
+        for (const variable of iterator.fields) {
             keys[variable.name] = variable.valueType
         }
     }
