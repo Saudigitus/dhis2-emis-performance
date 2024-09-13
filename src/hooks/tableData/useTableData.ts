@@ -109,7 +109,7 @@ export function useTableData() {
                 const attId = assessment.programs.find(x => x?.program === tei.enrollments[0]?.program)?.attributes.find(x => x.attributeName == 'parentId')?.attribute
                 const ouId = tei.attributes.find(x => x.attribute === attId)?.value
                 let coounter = 0
-                
+
                 if (ouId) {
                     const teiName: any = await getOrgUnitCode(ouId as unknown as string, true)
                     teiResults.results?.instances[counter].attributes.map((x: any) => {
@@ -117,11 +117,10 @@ export function useTableData() {
                     })
                 }
 
-                const totalFinancimanetos = await getEvents(1, 1, program, getDataStoreData.financiamento.programStage, [], [], tei.orgUnit, tei.trackedEntity)
-                const totalRecebido = await getEvents(1, 1, program, getDataStoreData.financiamento.programStage, [], [], tei.orgUnit, tei.trackedEntity, '', false)
+                const totalFinancimanetos = await getEvents(1, 1, program, getDataStoreData.financiamento.programStage, [], [], tei.orgUnit, tei.trackedEntity, '', false)
 
-                totalRecebido?.instances?.map((item: any) => {
-                    coounter += Number.parseInt(item.dataValues.find((x: any) => x.dataElement === getDataStoreData.financiamento.valorRecebido).value)
+                totalFinancimanetos?.instances?.map((item: any) => {
+                    coounter += Number.parseInt(item.dataValues.find((x: any) => x.dataElement === getDataStoreData.financiamento.valorRecebido)?.value ?? 0)
                 })
 
                 teiResults.results.instances[counter].attributes = [
