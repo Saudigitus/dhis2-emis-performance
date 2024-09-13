@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "build": "d2-app-scripts build",
-    "start": "d2-app-scripts start --proxy https://ascas.siiu.org/ascas",
+    "start": "d2-app-scripts start --proxy https://ascas.siiu.org/treino",
     "test": "d2-app-scripts test",
     "deploy": "d2-app-scripts deploy"
   },
