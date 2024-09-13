@@ -309,7 +309,7 @@ export function existValue(condition: string | undefined, values: Record<string,
     let localCondition = `false`;
     const dataArray = condition?.split(/[^a-zA-Z0-9_ ]+/)
         .map(item => item.trim().replace(/^'(.*)'$/, '$1'))
-
+  
     for (const value of Object.keys(values) || []) {
         if (dataArray?.includes(value)) {
 

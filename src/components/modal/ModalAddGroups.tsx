@@ -33,7 +33,7 @@ function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
   const [fieldsWithValue, setFieldsWitValues] = useState<any[]>([...formFields(ouNameValidationObject, formData)])
   const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
     variables: formFields(ouNameValidationObject, formData),
-    values, type: "programStageSection", formatKeyValueType: {}
+    values, type: "programStageSection", formatKeyValueType: formatKeyValueType(formFields(ouNameValidationObject, formData) as any)
   })
   const { getAllDataElementsToPost } = useGetGroupForm()
 
