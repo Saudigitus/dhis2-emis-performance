@@ -56,7 +56,6 @@ export default function useCreateGroup() {
             try {
                 await addOuToProgram(groupsAccess, saveOrgUnitResponse?.response?.uid)
                 createTrackerResponse = await createTracker({ data: postTrackerBody(formData, groupsManagementProgram, groupsTEI, saveOrgUnitResponse?.response?.uid, fieldsWithValue, values, programStage) })
-
             }
             catch (error: any) {
                 show({
@@ -72,10 +71,7 @@ export default function useCreateGroup() {
                 await createUser({ username: currentUser.username, password: currentUser.password, groupId: saveOrgUnitResponse?.response?.uid })
             }
             catch (error: any) {
-                show({
-                    message: `Erro ao criar grupo: ${error.message}`,
-                    type: { critical: true }
-                });
+                show({ message: `Erro ao criar grupo: ${error.message}`, type: { critical: true } });
                 await deleteTracker(createTrackerResponse?.bundleReport?.typeReportMap?.TRACKED_ENTITY?.objectReports[0]?.uid)
                     .then(async () => {
                         await deleteOrgUnit(saveOrgUnitResponse?.response?.uid)

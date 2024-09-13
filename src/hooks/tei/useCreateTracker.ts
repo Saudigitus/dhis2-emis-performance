@@ -1,30 +1,22 @@
-import { useDataMutation } from "@dhis2/app-runtime";
-import useShowAlerts from "../commons/useShowAlert";
+import { useDataEngine } from "@dhis2/app-runtime";
 
-const POST_EVENT : any = {
+const POST_TRACKER: any = {
     resource: "tracker",
-    type:"create",
+    type: "create",
     data: ({ data }: any) => data,
     params: {
         async: false
     }
-    
+
 };
 
-export default function useCreateTracker () {
-    const { hide, show } = useShowAlerts ()
+export default function useCreateTracker() {
+    const engine = useDataEngine()
 
+    const createTracker = async ({ data }: { data: any }) => {
+        return await engine.mutate(POST_TRACKER, { variables: { data } })
+    }
 
-    const [ create, { loading, data }] = useDataMutation (POST_EVENT, {
-        onError: (error: any) => {
-            show({
-                message: `Erro ao registar grupo: ${error.message}`,
-                type: { critical: true }
-            });
-            setTimeout(hide, 5000);
-        }
-    });
-
-    return { createTracker: create, loading, data}
+    return { createTracker }
 
 }
