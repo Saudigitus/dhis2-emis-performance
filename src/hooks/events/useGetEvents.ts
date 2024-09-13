@@ -22,6 +22,7 @@ export function useGetEvents() {
     const engine = useDataEngine();
     const { hide, show } = useShowAlerts()
     const [loading, setLoading] = useState<boolean>(false)
+    const [data, setData] = useState<any>([])
 
     const getEvents = async (page: number, pageSize: number, program: string, programStage: string, filter: any[], filterAttributes: any[], orgUnit: any, trackedEntity?: string, status?: string): Promise<EventQueryResults> => {
         setLoading(true)
@@ -39,7 +40,11 @@ export function useGetEvents() {
             ...(trackedEntity ? { trackedEntity: trackedEntity } : null),
             ...(status ? { status: status } : null)
 
-        }))
+        })).then((resp: any) => {
+            setData(resp?.results?.instances)
+            setLoading(false)
+            return resp?.results
+        })
             .catch((error) => {
                 show({
                     message: `${("Could not get events")}: ${error.message}`,
@@ -50,5 +55,5 @@ export function useGetEvents() {
     }
 
 
-    return { getEvents, loading }
+    return { getEvents, loading, data }
 }

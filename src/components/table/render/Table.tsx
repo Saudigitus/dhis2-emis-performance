@@ -15,7 +15,7 @@ import { TeiRefetch } from '../../../schema/refecthTeiSchema';
 import { TableDataLoadingState } from '../../../schema/tableDataLoadingSchema';
 import { TabsState } from '../../../schema/tabSchema';
 
-const usetStyles = makeStyles({
+export const usetStyles = makeStyles({
     tableContainer: {
         overflowX: 'auto'
     },

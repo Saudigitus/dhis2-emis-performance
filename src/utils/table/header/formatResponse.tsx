@@ -6,7 +6,8 @@ import { useMemo } from "react";
 
 
 export function formatResponse(data: ProgramConfig, programStageId: string, tableColumns: CustomAttributeProps[] = [], programIndicators: any[], nextProgramStages: nextProgramStageType[]): CustomAttributeProps[] {
-    let columns = ['Actions']
+    let columns = [{ label: 'Total de Financiamentos', id: 'totalFinancimanetos' }, { label: 'Actions', id: 'actions' }]
+
     const originalData = ((data?.programStages?.find(programStge => programStge.id === programStageId)) ?? {} as unknown as ProgramConfig["programStages"][0])
     const programIndicatorsData = data?.programIndicators?.filter((x) => programIndicators?.map((x) => x.id).join(",").includes(x.id))
 
@@ -127,12 +128,13 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
             .concat(
                 columns?.map((column) => {
                     return {
-                        id: column,
-                        displayName: column,
-                        header: column,
+                        id: column.id,
+                        rawId: column.id,
+                        displayName: column.label,
+                        header: column.label,
                         required: false,
-                        name: column,
-                        labelName: column,
+                        name: column.id,
+                        labelName: column.label,
                         valueType: '',
                         options: undefined,
                         initialOptions: undefined,
@@ -142,7 +144,7 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
                         searchable: false,
                         error: false,
                         content: '',
-                        key: '',
+                        key: column.id,
                         displayInFilters: false,
                         type: VariablesTypes.Custom
                     }

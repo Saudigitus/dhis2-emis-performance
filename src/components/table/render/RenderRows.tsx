@@ -72,6 +72,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
         );
     }
 
+    console.log(rowsData,headerData)
     return (
         <React.Fragment>
             {

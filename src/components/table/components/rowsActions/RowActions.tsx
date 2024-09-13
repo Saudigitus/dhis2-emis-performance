@@ -15,6 +15,7 @@ import { useGetEventUpdateFormData } from "../../../../hooks/form/useGetEventUpd
 import Actions from "./Actions";
 import { useGetNextActions } from "../../../../hooks/programStages/useGetNextActions";
 import { useNavigate } from "react-router-dom";
+import ModalHistory from "../../../modal/ModalHistory";
 
 export default function RowActions(props: RowActionsProps) {
   const { row, inactive } = props;
@@ -22,6 +23,7 @@ export default function RowActions(props: RowActionsProps) {
   const dataStore = useRecoilValue(DataStoreState)
   const getProgram = useRecoilValue(ProgramConfigState);
   const [openEditionModal, setOpenEditionModal] = useState<boolean>(false);
+  const [openHistoryModal, setOpenHistoryModal] = useState<boolean>(false);
   const [actionPStage, setActionPStage] = useState<string>();
   const title = getProgram?.programStages?.filter((x: any) => x.id === actionPStage)?.[0]?.displayName || ""
   const { buildFormData, error, loading, initialValues, setInitialValues } = useGetEventUpdateFormData()
@@ -53,7 +55,7 @@ export default function RowActions(props: RowActionsProps) {
       label: "Histórico de Financiamentos",
       disabled: false,
       onClick: () => {
-        navigate("/history")
+        setOpenHistoryModal(true)
       },
     },
     {
@@ -86,6 +88,16 @@ export default function RowActions(props: RowActionsProps) {
             }}
             row={row}
             mapping={dataStore[0].mappingVariables}
+          />
+        </ModalComponent>
+      }
+
+      {
+        openHistoryModal &&
+        <ModalComponent title={title} open={openHistoryModal} setOpen={setOpenHistoryModal}>
+          <ModalHistory
+            setOpen={setOpenHistoryModal}
+            row={row}
           />
         </ModalComponent>
       }

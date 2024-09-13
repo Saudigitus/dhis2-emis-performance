@@ -6,7 +6,7 @@ import { HeaderFieldsState } from "../../schema/headersSchema";
 import useShowAlerts from "../commons/useShowAlert";
 import { EventsState } from "../../schema/termMarksSchema";
 import { type TableDataProps, type EventQueryProps, type TeiQueryProps, type MarksQueryResults, type EventQueryResults, type TeiQueryResults } from "../../types/table/TableData";
-import { formatResponseRowsMarks, formatResponseRows, getDataStoreKeys } from "../../utils";
+import { formatResponseRowsMarks, formatResponseRows, getDataStoreKeys, getSelectedKey } from "../../utils";
 import { useGetProgramIndicators } from "../programIndicators/useGetProgramIndicators";
 import { formatAttributesFilter } from "../../utils/tei/formatAttributesFilter";
 import { returnTeiProgramIndicators } from "../../utils/tei/returnTeiProgramIndicators";
@@ -45,13 +45,14 @@ export function useTableData() {
     const [immutableTeiData, setImmutableTeiData] = useState<any[]>([]) // this variable receives the attributes and dataElements of the registragion programStage
     const { hide, show } = useShowAlerts()
     const [allTeis, setAllTeis] = useRecoilState(AllTeisSchema)
-    const { program, assessment } = getDataStoreKeys()
+    const { program, assessment, dataStoreKey } = getDataStoreKeys()
     const [, setAllEvents] = useRecoilState(EventsState);
     const { orgUnit } = urlParamiters()
     const { getProgramIndicators } = useGetProgramIndicators()
     const { getOrgUnitCode } = useGetOrgUnitCode()
     const { getEvents } = useGetEvents()
     const { nextAction = [], tableStatus = [] } = useGetNextActions()
+    const { getDataStoreData } = getSelectedKey()
 
     async function getData(page: number, pageSize: number, selectedProgramStage: string, selectedProgramIndicators: string[]) {
         setLoading(true)
@@ -114,6 +115,11 @@ export function useTableData() {
                         if (x.attribute === attId) x.value = teiName?.results?.name
                     })
                 }
+
+                const totalFinancimanetos = await getEvents(1, 1, program, getDataStoreData.financiamento.programStage, [], [], tei.orgUnit, tei.trackedEntity)
+                console.log(totalFinancimanetos)
+                teiResults.results.instances[counter].attributes = [...teiResults.results?.instances[counter].attributes, { attribute: 'totalFinancimanetos', value: totalFinancimanetos?.total > 0 ? totalFinancimanetos?.total : '0' }]
+
                 counter++
             }
         }
