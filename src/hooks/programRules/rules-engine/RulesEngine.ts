@@ -77,16 +77,14 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
                     switch (programRule.programRuleActionType) {
                         case "ASSIGN":
                             if (variable.name === programRule.variable) {
-                                const firstCondition = executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType));
+                                const firstCondition = existValue(programRule.condition, values, formatKeyValueType);
                                 const value = executeFunctionName(programRule.functionName, existValue(programRule.data, values, formatKeyValueType))
 
                                 try {
                                     if (eval(firstCondition ?? "")) {
-                                        if (!isFinite(value) && value !== undefined) {
-                                            values[variable.name] = value
+                                        if (value !== undefined) {
                                             variable.value = value
                                         } else {
-                                            values[variable.name] = ""
                                             variable.value = ""
                                         }
                                     }
@@ -309,7 +307,7 @@ export function existValue(condition: string | undefined, values: Record<string,
     let localCondition = `false`;
     const dataArray = condition?.split(/[^a-zA-Z0-9_ ]+/)
         .map(item => item.trim().replace(/^'(.*)'$/, '$1'))
-  
+
     for (const value of Object.keys(values) || []) {
         if (dataArray?.includes(value)) {
 

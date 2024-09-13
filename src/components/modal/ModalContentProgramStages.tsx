@@ -32,7 +32,7 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
   const setRefetch = useSetRecoilState(TeiRefetch)
   const { buildForm } = useGetGroupForm();
   const formData = buildForm(nexProgramStage)
-  
+
   const varibales = [
     ...formEvents(getProgram.programStages.find((x) => x.id === nexProgramStage)?.executionDateLabel),
     ...formData!

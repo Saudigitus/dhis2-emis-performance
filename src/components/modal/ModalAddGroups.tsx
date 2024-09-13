@@ -43,10 +43,6 @@ function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
   }, [values, validating])
 
   useEffect(() => {
-    setRefetch(false)
-  }, [])
-
-  useEffect(() => {
     if (parentId)
       void getOrgUnitCode(parentId)
   }, [parentId])
@@ -58,7 +54,7 @@ function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
 
   function onSubmit() {
     const allFields = fieldsWithValue.flat()
-    if (allFields.filter((element: any) => (element?.assignedValue === undefined && element.required))?.length === 0) {
+    if (allFields.filter((element: any) => (element?.value === undefined && element.required))?.length === 0) {
       createGroup({ data: postBody(values, parentId).data, formData: { ...values, parentId: parentId }, closeModal, fieldsWithValue: getAllDataElementsToPost(tab.programStage)!, values });
     }
   }
@@ -70,13 +66,13 @@ function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
       const section = sections[i]
 
       for (let j = 0; j < section?.length; j++) {
-        if (section[j].valueType === "TRUE_ONLY" && !section[j].assignedValue)
-          section[j].assignedValue = ''
+        if (section[j].valueType === "TRUE_ONLY" && !section[j].value)
+          section[j].value = ''
 
         if (section[j].valueType === "BOOLEAN")
           section[j].value = e[section[j].id]
 
-        section[j].assignedValue = e[section[j].id]
+        section[j].value = e[section[j].id]
       }
     }
 

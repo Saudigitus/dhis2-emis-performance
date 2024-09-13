@@ -28,13 +28,14 @@ function GroupForm(props: GroupFormProps) {
                                     </div>
                                     <div className="col-12 col-md-6">
                                         <GenericFields
+                                            key={x.value}
                                             attribute={x}
                                             disabled={x.disabled || disabled}
                                             valueType={x.valueType}
                                         />
-                                        {/* <span className={styles.content}>
+                                        <span className={styles.content}>
                                             {x.content}
-                                        </span> */}
+                                        </span>
                                     </div>
                                     {
                                         x.error ?

@@ -27,7 +27,7 @@ export function formatResponseEvents(programStageObject: ProgramStageConfig): Cu
             displayName: programStageDataElement.dataElement?.displayName,
             header: programStageDataElement.dataElement?.displayName,
             type: VariablesTypes.DataElement,
-            assignedValue: undefined
+            value: undefined
         }
     ));
 }

@@ -27,7 +27,7 @@ const staticForm = () => {
       displayName: "Distrito",
       header: "Distrito",
       type: VariablesTypes.DataElement,
-      assignedValue: undefined
+      value: undefined
     },
     enrollmentDate: {
       required: true,
@@ -47,7 +47,7 @@ const staticForm = () => {
       displayName: "Data do Cadastro",
       header: "Data do Cadastro",
       type: VariablesTypes.DataElement,
-      assignedValue: format(new Date(), "yyyy-MM-dd")
+      value: format(new Date(), "yyyy-MM-dd")
     }
   }
 }

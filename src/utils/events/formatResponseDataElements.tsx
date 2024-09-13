@@ -27,7 +27,7 @@ export function formatResponseDataElements(programStageObject: ProgramStageSecti
             displayName: dataElements.find(element => element.dataElement.id === dataElement.id)?.dataElement.formName,
             header: dataElements.find(element => element.dataElement.id === dataElement.id)?.dataElement.formName,
             type: VariablesTypes.DataElement,
-            assignedValue: undefined
+            value: undefined
         }
     ));
 }
@@ -56,7 +56,7 @@ export function formEvents(executionDateLabel = "Data do Evento") {
                     displayName: executionDateLabel,
                     header: executionDateLabel,
                     type: VariablesTypes.DataElement,
-                    assignedValue: undefined
+                    value: undefined
                 }
             ]
         },
@@ -82,7 +82,7 @@ export function formEvents(executionDateLabel = "Data do Evento") {
                     displayName: "Nome da ASCA",
                     header: "Nome da ASCA",
                     type: VariablesTypes.DataElement,
-                    assignedValue: undefined
+                    value: undefined
                 }
             ]
         },
