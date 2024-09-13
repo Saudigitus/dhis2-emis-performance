@@ -44,25 +44,26 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function RenderHeader(props: RenderHeaderProps): React.ReactElement {
-    const { rowsHeader, rowsData, allChecked, setAllChecked, events: monitoriaEvents } = props
+    const { rowsHeader, rowsData, allChecked, setAllChecked, events } = props
     const classes = useStyles()
-    const [events, setEvents] = useState(true)
+    const [monitoriaEvents, setMonitoriaEvents] = useState<any>({})
     const [disabled, setDisabled] = useState(true)
     let [, SetSelectedRows] = useRecoilState(RowSelectorState)
 
 
     useEffect(() => {
-        let events: any = {}
-        const validEvents = monitoriaEvents?.filter((x: any) => x != undefined) ?? []
+        let tableEvents: any = {}
+        const validEvents = events?.filter((x: any) => x != undefined) ?? []
 
         for (const event of validEvents) {
-            if (rowsData?.find(x => x.trackedEntity === event.trackedEntity) && event.event && checkCompleted(event?.status) === false)
-                events[event.event] = event
+            if (rowsData?.find(x => x.trackedEntity === event.trackedEntity) && checkCompleted(event?.status) === false) {
+                tableEvents[event.event] = event
+            }
         }
 
-        if (Object.keys(events).length > 0) {
+        if (Object.keys(tableEvents).length > 0) {
             setDisabled(false)
-            setEvents(events)
+            setMonitoriaEvents(tableEvents)
         }
     }, [rowsData])
 
@@ -80,12 +81,14 @@ function RenderHeader(props: RenderHeaderProps): React.ReactElement {
     function checkAll(inputEvent: any) {
         if (inputEvent.target.checked) {
             setAllChecked(true)
-            SetSelectedRows(events)
+            SetSelectedRows(monitoriaEvents)
         } else {
             setAllChecked(false)
             SetSelectedRows({})
         }
     }
+
+    // console.log(rowsData?.map(x => x.trackedEntity), events, 'kekekeke')
 
     return (
         <thead>

@@ -11,7 +11,6 @@ import { useParams, usePostTei } from "../../hooks";
 import { CustomDhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine";
 import styles from "./modal.module.css";
 import classNames from "classnames";
-import { formatProgramStageSections } from "../../utils/events/formatProgramStageSections";
 import { formatResponseDataElements } from "../../utils/events/formatResponseDataElements";
 
 function ModalContentProgramStages(props: ModalContentProgramStageProps): React.ReactElement {

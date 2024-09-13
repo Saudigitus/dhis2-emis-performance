@@ -25,9 +25,9 @@ export function useGetEvents() {
     const getEvents = async (page: number, pageSize: number, program: string, programStage: string, filter: any[], filterAttributes: any[], orgUnit: any, paging = false) => {
         setLoading(true)
         return await engine.query(EVENT_QUERY({
-            page,
+            ...(paging ? { page: page } : {}),
+            ...(paging ? { pageSize: pageSize } : {}),
             paging,
-            pageSize,
             filter: filter,
             program: program,
             totalPages: true,

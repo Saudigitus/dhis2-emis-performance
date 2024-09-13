@@ -66,7 +66,7 @@ function Table() {
     useEffect(() => {
         if (orgUnit) {
             if (allChecked) setAllChecked(false)
-            void getEvents(page, pageSize, program, getDataStoreData?.monitoria?.programStage, headerFieldsState.dataElements, headerFieldsState.attributes, orgUnit)
+            void getEvents(1, 1, program, getDataStoreData?.monitoria?.programStage, headerFieldsState.dataElements, headerFieldsState.attributes, orgUnit, false)
         }
     }, [refetch, orgUnit, moduloAdministrativo])
 
