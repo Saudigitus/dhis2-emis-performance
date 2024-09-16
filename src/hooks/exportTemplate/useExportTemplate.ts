@@ -1243,18 +1243,6 @@ export default function useExportTemplate() {
             }
             cell.protection = { locked: false }
           }
-
-          // Lock specific columns: Academic Year, Grade, Class/Section
-          if (
-            header.id === "Academic Year" ||
-            header.id === "Grade" ||
-            header.id === "classSection" ||
-            header.metadataType === VariablesTypes.Attribute
-          ) {
-            cell.protection = { locked: true }
-          } else {
-            cell.protection = { locked: false }
-          }
         })
       }
       console.log(VariablesTypes)
