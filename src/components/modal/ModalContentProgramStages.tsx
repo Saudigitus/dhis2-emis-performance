@@ -30,7 +30,7 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
   const { updateEvent, loadUpdateEvent: loading, data } = usePostEvent()
   const [clickedButton, setClickedButton] = useState<string>("");
   const [disabled, setdisabled] = useState(true)
-  const setRefetch = useSetRecoilState(TeiRefetch)
+  const [refetch, setRefetch] = useRecoilState(TeiRefetch)
   const { buildForm } = useGetGroupForm();
   const formData = buildForm(nexProgramStage)
 
@@ -50,7 +50,7 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
       setOpen(false)
       setClicked(false)
       formRef.current.restart()
-      setRefetch(true)
+      setRefetch(!refetch)
     }
   }, [data])
 
