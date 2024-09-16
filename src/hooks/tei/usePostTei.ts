@@ -19,7 +19,7 @@ export default function usePostTei() {
     const [create, { loading, data }] = useDataMutation(POST_TEI, {
         onComplete: () => {
             show({ message: "Enrollment saved successfully", type: { success: true } })
-            setRefetch(!refetch)
+            // setRefetch(!refetch)
         },
         onError: (error) => {
             show({

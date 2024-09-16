@@ -4,7 +4,7 @@ import useShowAlerts from '../commons/useShowAlert';
 import useCreateTracker from '../tei/useCreateTracker';
 import useAddOrgUnitToProgram from './useAddOrgUnitToProgram';
 import { useGenerateUsers } from '../users/useGenerateUsers';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { TeiRefetch } from '../../schema/refecthTeiSchema';
 import { postTrackerBody } from '../../utils/tracker/formatDataForPost';
 import { useFormatDataStore } from '../dataStore/useFormatDataStore';
@@ -38,7 +38,7 @@ export default function useCreateGroup() {
     const { addOuToProgram } = useAddOrgUnitToProgram()
     const [loading, setLoading] = useState<boolean>(false)
     const { createUser, generateUsers } = useGenerateUsers()
-    const setRefetch = useSetRecoilState(TeiRefetch)
+    const [refetch,setRefetch] = useRecoilState(TeiRefetch)
     const { deleteOrgUnit } = useDeleteOrgUnit()
     const { deleteTracker } = useDeleteTracker()
     const programStage = useRecoilValue(TabsState).programStage
@@ -94,7 +94,7 @@ export default function useCreateGroup() {
         }
 
         finally {
-            setRefetch(true)
+            setRefetch(!refetch)
             setLoading(false)
             closeModal()
         }
