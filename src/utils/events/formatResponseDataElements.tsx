@@ -5,8 +5,6 @@ import { CustomAttributeProps, VariablesTypes } from "../../types/variables/Attr
 export function formatResponseDataElements(programStageObject: ProgramStageSectionConfig["dataElements"], dataElements: programStageDataElements[]): any[] {
     if (!programStageObject) return [];
 
-    console.log(programStageObject, dataElements)
-
     return programStageObject.map(dataElement => (
         {
             required: dataElements.find(element => element.dataElement.id === dataElement.id)?.compulsory,

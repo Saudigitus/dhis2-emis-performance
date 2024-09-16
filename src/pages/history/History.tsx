@@ -15,13 +15,15 @@ import { Paper } from '@material-ui/core';
 import { useParams } from '../../hooks';
 import { format } from 'date-fns';
 import { TeiRefetch } from '../../schema/refecthTeiSchema';
+import { NoticeBox } from '@dhis2/ui'
 
 export default function History() {
   const [page, setpage] = useState(1)
   const programConfigState = useRecoilValue(ProgramConfigState);
   const { getDataStoreData } = getSelectedKey()
-  const [columns,] = useState<any>(formatResponse({ programTrackedEntityAttributes: [] } as unknown as any, '', [], [], [], programConfigState?.programStages.find(x => x.id == getDataStoreData?.financiamento?.programStage)).filter((x: any) => x.id != "totalFinancimanetos"))
+  const [columns,] = useState<any>(formatResponse({ programTrackedEntityAttributes: [] } as unknown as any, '', [], [], [], programConfigState?.programStages.find(x => x.id == getDataStoreData?.financiamento?.programStage)).filter((x: any) => x.id != "totalFinancimanetos" && x.id != "totalRecebido"))
   const [pageSize, setpageSize] = useState(10)
+  const [totalRecebido, setTotalRecebido] = useState(10)
   const [tableData, setTableData] = useState<any>([])
   const classes = usetStyles()
   const { getEvents, loading, data } = useGetEvents()
@@ -35,12 +37,15 @@ export default function History() {
 
   useEffect(() => {
     let formatedDataValues = []
+    let finaceCounter: any = 0
 
     for (const event of data) {
+      finaceCounter += Number.parseInt(event.dataValues.find((x: any) => x.dataElement === getDataStoreData.financiamento.valorRecebido)?.value ?? 0)
       formatedDataValues.push({ ...dataValues(event?.dataValues), event: event.event, eventDate: format(new Date(event.occurredAt), "yyyy-MM-dd"), occurredAt: format(new Date(event.occurredAt), "yyyy-MM-dd") })
     }
 
     setTableData(formatedDataValues)
+    setTotalRecebido(finaceCounter)
   }, [data])
 
   const onPageChange = (newPage: number) => {
@@ -56,7 +61,10 @@ export default function History() {
   return (
     <Paper>
       <WithPadding>
-        <h4 className={classes.h4}>Histórico de financiamento de {orgUnitName}</h4>
+        <div style={{ display: "flex", justifyContent: "space-between" }} >
+          <h4 className={classes.h4}>Histórico de financiamento de {orgUnitName}</h4>
+          <NoticeBox> Total: {totalRecebido}.00 MT </NoticeBox>
+        </div>
       </WithPadding>
 
       <WithPadding>

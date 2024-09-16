@@ -49,6 +49,7 @@ export interface TeiQueryResults {
         instances: [{
             enrollments: any
             trackedEntity: string
+            orgUnit: string
             attributes: attributesProps[]
         }]
     }

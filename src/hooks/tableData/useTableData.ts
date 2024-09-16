@@ -105,28 +105,38 @@ export function useTableData() {
 
         if (teiResults?.results?.instances) {
             let counter = 0
+            let fetchedNames: any = {}
+
             for (const tei of teiResults?.results?.instances) {
                 const attId = assessment.programs.find(x => x?.program === tei.enrollments[0]?.program)?.attributes.find(x => x.attributeName == 'parentId')?.attribute
                 const ouId = tei.attributes.find(x => x.attribute === attId)?.value
-                let coounter = 0
+                let finaceCounter = 0
 
                 if (ouId) {
-                    const teiName: any = await getOrgUnitCode(ouId as unknown as string, true)
-                    teiResults.results?.instances[counter].attributes.map((x: any) => {
-                        if (x.attribute === attId) x.value = teiName?.results?.name
-                    })
+                    if (fetchedNames?.[ouId]) {
+                        console.log(fetchedNames, ouId, counter)
+                        teiResults.results?.instances[counter].attributes.map((x: any) => {
+                            if (x.attribute === attId) x.value = fetchedNames?.[ouId]
+                        })
+                    } else {
+                        const teiName: any = await getOrgUnitCode(ouId as unknown as string, true)
+                        fetchedNames[ouId] = teiName?.results?.name
+                        teiResults.results?.instances[counter].attributes.map((x: any) => {
+                            if (x.attribute === attId) x.value = teiName?.results?.name
+                        })
+                    }
                 }
 
-                const totalFinancimanetos = await getEvents(1, 1, program, getDataStoreData.financiamento.programStage, [], [], tei.orgUnit, tei.trackedEntity, '', false)
+                const totalFinancimanetos: any = await getEvents(1, 1, program, getDataStoreData.financiamento.programStage, [], [], tei.orgUnit, tei.trackedEntity, '', false)
 
                 totalFinancimanetos?.instances?.map((item: any) => {
-                    coounter += Number.parseInt(item.dataValues.find((x: any) => x.dataElement === getDataStoreData.financiamento.valorRecebido)?.value ?? 0)
+                    finaceCounter += Number?.parseInt(item.dataValues.find((x: any) => x.dataElement === getDataStoreData.financiamento.valorRecebido)?.value ?? 0)
                 })
 
                 teiResults.results.instances[counter].attributes = [
                     ...teiResults.results?.instances[counter].attributes,
                     { attribute: 'totalFinancimanetos', value: totalFinancimanetos?.total > 0 ? totalFinancimanetos?.total : '0' },
-                    { attribute: 'totalRecebido', value: coounter }
+                    { attribute: 'totalRecebido', value: finaceCounter }
                 ]
 
                 counter++
