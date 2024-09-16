@@ -1,3 +1,4 @@
-import ModalComponent from "./Modal"
+import ModalComponent from "./components/Modal"
+import ImportContent from "./components/ImportContent"
 import ModalContentComponent from "./ModalContent"
-export { ModalComponent, ModalContentComponent }
+export { ModalComponent, ModalContentComponent, ImportContent }

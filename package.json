@@ -1,6 +1,6 @@
 {
-  "name": "semis-performance",
-  "version": "1.1.0",
+  "name": "dhis2-emis-skeleton",
+  "version": "1.0.0",
   "description": "",
   "license": "BSD-3-Clause",
   "private": true,

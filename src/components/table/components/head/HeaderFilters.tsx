@@ -20,10 +20,14 @@ function HeaderFilters() {
 
       <div className={styles.filterLeftContainer}>
         <SwitchButtonView />
-        <ConfigTableColumns filteredHeaders={updatedCols} headers={columns} updateVariables={setTableHeaders} />
+        <ConfigTableColumns
+          filteredHeaders={updatedCols}
+          headers={columns}
+          updateVariables={setTableHeaders}
+        />
       </div>
     </div>
-  );
+  )
 }
 
-export default HeaderFilters;
+export default HeaderFilters

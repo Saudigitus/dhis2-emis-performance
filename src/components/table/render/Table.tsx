@@ -18,21 +18,21 @@ import { CustomDhis2RulesEngine } from '../../../hooks/programRules/rules-engine
 import { getSelectedKey } from '../../../utils';
 
 const usetStyles = makeStyles({
-    tableContainer: {
-        overflowX: 'auto'
-    },
-    workingListsContainer: {
-        display: 'flex',
-        marginLeft: '0.5rem',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-    },
-    h4: {
-        margin: '0px',
-        fontSize: '22px',
-        fontWeigth: '500'
-    }
-});
+  tableContainer: {
+    overflowX: "auto"
+  },
+  workingListsContainer: {
+    display: "flex",
+    marginLeft: "0.5rem",
+    alignItems: "center",
+    justifyContent: "space-between"
+  },
+  h4: {
+    margin: "0px",
+    fontSize: "22px",
+    fontWeigth: "500"
+  }
+})
 
 function Table() {
     const classes = usetStyles()
@@ -62,83 +62,88 @@ function Table() {
         }
     }, [grade, programStage])
 
-    // console.log(columns, updatedVariables);
-
     useEffect(() => {
         setLoading(loading)
     }, [loading])
 
-    useEffect(() => {
-        setpage(1)
-    }, [headerFieldsState])
+  useEffect(() => {
+    setLoading(loading)
+  }, [loading])
 
-    useEffect(() => {
-        if (academicYear)
-            void getData(page, pageSize, programStage as unknown as string)
-    }, [headerFieldsState, page, pageSize, refetch])
+  useEffect(() => {
+    setpage(1)
+  }, [headerFieldsState])
 
-    useEffect(() => {
-        if (termMarksState.id !== null && termMarksState.id !== undefined && termMarksState.id !== '' && academicYear) {
-            void getMarks(termMarksState.id)
-        }
-    }, [programStage])
+  useEffect(() => {
+    if (academicYear)
+      void getData(page, pageSize, programStage as unknown as string)
+  }, [headerFieldsState, page, pageSize, refetch])
 
-    const onPageChange = (newPage: number) => {
-        setpage(newPage)
+  useEffect(() => {
+    if (
+      termMarksState.id !== null &&
+      termMarksState.id !== undefined &&
+      termMarksState.id !== "" &&
+      academicYear
+    ) {
+      void getMarks(termMarksState.id)
     }
+  }, [programStage])
 
-    const onRowsPerPageChange = (event: any) => {
-        setpageSize(parseInt(event.value, 10))
-        setpage(1)
-    }
+  const onPageChange = (newPage: number) => {
+    setpage(newPage)
+  }
 
-    return (
-        <Paper>
-            <div className={classes.workingListsContainer}>
-                <h4 className={classes.h4}>Performance</h4>
-                <WorkingLists />
-            </div>
-            <WithBorder type='bottom' />
-            <WithPadding >
-                <WithBorder type='all' >
-                    <HeaderFilters />
-                    <div
-                        className={classes.tableContainer}
-                    >
-                        {loading ?
-                            <CenteredContent className="p-4">
-                                <CircularLoader />
-                            </CenteredContent>
-                            :
-                            <TableComponent>
-                                <>
-                                    <RenderHeader
-                                        createSortHandler={() => { }}
-                                        order='asc'
-                                        orderBy='desc'
-                                        rowsHeader={updatedVariables}
-                                    />
-                                    <RenderRows
-                                        loader={loading}
-                                        headerData={updatedVariables}
-                                        rowsData={tableData}
-                                    />
-                                </>
-                            </TableComponent>
-                        }
-                    </div>
-                    <Pagination
-                        loading={loading}
-                        onPageChange={onPageChange}
-                        onRowsPerPageChange={onRowsPerPageChange}
-                        page={page}
-                        rowsPerPage={pageSize}
-                        totalPerPage={tableData?.length}
-                    />
-                </WithBorder>
-            </WithPadding>
-        </Paper>
-    )
+  const onRowsPerPageChange = (event: any) => {
+    setpageSize(parseInt(event.value, 10))
+    setpage(1)
+  }
+
+  return (
+    <Paper>
+      <div className={classes.workingListsContainer}>
+        <h4 className={classes.h4}>Performance</h4>
+        <WorkingLists />
+      </div>
+      <WithBorder type="bottom" />
+      <WithPadding>
+        <WithBorder type="all">
+          <HeaderFilters />
+          <div className={classes.tableContainer}>
+            {loading ? (
+              <CenteredContent className="p-4">
+                <CircularLoader />
+              </CenteredContent>
+            ) : (
+              <TableComponent>
+                <>
+                  <RenderHeader
+                    createSortHandler={() => {}}
+                    order="asc"
+                    orderBy="desc"
+                    rowsHeader={columns}
+                  />
+                  <RenderRows
+                    loader={loading}
+                    headerData={columns}
+                    rowsData={tableData}
+                  />
+                </>
+              </TableComponent>
+            )}
+          </div>
+          <Pagination
+            loading={loading}
+            onPageChange={onPageChange}
+            onRowsPerPageChange={onRowsPerPageChange}
+            page={page}
+            rowsPerPage={pageSize}
+            totalPerPage={tableData?.length}
+          />
+        </WithBorder>
+      </WithPadding>
+    </Paper>
+  )
 }
 
 export default Table
