@@ -6,14 +6,13 @@ import { FormattedPRulesType, PRTypes } from "../../types/programRules/Formatted
 export function formatProgramRules(programRules: ProgramRuleConfig []) {
     const programRulesResponses: FormattedPRulesType [] = [];
     for (const prules of programRules || []) {
-        // console.log(prules);
         for (const pRulesAction of prules.programRuleActions) {
             programRulesResponses.push({
                 condition: prules.condition,
                 programRuleActionType: pRulesAction.programRuleActionType,
                 variable: pRulesAction?.dataElement?.id || pRulesAction?.trackedEntityAttribute?.id || pRulesAction?.programStageSection?.id,
                 type: pRulesAction?.dataElement?.id && PRTypes.DATA_ELEMENT || pRulesAction?.trackedEntityAttribute?.id && PRTypes.ATTRIBUTE || pRulesAction?.programStageSection?.id && PRTypes.SECTION,
-                content: prules.content,
+                content: prules.content ?? pRulesAction?.content,
                 programStage: prules?.programStage?.id,
                 data: pRulesAction.data,
                 optionGroup: pRulesAction?.optionGroup?.id,

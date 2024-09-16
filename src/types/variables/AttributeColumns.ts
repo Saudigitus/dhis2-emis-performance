@@ -38,6 +38,7 @@ export interface CustomAttributeProps {
         }
     }
     pattern?: string
+    warning?: boolean
     searchable?: boolean
     error?: boolean
     content?: string

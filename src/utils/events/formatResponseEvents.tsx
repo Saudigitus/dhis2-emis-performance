@@ -4,12 +4,10 @@ import {
   VariablesTypes,
   type CustomAttributeProps
 } from "../../types/variables/AttributeColumns"
-// import { CustomAttributeProps, VariablesTypes } from "../../types/variables/AttributeColumns"
 
 export function formatResponseEvents(
   programStageObject: ProgramStageConfig
 ): CustomAttributeProps[] {
-  //   if (!programStageObject) return []
 
   return programStageObject.programStageDataElements?.map(
     (programStageDataElement) => ({
@@ -41,3 +39,4 @@ export function formatResponseEvents(
     })
   )
 }
+

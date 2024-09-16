@@ -16,16 +16,17 @@ function MenuItemContainer(props: MenuItemContainerProps): React.ReactElement {
     const { getDataStoreData } = getSelectedKey()
     const programConfigState = useRecoilValue(ProgramConfigState);
     const { registration } = getDataStoreKeys();
+    const customVariables = formatResponse(programConfigState, registration?.programStage)?.filter(element => element.rawId === dataElementId).map((x) => { return { ...x, name: x.rawId } })
 
     const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
-        variables: formatResponse(programConfigState, registration?.programStage)?.filter(element => element.rawId === dataElementId).map((x) => { return { ...x, name: x.rawId } }),
+        variables: [...customVariables],
         values: { orgUnit: school, [getDataStoreData.registration.grade as string]: grade },
         type: "programStage",
         formatKeyValueType: formatKeyValueTypeHeader(formatResponse(programConfigState, registration?.programStage)?.filter(element => element.rawId === dataElementId)) || []
     })
 
     useEffect(() => {
-        runRulesEngine()
+        runRulesEngine([...customVariables])
     }, [school])
 
     const options = updatedVariables?.find(element => element.rawId === dataElementId)?.options.optionSet.options ?? []

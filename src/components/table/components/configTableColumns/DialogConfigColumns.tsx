@@ -9,6 +9,7 @@ import { Button } from "react-bootstrap"
 import type { DialogSelectColumnsProps } from "../../../../types/table/ConfigColumnsProps"
 import type { CustomAttributeProps } from "../../../../types/variables/AttributeColumns"
 
+
 function DialogSelectColumns(props: DialogSelectColumnsProps) {
   const {
     open,

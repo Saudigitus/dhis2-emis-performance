@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from "react"
-import { CenteredContent, CircularLoader } from "@dhis2/ui"
-import { HeaderFilters, Pagination, TableComponent } from "../components"
-import RenderHeader from "./RenderHeader"
-import RenderRows from "./RenderRows"
-import { makeStyles } from "@material-ui/core/styles"
-import { Paper } from "@material-ui/core"
-import WithBorder from "../../template/WithBorder"
-import WithPadding from "../../template/WithPadding"
-import WorkingLists from "../components/filters/workingList/WorkingLists"
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
-import { HeaderFieldsState } from "../../../schema/headersSchema"
-import { TermMarksState } from "../../../schema/termMarksSchema"
-import { useHeader, useParams, useTableData } from "../../../hooks"
-import { TeiRefetch } from "../../../schema/refecthTeiSchema"
-import { TableDataLoadingState } from "../../../schema/tableDataLoadingSchema"
+import React, { useEffect, useState } from 'react'
+import { CenteredContent, CircularLoader } from "@dhis2/ui";
+import { HeaderFilters, Pagination, TableComponent } from '../components'
+import RenderHeader from './RenderHeader'
+import RenderRows from './RenderRows'
+import { makeStyles } from '@material-ui/core/styles';
+import { Paper } from '@material-ui/core';
+import WithBorder from '../../template/WithBorder';
+import WithPadding from '../../template/WithPadding';
+import WorkingLists from '../components/filters/workingList/WorkingLists';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { HeaderFieldsState } from '../../../schema/headersSchema';
+import { TermMarksState } from '../../../schema/termMarksSchema';
+import { useHeader, useParams, useTableData } from '../../../hooks';
+import { TeiRefetch } from '../../../schema/refecthTeiSchema';
+import { TableDataLoadingState } from '../../../schema/tableDataLoadingSchema';
+import { CustomDhis2RulesEngine } from '../../../hooks/programRules/rules-engine/RulesEngine';
+import { getSelectedKey } from '../../../utils';
 
 const usetStyles = makeStyles({
   tableContainer: {
@@ -33,17 +35,36 @@ const usetStyles = makeStyles({
 })
 
 function Table() {
-  const classes = usetStyles()
-  const { columns } = useHeader()
-  const { getData, loading, tableData, getMarks } = useTableData()
-  const headerFieldsState = useRecoilValue(HeaderFieldsState)
-  const [page, setpage] = useState(1)
-  const [pageSize, setpageSize] = useState(10)
-  const [refetch] = useRecoilState(TeiRefetch)
-  const termMarksState = useRecoilValue(TermMarksState)
-  const { urlParamiters } = useParams()
-  const { academicYear, programStage } = urlParamiters()
-  const setLoading = useSetRecoilState(TableDataLoadingState)
+    const classes = usetStyles()
+    const { columns = [] } = useHeader()
+    const { getData, loading, tableData, getMarks } = useTableData()
+    const headerFieldsState = useRecoilValue(HeaderFieldsState)
+    const [page, setpage] = useState(1)
+    const [pageSize, setpageSize] = useState(10)
+    const [refetch] = useRecoilState(TeiRefetch)
+    const termMarksState = useRecoilValue(TermMarksState)
+    const { urlParamiters } = useParams()
+    const { academicYear, programStage, grade } = urlParamiters()
+    const setLoading = useSetRecoilState(TableDataLoadingState)
+    const { getDataStoreData } = getSelectedKey()
+    const customColumns = columns?.map((column: any) => { return { ...column, name: column.id.split("_")[0] } })
+
+    const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
+        type: "programStage",
+        variables: customColumns,
+        formatKeyValueType: { [getDataStoreData.registration.grade as string]: "LIST" },
+        values: { [getDataStoreData.registration.grade as string]: grade, testi: "test" }
+    })
+
+    useEffect(() => {
+        if (grade) {
+            runRulesEngine(customColumns)
+        }
+    }, [grade, programStage])
+
+    useEffect(() => {
+        setLoading(loading)
+    }, [loading])
 
   useEffect(() => {
     setLoading(loading)

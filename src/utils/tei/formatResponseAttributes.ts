@@ -18,6 +18,7 @@ export function formatResponseTEI(attributes: ProgramConfig) {
                 pattern: trackedEntityAttribute?.trackedEntityAttribute?.pattern,
                 searchable: trackedEntityAttribute?.searchable,
                 error: false,
+                warning: false,
                 content: "",
                 id: trackedEntityAttribute?.trackedEntityAttribute?.id,
                 displayName: trackedEntityAttribute?.trackedEntityAttribute?.displayName,
