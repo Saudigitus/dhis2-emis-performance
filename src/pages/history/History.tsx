@@ -16,6 +16,7 @@ import { useParams } from '../../hooks';
 import { format } from 'date-fns';
 import { TeiRefetch } from '../../schema/refecthTeiSchema';
 import { NoticeBox } from '@dhis2/ui'
+import styles from './History.module.css'
 
 export default function History() {
   const [page, setpage] = useState(1)
@@ -63,7 +64,7 @@ export default function History() {
       <WithPadding>
         <div style={{ display: "flex", justifyContent: "space-between" }} >
           <h4 className={classes.h4}>Histórico de financiamento de {orgUnitName}</h4>
-          <NoticeBox> Total: {totalRecebido}.00 MT </NoticeBox>
+          <NoticeBox className={styles.noticeBox} > <span style={{ fontWeight: "500" }} >Total</span>: {totalRecebido}.00 MT </NoticeBox>
         </div>
       </WithPadding>
 
