@@ -1,7 +1,7 @@
 import { useDataEngine, useDataQuery } from "@dhis2/app-runtime"
 import { format } from "date-fns"
 import { useSearchParams } from "react-router-dom"
-import { useRecoilState, useRecoilValue } from "recoil"
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
 import { HeaderFieldsState } from "../../schema/headersSchema"
 import { ProgramConfigState } from "../../schema/programSchema"
 import type { EventQueryProps } from "../../types/api/WithoutRegistrationProps"
@@ -22,6 +22,7 @@ import { useParams } from "../commons/useQueryParams"
 import { validationSheetConstructor } from "./validationSheetConstructor"
 import useShowAlerts from "../commons/useShowAlert"
 import { TermMarksState } from "../../schema/termMarksSchema"
+import { ProgressState } from "../../schema/linearProgress"
 
 export enum SectionVariablesTypes {
   EnrollmentDetails = "Enrollment Details",
@@ -115,14 +116,15 @@ export default function useExportTemplate() {
   const programConfig = useRecoilValue(ProgramConfigState)
   const headerFieldsState = useRecoilValue(HeaderFieldsState)
   const [selectedTerm] = useRecoilState(TermMarksState)
+  const updateProgress = useSetRecoilState(ProgressState)
 
   const { school, programStage } = urlParamiters()
   const [searchParams] = useSearchParams()
   const { hide, show } = useShowAlerts()
-  const { refetch: loadOneProgram } = useDataQuery(oneProgramQuery, {
+  const { refetch: loadOneProgram, loading } = useDataQuery(oneProgramQuery, {
     lazy: true
   })
-  const { refetch: loadReserveValues } = useDataQuery(reserveValuesQuery, {
+  const { refetch: loadReserveValues, loading: loading2 } = useDataQuery(reserveValuesQuery, {
     lazy: true
   })
   const { getDataStoreData: programConfigDataStore } = getSelectedKey()
@@ -390,11 +392,11 @@ export default function useExportTemplate() {
 
   async function handleExportToWord(values: useExportTemplateProps) {
     try {
+      updateProgress({ progress: 0, buffer: 10 })
+
       values.setLoadingExport && values.setLoadingExport(true)
 
-      const {
-        results: { instances: eventsInstances }
-      } = await engine.query(
+      const { results: { instances: eventsInstances } } = await engine.query(
         EVENT_QUERY({
           ouMode: "SELECTED",
           paging: false,
@@ -407,25 +409,23 @@ export default function useExportTemplate() {
         })
       )
 
-      const allTeis: [] = eventsInstances.map(
-        (x: { trackedEntity: string }) => x.trackedEntity
-      )
+      updateProgress({ progress: 10, buffer: 15 })
 
-      const {
-        results: { instances: teiInstances }
-      } = await engine.query(
+      const allTeis: [] = eventsInstances.map((x: { trackedEntity: string }) => x.trackedEntity)
+
+      const { results: { instances: teiInstances } } = await engine.query(
         TEI_QUERY({
           program: program as unknown as string,
           trackedEntity: allTeis.join(";")
         })
       )
 
+      updateProgress({ progress: 40, buffer: 45 })
+
       let marksInstances: any[] = []
 
       for (const tei of allTeis) {
-        const {
-          results: { instances: marksData }
-        } = await engine.query(
+        const { results: { instances: marksData } } = await engine.query(
           EVENT_QUERY({
             program: program as unknown as string,
             order: "createdAt:desc",
@@ -433,7 +433,8 @@ export default function useExportTemplate() {
             trackedEntity: tei
           })
         )
-
+        
+        updateProgress((progress: any) => ({ progress: progress.progress + 50 / allTeis.length, buffer: progress.buffer + 55 / allTeis.length }))
         marksInstances = marksInstances.concat(marksData)
       }
 
@@ -444,12 +445,14 @@ export default function useExportTemplate() {
         programConfig: programConfig,
         programStageId: programConfigDataStore["performance"].programStage
       })
+
       const workbook = new window.ExcelJS.Workbook()
       const dataSheet = workbook.addWorksheet("Data")
       const metaDataSheet = workbook.addWorksheet("Metadata")
       const validationSheet = workbook.addWorksheet("Validation", {
         state: "veryHidden"
       })
+
       const { headers, datas, currentProgram } = await generateInformations({
         ...values,
         studentsNumber: localData.length
@@ -603,7 +606,6 @@ export default function useExportTemplate() {
           }
         })
       }
-      console.log(VariablesTypes)
       // Protect the data sheet but allow editing of unlocked cells
       dataSheet.protect("", {
         selectLockedCells: true,
@@ -638,11 +640,14 @@ export default function useExportTemplate() {
         )
       })
 
+
       show({
         message: "File exported successfully",
         type: { success: true }
       })
       setTimeout(hide, 5000)
+
+      updateProgress({ progress: 100, buffer: 100 })
       values.setLoadingExport && values.setLoadingExport(false)
     } catch (err: any) {
       console.log(err)
