@@ -7,10 +7,10 @@ import type { FlyoutOptionsProps } from "../../../../types/Buttons/FlyoutOptions
 import styles from "./enrollmentActionsButtons.module.css"
 import {
   ModalComponent,
-  ModalContentComponent,
-  ImportContent
+  ModalContentComponent
 } from "../../../../components"
 import ModalExportTemplateContent from "../../../modal/ModalExportTemplateContent"
+import {BulkMarksUpload} from "../../../bulkImport/BulkMarksUpload";
 
 function EnrollmentActionsButtons() {
   const { urlParamiters } = useParams()
@@ -26,6 +26,13 @@ function EnrollmentActionsButtons() {
       divider: false,
       onClick: () => {
         setOpenExportEmptyTemplate(true)
+      }
+    },
+    {
+      label: "Bulk marks upload",
+      divider: true,
+      onClick: () => {
+        setOpenImport(true)
       }
     }
   ]
@@ -64,15 +71,13 @@ function EnrollmentActionsButtons() {
           <ModalContentComponent setOpen={setOpen} />
         </ModalComponent>
       )}
-      {openImport && (
-        <ModalComponent
-          title="Import Students"
-          open={openImport}
-          setOpen={setOpenImport}
-        >
-          <ImportContent setOpen={setOpen} />
-        </ModalComponent>
-      )}
+      {openImport &&
+          <BulkMarksUpload
+            setOpen={setOpenImport}
+            isOpen={openImport}
+            forUpdate={false}
+          />
+      }
       {openExportEmptyTemplate && (
         <ModalComponent
           title={`Data Import Template Export`}
