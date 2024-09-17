@@ -18,7 +18,7 @@ export const useGenerateUsers = () => {
     const engine = useDataEngine()
 
     function generateUsers(groupAutoGenerate: string) {
-        const randomNumberUsername = Math.floor(Math.random() * 100000)
+        const randomNumberUsername = Math.floor(Math.random() * 1000000)
         const randomNumber = Math.floor(Math.random() * 1000)
 
         const username = `${usernameBase}${randomNumberUsername}`

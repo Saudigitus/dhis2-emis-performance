@@ -14,7 +14,7 @@ import { formatToString } from '../../../utils';
 const { Field } = ReactFinalForm
 
 // Omitting the underscore here since it messes up i18n
-const lowerbound = 1
+const lowerbound = 0
 const upperbound = 86400
 
 const VALIDATOR = composeValidators(
