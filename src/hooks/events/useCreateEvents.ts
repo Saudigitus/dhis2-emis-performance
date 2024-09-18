@@ -1,8 +1,9 @@
-import { useRecoilState } from "recoil"
+import { useRecoilState, useSetRecoilState } from "recoil"
 import { useShowAlerts } from "../../hooks"
 import { useDataMutation } from "@dhis2/app-runtime"
 import { teiRefetch } from "../../schema/teiRefetchSchema"
-import {type ApiResponse} from "../../types/bulkImport/Interfaces";
+import { type ApiResponse } from "../../types/bulkImport/Interfaces";
+import { ProgressState } from "../../schema/linearProgress";
 
 const POST_EVENT: any = {
   resource: "tracker",
@@ -17,9 +18,11 @@ const POST_EVENT: any = {
 export function usePostEvent() {
   const { hide, show } = useShowAlerts()
   const [refetch, setRefetch] = useRecoilState<boolean>(teiRefetch)
+  const setProgress = useSetRecoilState(ProgressState)
 
   const [create, { loading, data, error }] = useDataMutation(POST_EVENT, {
     onComplete: () => {
+      setProgress({ progress: null })
       show({
         message: "Final results updated successfully",
         type: { success: true }
@@ -27,6 +30,7 @@ export function usePostEvent() {
       setRefetch(!refetch)
     },
     onError: (error) => {
+      setProgress({ progress: null })
       show({
         message: `Could not save the final result details: ${error.message}`,
         type: { critical: true }

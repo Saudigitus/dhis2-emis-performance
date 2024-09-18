@@ -13,7 +13,7 @@ import {
     ProcessingRecordsState,
     ProcessingStage
 } from "../../schema/bulkImportSchema";
-import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
 import { type ApiResponse } from "../../types/bulkImport/Interfaces";
 import { usePostEvent } from "../../hooks";
 import { type ButtonActionProps } from "../../types/Buttons/ButtonActions";
@@ -43,7 +43,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
         data,
         error
     } = usePostEvent()
-    const [progress, setProgress] = useRecoilState(ProgressState)
+    const setProgress = useSetRecoilState(ProgressState)
 
     useEffect(() => {
         if (data !== undefined) {
@@ -80,6 +80,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
             })
         }
     }, [error])
+
     const handleShowDetails = () => {
         setShowDetails(!showDetails);
     }
@@ -111,10 +112,10 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
             void updateEvent({
                 data: EventsPayload,
                 params
-            }).then(() => setProgress({ progress: 100, buffer: 100, stage: '' }))
-                .catch(() => setProgress({ progress: null }))
+            })
                 
         } catch (error: any) {
+            setProgress({ progress: null })
             console.error("Error updating marks: ", error)
         }
     }
