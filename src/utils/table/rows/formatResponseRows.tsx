@@ -41,6 +41,8 @@ export function formatResponseRows({
       ...attributes(teiDetails?.attributes ?? []),
       trackedEntity: event.trackedEntity,
       enrollment: event?.enrollment,
+      event: marksDetails?.event ?? "",
+      occurredAt: marksDetails?.occurredAt ?? new Date().toISOString(),
       status: teiDetails?.enrollments?.[0]?.status
     })
   }

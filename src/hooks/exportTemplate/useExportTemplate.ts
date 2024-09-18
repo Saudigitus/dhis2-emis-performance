@@ -328,6 +328,16 @@ export default function useExportTemplate() {
         options: [],
         optionSetId: null,
         required: true
+      },
+      {
+      key: `occurredAt`,
+        id: `occurredAt`,
+        label: "EventDate",
+        valueType: "TEXT",
+        optionSetValue: false,
+        options: [],
+        optionSetId: null,
+        required: true
       }
     ]
 
@@ -561,11 +571,21 @@ export default function useExportTemplate() {
         if (header.id === "enrollment") {
           dataSheet.getColumn(index + 1).hidden = true
         }
+        if (header.id === "occurredAt") {
+          dataSheet.getColumn(index + 1).hidden = true
+        }
         // Hide the trackedEntity ID column
         if (header.id === "trackedEntity") {
           dataSheet.getColumn(index + 1).hidden = true
         }
       })
+      // Ajout du deuxieme headers
+      const headerRow = dataSheet.addRow(headers.reduce((prev: any, curr: any) => {
+        prev[curr.id] = curr.id;
+        return prev;
+      }, {}));
+      // Hide the header IDs row
+      headerRow.hidden = true;
 
       // Add the data rows
       let index = 0
@@ -593,16 +613,10 @@ export default function useExportTemplate() {
             header.metadataType === VariablesTypes.DataElement &&
             header.valueType === "NUMBER"
           ) {
-            cell.dataValidation = {
-              type: "whole",
-              operator: "between",
-              formula1: "0",
-              formula2: "100",
-              showErrorMessage: true,
-              errorTitle: "Invalid Entry",
-              error: "Please enter a number between 0 and 100."
+            if (!header.key.includes(registration.programStage)) {
+              cell.protection = { locked: false }
             }
-            cell.protection = { locked: false }
+            cell.numFmt = "0"
           }
         })
       }
