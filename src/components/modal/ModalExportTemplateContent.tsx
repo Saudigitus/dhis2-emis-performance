@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import { ModalActions, Button, ButtonStrip, Tag, IconInfo16 } from "@dhis2/ui"
 import { Form } from "react-final-form"
 import GroupForm from "../form/GroupForm"
@@ -9,6 +9,10 @@ import type { ModalExportTemplateProps } from "../../types/modal/ModalProps"
 import useGetExportTemplateForm from "../../hooks/form/useGetExportTemplateForm"
 import useExportTemplate from "../../hooks/exportTemplate/useExportTemplate"
 import { removeFalseKeys } from "../../utils/commons/removeFalseKeys"
+import IteractiveProgress from "./components/importProgress"
+import { useRecoilState } from "recoil"
+import { ProgressState } from "../../schema/linearProgress"
+import styles from './modal.module.css'
 
 const loading = false
 function ModalExportTemplateContent(
@@ -36,8 +40,18 @@ function ModalExportTemplateContent(
     [registration?.grade as string]: grade
   })
   const [loadingExport, setLoadingExport] = useState(false)
+  const [progress, updateProgress] = useRecoilState(ProgressState)
 
   const { handleExportToWord } = useExportTemplate()
+
+  useEffect(() => {
+    if (progress?.progress >= 100) {
+      const timeout = setTimeout(() => {
+        updateProgress({ progress: null, buffer: null });
+      }, 400);
+      return () => clearTimeout(timeout)
+    }
+  }, [progress?.progress])
 
   async function onSubmit() {
     await handleExportToWord({
@@ -49,6 +63,7 @@ function ModalExportTemplateContent(
       setLoadingExport
     })
     setOpen(false)
+    updateProgress({ progress: null })
   }
 
   function onChange(e: any): void {
@@ -71,55 +86,74 @@ function ModalExportTemplateContent(
       label: "Export Students List",
       primary: true,
       disabled: loadingExport,
-      loading: loadingExport
+      loading: loadingExport,
+      className: progress?.progress != null && styles.remove
     }
   ]
 
+  function Actions() {
+    return (
+      <ModalActions>
+        <ButtonStrip end>
+          {modalActions.map((action, i) => (
+            <Button
+              key={i}
+              {...action}
+            >
+              {action.label}
+            </Button>
+          ))}
+        </ButtonStrip>
+      </ModalActions>
+    )
+  }
+
+
   return (
     <div>
-      <Tag positive icon={<IconInfo16 />} maxWidth="100%">
-        This file will allow the import of new {sectionName} data into the
-        system. Please respect the blocked fields to avoid conflicts.
-      </Tag>
+      {
+        progress.progress != null ?
+          <>
+            <IteractiveProgress />
+            <Actions />
+          </>
+          :
+          <>
+            <Tag positive icon={<IconInfo16 />} maxWidth="100%">
+              This file will allow the import of new {sectionName} data into the
+              system. Please respect the blocked fields to avoid conflicts.
+            </Tag>
 
-      <Form initialValues={{ ...initialValues, orgUnit }} onSubmit={onSubmit}>
-        {({ handleSubmit, values, form }) => {
-          formRef.current = form
-          return (
-            <form
-              onSubmit={handleSubmit}
-              onChange={onChange(values) as unknown as () => void}
-            >
-              {formFields(exportFormFields, sectionName)?.map(
-                (field: any, index: number) => {
-                  return (
-                    <GroupForm
-                      name={field.section}
-                      description={field.description}
-                      key={index}
-                      fields={field.fields}
-                      disabled={false}
-                    />
-                  )
-                }
-              )}
+            <Form initialValues={{ ...initialValues, orgUnit }} onSubmit={onSubmit}>
+              {({ handleSubmit, values, form }) => {
+                formRef.current = form
+                return (
+                  <form
+                    onSubmit={handleSubmit}
+                    onChange={onChange(values) as unknown as () => void}
+                  >
+                    {formFields(exportFormFields, sectionName)?.map(
+                      (field: any, index: number) => {
+                        return (
+                          <GroupForm
+                            name={field.section}
+                            description={field.description}
+                            key={index}
+                            fields={field.fields}
+                            disabled={false}
+                          />
+                        )
+                      }
+                    )}
 
-              <br />
-              <ModalActions>
-                <ButtonStrip end>
-                  {modalActions.map((action, i) => {
-                    return (
-                      <Button key={i} {...action}>
-                        {action.label}
-                      </Button>
-                    )
-                  })}
-                </ButtonStrip>
-              </ModalActions>
-            </form>
-          )
-        }}
-      </Form>
+                    <br />
+                    <Actions />
+                  </form>
+                )
+              }}
+            </Form>
+          </>
+      }
     </div>
   )
 }
