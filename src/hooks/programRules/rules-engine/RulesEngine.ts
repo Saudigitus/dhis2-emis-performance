@@ -77,18 +77,43 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
                     switch (programRule.programRuleActionType) {
                         case "ASSIGN":
                             if (variable.name === programRule.variable) {
+                                // Obter a primeira condição e o valor associado
                                 const firstCondition = existValue(programRule.condition, values, formatKeyValueType);
-                                const value = executeFunctionName(programRule.functionName, existValue(programRule.data, values, formatKeyValueType))
+                                const value = executeFunctionName(programRule.functionName, existValue(programRule.data, values, formatKeyValueType));
 
-                                if (eval(firstCondition)) {
-                                    if (!isNaN(value) && isFinite(value) && value !== undefined) {
-                                        values[variable.name] = value
-                                    } else {
-                                        values[variable.name] = ""
+
+                            
+                                try {
+                                    // Avaliar a condição uma vez
+                                    const evaluatedCondition = eval(firstCondition ?? "");
+                            
+                                    // Verificar se a condição é uma string e o tipo de variável
+                                    const isStringCondition = typeof evaluatedCondition === "string" || typeof evaluatedCondition === "boolean";
+                                    const isValidType = formatKeyValueType[variable.name] !== "INTEGER_ZERO_OR_POSITIVE" && formatKeyValueType[variable.name] !== "NUMBER";
+                                    
+                                    if (isStringCondition && isValidType) {
+                                        if (evaluatedCondition) {
+                                            // Atribuição de valores caso a condição seja verdadeira
+                                            values[variable.name] = value !== undefined ? value : "";
+                                            variable.value = value !== undefined ? value : "";
+                                        }
+                                    } 
+                                    // Verificar se a condição é um número
+                                    else if (typeof evaluatedCondition === "number") {
+                                        values[variable.name] = value !== undefined ? value : "";
+                                        variable.value = value !== undefined ? value : "";
                                     }
+                                    
+                                    // Desabilitar a variável após o processamento
+                                    variable.disabled = true;
+                                    
+                                } catch (error) {
+                                    // Em caso de erro, desabilitar a variável
+                                    console.error("Erro ao avaliar a condição:", error);
+                                    variable.disabled = true;
                                 }
-                                variable.disabled = true
                             }
+                            
                             break;
                         case "SHOWOPTIONGROUP":
                             if (variable.name === programRule.variable) {
@@ -214,11 +239,25 @@ export function replaceEspecifValue(values: Record<string, any>, variables: Reco
     return false;
 }
 
+function isDate(str: string) {
+    // Remove os parênteses se existirem
+    if (typeof str === 'string') {
+        const cleanedStr = str?.replace(/[()]/g, '');
+
+        // Tenta criar um objeto Date
+        const date = new Date(cleanedStr);
+
+        // Verifica se a data é válida
+        return !isNaN(date.getTime());
+    }
+    return str;
+}
+
 // execute function
 function executeFunctionName(functionName: string | undefined, condition: string | undefined) {
     switch (functionName) {
         case "hasValue":
-            return eval(condition ?? "");
+            return isDate(condition!) ? condition : eval(condition ?? "");
         case "yearsBetween":
             return eval(d2YearsBetween(condition, condition?.split(")")) ?? "");
 
@@ -286,9 +325,10 @@ function d2YearsBetween(origin: string | undefined, condition: string[] | undefi
 
 // replace varieble by value from condition
 export function existValue(condition: string | undefined, values: Record<string, any> = {}, formatKeyValueType: any) {
-    let localCondition = `false`;
-    const dataArray = condition?.split(/[^a-zA-Z0-9_ ]+/)
-        .map(item => item.trim().replace(/^'(.*)'$/, '$1'))
+    let localCondition = condition as string;
+    let valueToReturn = condition as string
+    const dataArray = condition?.split(/[^a-zA-Z0-9À-ÿ_ ]+/)
+        .map(item => item.trim().replace(/^'(.*)'$/, '$1')).filter(item => item.length > 0);
 
     for (const value of Object.keys(values) || []) {
         if (dataArray?.includes(value)) {
@@ -304,7 +344,12 @@ export function existValue(condition: string | undefined, values: Record<string,
 
                 case "NUMBER":
                 case "INTEGER_ZERO_OR_POSITIVE":
-                    localCondition = localCondition.replaceAll(`'${value}'`, String(Number(values[value] ?? 0)))
+                    valueToReturn = valueToReturn.replaceAll(`'${value}'`, String(Number(values[value] ?? 0)))
+                    if (!/[a-zA-Z]/.test(valueToReturn)) {
+                        localCondition = valueToReturn
+                    } else {
+                        localCondition = "0"
+                    }
                     break;
 
                 default:

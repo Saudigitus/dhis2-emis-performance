@@ -36,6 +36,7 @@ interface transfer {
 
 interface defaults {
   currentAcademicYear: string
+  defaultOrder: string
 }
 
 interface filterItem {

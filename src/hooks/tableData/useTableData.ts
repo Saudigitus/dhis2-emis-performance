@@ -6,7 +6,7 @@ import { HeaderFieldsState } from "../../schema/headersSchema";
 import useShowAlerts from "../commons/useShowAlert";
 import { EventsState, TermMarksState } from "../../schema/termMarksSchema";
 import { type TableDataProps, type EventQueryProps, type TeiQueryProps, type MarksQueryResults, type EventQueryResults, type TeiQueryResults } from "../../types/table/TableData";
-import { formatResponseRowsMarks, formatResponseRows, getDataStoreKeys } from "../../utils";
+import { formatResponseRowsMarks, formatResponseRows, getDataStoreKeys, getSelectedKey } from "../../utils";
 
 const EVENT_QUERY = (queryProps: EventQueryProps) => ({
     results: {
@@ -39,6 +39,7 @@ export function useTableData() {
     const [allTeis, setAllTeis] = useState<any[]>([])
     const { program, registration } = getDataStoreKeys()
     const [, setAllEvents] = useRecoilState(EventsState);
+    const { getDataStoreData } = getSelectedKey()
     const { school } = urlParamiters()
 
     const fetchMarks = async (tei: string, selectedTermId: string) => {
@@ -46,7 +47,7 @@ export function useTableData() {
             //ouMode: "SELECTED",
             // programStatus: "ACTIVE",
             program: program,
-            order: "createdAt:desc",
+            order: getDataStoreData.defaults.defaultOrder || "occurredAt:desc",
             programStage: selectedTermId,
             //orgUnit: school as unknown as string,
             trackedEntity: tei
@@ -103,7 +104,7 @@ export function useTableData() {
             pageSize,
             // programStatus: "ACTIVE",
             program: program,
-            order: "createdAt:desc",
+            order: getDataStoreData.defaults.defaultOrder || "occurredAt:desc",
             programStage: registration?.programStage,
             filter: headerFieldsState?.dataElements,
             filterAttributes: headerFieldsState?.attributes,
