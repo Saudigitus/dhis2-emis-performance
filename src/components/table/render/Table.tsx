@@ -15,6 +15,7 @@ import { TableDataLoadingState } from '../../../schema/tableDataLoadingSchema';
 import { getDataStoreKeys, getSelectedKey } from '../../../utils';
 import { useGetEvents } from '../../../hooks/events/useGetEvents';
 import AlertDialog from '../../confirm/confirm';
+import { RowSelectorState } from '../../../schema/rowSelectorSchema';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -48,6 +49,7 @@ function Table() {
     const { program } = getDataStoreKeys()
     const { getEvents, events, loadingMonitoriaEvents } = useGetEvents()
     const [allChecked, setAllChecked] = useState(false)
+    const setSelectedRows = useSetRecoilState(RowSelectorState)
 
     useEffect(() => {
         setLoading(loading)
@@ -66,7 +68,8 @@ function Table() {
     useEffect(() => {
         if (orgUnit) {
             if (allChecked) setAllChecked(false)
-            void getEvents(1, 1, program, getDataStoreData?.monitoria?.programStage, headerFieldsState.dataElements, headerFieldsState.attributes, orgUnit, false)
+            setSelectedRows({})
+            void getEvents(1, 1, program, getDataStoreData?.monitoria?.programStage, [`${getDataStoreData.monitoria?.filters?.dataElements[0].dataElement}:in:${moduloAdministrativo}`], [], orgUnit, false)
         }
     }, [refetch, orgUnit, moduloAdministrativo])
 

@@ -147,19 +147,30 @@ export function useTableData() {
 
         if (teiResults?.results?.instances) {
             let counter = 0
+            let fetchedNames: any = {}
+
             for (const tei of teiResults?.results?.instances) {
                 const attId = assessment?.programs.find((x: any) => x?.program === tei.enrollments[0]?.program)?.attributes.find((x: any) => x.attributeName == 'parentId')?.attribute
                 const ouId = tei.attributes.find(x => x.attribute === attId)?.value
 
                 if (ouId) {
-                    const teiName: any = await getOrgUnitName(ouId as unknown as string)
-                    teiResults.results?.instances[counter].attributes.map((x: any) => {
-                        if (x.attribute === attId) x.value = teiName?.results?.name
-                    })
+                    if (fetchedNames?.[ouId]) {
+                        teiResults.results?.instances[counter].attributes.map((x: any) => {
+                            if (x.attribute === attId) x.value = fetchedNames?.[ouId]
+                        })
+                    } else {
+                        const teiName: any = await getOrgUnitName(ouId as unknown as string)
+                        fetchedNames[ouId] = teiName?.results?.name
+                        teiResults.results?.instances[counter].attributes.map((x: any) => {
+                            if (x.attribute === attId) x.value = teiName?.results?.name
+                        })
+                    }
                 }
+
                 counter++
             }
         }
+
 
         // if (selectedProgramStage !== null && selectedProgramStage !== undefined && selectedProgramStage !== '') {
         //     for (const tei of allTeis) {

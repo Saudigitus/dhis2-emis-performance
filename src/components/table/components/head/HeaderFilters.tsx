@@ -24,9 +24,6 @@ function HeaderFilters(props: any) {
       <EnrollmentFilters />
 
       <div className={styles.filterLeftContainer}>
-        {/* <RowActions row={{}}/> */}
-        {/* <SwitchButtonView /> */}
-        {/* <EnrollmentActionsButtons/> */}
         {
           Object.keys(selectedRows).length > 0 && <NoticeBox className={styles.noticeBox} title={`${Object.keys(selectedRows).length} ASCA(S) selecionada(s)`} />
         }

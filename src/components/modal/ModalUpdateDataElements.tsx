@@ -25,8 +25,8 @@ export default function ModalEdit({ tableData, setOpen }: { setOpen: (args: bool
                     dataElement: getDataStoreData.monitoria.facilitadores.treinador,
                     value: values[getDataStoreData.monitoria.facilitadores.treinador]
                 }],
-                eventDate: values.eventDate,
-                occurredAt: values.eventDate
+                ...(values.eventDate ? { eventDate: values.eventDate } : {}),
+                ...(values.eventDate ? { occurredAt: values.eventDate } : {}),
             })
         })
 
