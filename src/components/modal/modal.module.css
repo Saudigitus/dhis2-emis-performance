@@ -44,3 +44,23 @@
     font-weight: 500;
     letter-spacing: 2px;
 }
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-out, visibility 0.8s ease-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.visible {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 1.2s ease-in, visibility 1.2s ease-in;
+}

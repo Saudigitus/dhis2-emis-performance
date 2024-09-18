@@ -1,5 +1,5 @@
 .modalContainer{
-    /* min-width: 800px !important; */
+    min-width: 1000px !important;
 }
 
 .subTitle {
@@ -105,4 +105,8 @@
     text-align: center;
     margin: 0px !important;
 
+}
+
+.remove {
+    display: none !important;
 }
