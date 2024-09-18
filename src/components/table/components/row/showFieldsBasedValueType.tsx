@@ -23,7 +23,7 @@ export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueType
     const [values, setValues] = useState<Record<string, string>>({})
     const { name, ...rest } = column
     const customVariables = [{ ...rest, name: dataElement }]
-    
+
     const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
         type: "programStage",
         variables: customVariables,
@@ -87,6 +87,7 @@ export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueType
                         <Tooltip arrow={true} title={updatedVariables[0]?.content}>
                             <div>
                                 <GenericFields
+                                    key={updatedVariables[0]?.value}
                                     attribute={updatedVariables[0]}
                                     disabled={((loader === true) || inactive)}
                                     valueType={updatedVariables[0]?.valueType}

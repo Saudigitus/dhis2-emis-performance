@@ -117,6 +117,7 @@ export default function useExportTemplate() {
   const headerFieldsState = useRecoilValue(HeaderFieldsState)
   const [selectedTerm] = useRecoilState(TermMarksState)
   const updateProgress = useSetRecoilState(ProgressState)
+  const { getDataStoreData } = getSelectedKey()
 
   const { school, programStage } = urlParamiters()
   const [searchParams] = useSearchParams()
@@ -411,7 +412,7 @@ export default function useExportTemplate() {
           ouMode: "SELECTED",
           paging: false,
           program: program as unknown as string,
-          order: "createdAt:desc",
+          order: getDataStoreData.defaults.defaultOrder || "occurredAt:desc",
           programStage: registration?.programStage as unknown as string,
           filter: headerFieldsState?.dataElements,
           filterAttributes: headerFieldsState?.attributes,
@@ -438,7 +439,7 @@ export default function useExportTemplate() {
         const { results: { instances: marksData } } = await engine.query(
           EVENT_QUERY({
             program: program as unknown as string,
-            order: "createdAt:desc",
+            order: getDataStoreData.defaults.defaultOrder || "occurredAt:desc",
             programStage: programStage as string,
             trackedEntity: tei
           })

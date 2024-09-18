@@ -121,11 +121,11 @@ function Table() {
                     createSortHandler={() => {}}
                     order="asc"
                     orderBy="desc"
-                    rowsHeader={columns}
+                    rowsHeader={updatedVariables}
                   />
                   <RenderRows
                     loader={loading}
-                    headerData={columns}
+                    headerData={updatedVariables}
                     rowsData={tableData}
                   />
                 </>
