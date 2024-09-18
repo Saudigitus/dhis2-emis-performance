@@ -155,7 +155,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                         name="Ex"
                                         onChange={() => onCheck(currEvent)}
                                         color="primary"
-                                        disabled={currEvent?.event ? checkCompleted(currEvent?.status) === true ? true : false : true}
+                                        disabled={!moduloAdministrativo ? true : currEvent?.event ? checkCompleted(currEvent?.status) === true ? true : false : true}
                                     />
                                 </div>
                             </RowCell>

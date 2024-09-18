@@ -37,7 +37,7 @@ export function useGetEvents() {
             filterAttributes: filterAttributes,
             orgUnit: orgUnit as unknown as string,
         })).then((resp: any) => {
-            setData(resp.results.instances)
+            setData(resp?.results?.instances)
             setConfirmState((cd) => ({ ...cd, loading: false, open: false, loadingComplete: false }))
             setLoading(false)
             return resp

@@ -50,6 +50,7 @@ function Table() {
     const { getEvents, events, loadingMonitoriaEvents } = useGetEvents()
     const [allChecked, setAllChecked] = useState(false)
     const setSelectedRows = useSetRecoilState(RowSelectorState)
+    const filter = moduloAdministrativo ? [`${getDataStoreData.monitoria?.filters?.dataElements[0].dataElement}:in:${moduloAdministrativo}`] : []
 
     useEffect(() => {
         setLoading(loading)
@@ -69,7 +70,7 @@ function Table() {
         if (orgUnit) {
             if (allChecked) setAllChecked(false)
             setSelectedRows({})
-            void getEvents(1, 1, program, getDataStoreData?.monitoria?.programStage, [`${getDataStoreData.monitoria?.filters?.dataElements[0].dataElement}:in:${moduloAdministrativo}`], [], orgUnit, false)
+            void getEvents(1, 1, program, getDataStoreData?.monitoria?.programStage, filter, [], orgUnit, false)
         }
     }, [refetch, orgUnit, moduloAdministrativo])
 

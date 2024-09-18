@@ -8,6 +8,7 @@ import { Checkbox } from '@material-ui/core';
 import { useRecoilState } from 'recoil';
 import { RowSelectorState } from '../../../schema/rowSelectorSchema';
 import { checkCompleted } from '../../../utils/table/rows/checkCompleted';
+import { useParams } from '../../../hooks';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -48,6 +49,8 @@ function RenderHeader(props: RenderHeaderProps): React.ReactElement {
     const classes = useStyles()
     const [monitoriaEvents, setMonitoriaEvents] = useState<any>({})
     const [disabled, setDisabled] = useState(true)
+    const { urlParamiters } = useParams()
+    const { moduloAdministrativo } = urlParamiters()
     let [, SetSelectedRows] = useRecoilState(RowSelectorState)
 
 
@@ -105,7 +108,7 @@ function RenderHeader(props: RenderHeaderProps): React.ReactElement {
                             name="Ex"
                             onChange={(event: any) => checkAll(event)}
                             color="primary"
-                            disabled={disabled}
+                            disabled={disabled || !moduloAdministrativo}
                         />
                     </div>
                 </RowCell>
