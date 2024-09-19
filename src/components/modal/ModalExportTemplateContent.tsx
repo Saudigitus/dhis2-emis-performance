@@ -83,7 +83,7 @@ function ModalExportTemplateContent(
     {
       id: "downloadTemplate",
       type: "submit",
-      label: "Export Students List",
+      label: "Export empty template",
       primary: true,
       disabled: loadingExport,
       loading: loadingExport,

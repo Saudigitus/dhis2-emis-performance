@@ -10,11 +10,11 @@ import {
   ModalContentComponent
 } from "../../../../components"
 import ModalExportTemplateContent from "../../../modal/ModalExportTemplateContent"
-import {BulkMarksUpload} from "../../../bulkImport/BulkMarksUpload";
+import { BulkMarksUpload } from "../../../bulkImport/BulkMarksUpload";
 
 function EnrollmentActionsButtons() {
   const { urlParamiters } = useParams()
-  const { school: orgUnit } = urlParamiters()
+  const { school: orgUnit, programStage } = urlParamiters()
   const [openExportEmptyTemplate, setOpenExportEmptyTemplate] =
     useState<boolean>(false)
   const [open, setOpen] = useState<boolean>(false)
@@ -22,17 +22,17 @@ function EnrollmentActionsButtons() {
 
   const enrollmentOptions: FlyoutOptionsProps[] = [
     {
-      label: "Export students list",
-      divider: false,
-      onClick: () => {
-        setOpenExportEmptyTemplate(true)
-      }
-    },
-    {
       label: "Bulk marks upload",
       divider: true,
       onClick: () => {
         setOpenImport(true)
+      }
+    },
+    {
+      label: "Export empty template",
+      divider: false,
+      onClick: () => {
+        setOpenExportEmptyTemplate(true)
       }
     }
   ]
@@ -42,7 +42,8 @@ function EnrollmentActionsButtons() {
       <ButtonStrip>
         <Tooltip
           title={
-            orgUnit === null ? "Please select an organisation unit before" : ""
+            orgUnit === null ? "Please select an organisation unit before" : 
+            Boolean(!programStage) ? "Please select a term before" : ""
           }
         >
           <span>
@@ -54,7 +55,7 @@ function EnrollmentActionsButtons() {
                   </span>
                 ) as unknown as string
               }
-              disabled={false}
+              disabled={Boolean(!programStage)}
               // disabled={!grade || !currentClass}
               icon={<IconUserGroup16 />}
               options={enrollmentOptions}
@@ -72,11 +73,17 @@ function EnrollmentActionsButtons() {
         </ModalComponent>
       )}
       {openImport &&
+        <ModalComponent
+          title="Bulk Marks"
+          setOpen={setOpenImport}
+          open={openImport}
+        >
           <BulkMarksUpload
             setOpen={setOpenImport}
             isOpen={openImport}
             forUpdate={false}
           />
+        </ModalComponent>
       }
       {openExportEmptyTemplate && (
         <ModalComponent

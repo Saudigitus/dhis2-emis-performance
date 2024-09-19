@@ -20,6 +20,7 @@ import {
 } from "../../schema/bulkImportSchema";
 import SummaryDetails from "./SummaryDetails";
 import ModalSummaryContent from "./ModalSummaryContent";
+import DropZone from '../dropzone/DropZone';
 // import SummaryDetails from "./SummaryDetails";
 // import {fromPairs} from "../../utils/bulkImport/validateTemplae";
 
@@ -109,34 +110,36 @@ export const BulkMarksUpload = ({setOpen, isOpen, forUpdate}: BulkMarksUploadPro
     return (
         <>
             { (!isProcessing && !summaryOpen) &&
-                <MuiThemeProvider theme={theme}>
-                    <DropzoneDialog
-                        dialogTitle={"Bulk Marks Upload"}
-                        submitButtonText={"Start Import"}
-                        dropzoneText={"Drag and drop a file here or Browse"}
-                        Icon={CloudUpload as any}
-                        filesLimit={1}
-                        showPreviews={false}
-                        showPreviewsInDropzone={true}
-                        previewGridProps={{
-                            container: {
-                                spacing: 1,
-                                direction: 'row'
-                            }
-                        }}
-                        previewChipProps={{classes: {root: classes.previewChip}}}
-                        previewText="Selected file:"
-                        showFileNames={true}
-                        showFileNamesInPreview={true}
-                        acceptedFiles={[".xlsx"]}
-                        open={isOpen}
-                        onClose={() => {
-                            setOpen(false)
-                        }}
-                        onSave={onSave}
-                        clearOnUnmount={true}
-                    />
-                </MuiThemeProvider>
+                // <MuiThemeProvider theme={theme}>
+                //     <DropzoneDialog
+                //         dialogTitle={"Bulk Marks Upload"}
+                //         submitButtonText={"Start Import"}
+                //         dropzoneText={"Drag and drop a file here or Browse"}
+                //         Icon={CloudUpload as any}
+                //         filesLimit={1}
+                //         showPreviews={false}
+                //         showPreviewsInDropzone={true}
+                //         previewGridProps={{
+                //             container: {
+                //                 spacing: 1,
+                //                 direction: 'row'
+                //             }
+                //         }}
+                //         previewChipProps={{classes: {root: classes.previewChip}}}
+                //         previewText="Selected file:"
+                //         showFileNames={true}
+                //         showFileNamesInPreview={true}
+                //         acceptedFiles={[".xlsx"]}
+                //         open={isOpen}
+                //         onClose={() => {
+                //             setOpen(false)
+                //         }}
+                //         onSave={onSave}
+                //         clearOnUnmount={true}
+                //     />
+                // </MuiThemeProvider>
+
+                <DropZone onSave={onSave}/>
             }
             { (summaryOpen) &&
                 <Modal large position={"middle"} className={styles.modalContainer}>
