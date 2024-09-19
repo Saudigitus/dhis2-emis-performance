@@ -1,15 +1,15 @@
-import React, {useState} from 'react';
-
-import {createStyles, createTheme, makeStyles, MuiThemeProvider} from "@material-ui/core/styles";
-import {DropzoneDialog} from "material-ui-dropzone";
-import {CloudUpload} from "@material-ui/icons";
-import {read, utils} from "xlsx";
-import {CenteredContent, CircularLoader, Modal, ModalContent, ModalTitle} from "@dhis2/ui";
+import React, { useState } from 'react';
+import { Divider, IconCheckmarkCircle16, Tag, ModalActions, Button, ButtonStrip } from "@dhis2/ui";
+import { createStyles, createTheme, makeStyles, MuiThemeProvider } from "@material-ui/core/styles";
+import { DropzoneDialog } from "material-ui-dropzone";
+import { CloudUpload } from "@material-ui/icons";
+import { read, utils } from "xlsx";
+import { CenteredContent, CircularLoader, Modal, ModalContent, ModalTitle } from "@dhis2/ui";
 import styles from "./modal.module.css";
-import {getMarksDataFromTemplate, generateData, createUpdatePayload} from "../../utils/bulkImport/processImportData";
-import {type ProgramConfig} from "../../types/programConfig/ProgramConfig";
-import {useRecoilState, useRecoilValue, useResetRecoilState} from "recoil";
-import {ProgramConfigState} from "../../schema/programSchema";
+import { getMarksDataFromTemplate, generateData, createUpdatePayload } from "../../utils/bulkImport/processImportData";
+import { type ProgramConfig } from "../../types/programConfig/ProgramConfig";
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
+import { ProgramConfigState } from "../../schema/programSchema";
 import useGetProgramStageTerms from "../../hooks/programStages/useGetProgramStageTerms";
 import {
     type BulkImportStats,
@@ -21,6 +21,8 @@ import {
 import SummaryDetails from "./SummaryDetails";
 import ModalSummaryContent from "./ModalSummaryContent";
 import DropZone from '../dropzone/DropZone';
+import IteractiveProgress from '../modal/components/importProgress';
+import { ProgressState } from '../../schema/linearProgress';
 // import SummaryDetails from "./SummaryDetails";
 // import {fromPairs} from "../../utils/bulkImport/validateTemplae";
 
@@ -30,12 +32,12 @@ interface BulkMarksUploadProps {
     forUpdate: boolean
 }
 
-export const BulkMarksUpload = ({setOpen, isOpen, forUpdate}: BulkMarksUploadProps) => {
+export const BulkMarksUpload = ({ setOpen, isOpen, forUpdate }: BulkMarksUploadProps) => {
     const programConfig: ProgramConfig = useRecoilValue<ProgramConfig>(ProgramConfigState)
     const [isProcessing, setIsProcessing] = useState(false);
     const [summaryOpen, setSummaryOpen] = useState(false);
     const performanceStages = useGetProgramStageTerms()
-    const resetProcessingStage = useResetRecoilState(ProcessingStage);
+    const [processingStage, resetProcessingStage] = useRecoilState<string>(ProcessingStage)
     const [uploadStats, setUploadStats] = useRecoilState<BulkImportStats>(BulkImportStatsState);
     const [_processedRecords, setProcessedRecords] = useRecoilState<ProcessingRecords>(ProcessingRecordsState);
     const marksStages = performanceStages?.items.map((p: any) => {
@@ -52,8 +54,10 @@ export const BulkMarksUpload = ({setOpen, isOpen, forUpdate}: BulkMarksUploadPro
         overrides: {}
     });
     const classes = useStyles();
+    const progress = useRecoilValue(ProgressState)
+
     const handleFileChange = (file: File) => {
-        resetProcessingStage()
+        resetProcessingStage('template-processing')
         setIsProcessing(true)
         setSummaryOpen(true)
         const reader: FileReader = new FileReader();
@@ -70,7 +74,7 @@ export const BulkMarksUpload = ({setOpen, isOpen, forUpdate}: BulkMarksUploadPro
             const sheetName = workbook.SheetNames[0];
             const worksheet = workbook.Sheets[sheetName];
             const rawData = utils.sheet_to_json(worksheet,
-                {header: 1, raw: false, dateNF: 'yyyy-mm-dd', defval: ""});
+                { header: 1, raw: false, dateNF: 'yyyy-mm-dd', defval: "" });
             const headers: string[] = rawData[2] as string[] // hidden header in template
             // const templateHeadings = fromPairs(headers.map((val, idx) => { return [val, headings[idx] ?? ""] }))
             // setExcelTemplateHeaders(templateHeadings)
@@ -81,7 +85,6 @@ export const BulkMarksUpload = ({setOpen, isOpen, forUpdate}: BulkMarksUploadPro
             const marksData = getMarksDataFromTemplate(dataWithHeaders, marksStages, programConfig)
             // console.log("marksData", marksData)
             const events = createUpdatePayload(marksData)
-            console.log("events", events)
 
             setUploadStats(stats => ({
                 ...stats,
@@ -92,7 +95,7 @@ export const BulkMarksUpload = ({setOpen, isOpen, forUpdate}: BulkMarksUploadPro
                     conflicts: 0
                 }
             }))
-            console.log("UPLOAD STATS ======>", uploadStats)
+
             setProcessedRecords((r) => ({
                 ...r,
                 recordsToUpdate: marksData,
@@ -141,9 +144,9 @@ export const BulkMarksUpload = ({setOpen, isOpen, forUpdate}: BulkMarksUploadPro
 
                 <DropZone onSave={onSave}/>
             }
-            { (summaryOpen) &&
+            {(summaryOpen) &&
                 <Modal large position={"middle"} className={styles.modalContainer}>
-                    <ModalTitle>{isProcessing ? "Processing Bulk Marks Upload" : "Bulk Marks Upload Summary"}</ModalTitle>
+                    {progress.progress === null && <ModalTitle>{isProcessing ? "Processing Bulk Marks Upload" : "Bulk Marks Upload Summary"}</ModalTitle>}
                     <ModalContent>
                         {isProcessing
                             ? <CenteredContent className="p-5"><CircularLoader /></CenteredContent>
@@ -157,11 +160,10 @@ export const BulkMarksUpload = ({setOpen, isOpen, forUpdate}: BulkMarksUploadPro
                                         duplicates: uploadStats.events.updated,
                                         invalid: uploadStats.events.invalid
                                     }
-                                    // {updated: 0, created: 0, conflicts:0, duplicates: 0, invalid: 0}
                                 }
                                 summaryDetails={
                                     <>
-                                        <SummaryDetails/>
+                                        <SummaryDetails />
                                     </>
                                 }
                             />

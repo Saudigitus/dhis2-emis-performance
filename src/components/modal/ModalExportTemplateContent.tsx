@@ -74,7 +74,7 @@ function ModalExportTemplateContent(
     {
       id: "cancel",
       type: "button",
-      label: "Cancel",
+      label: progress?.progress != null ? "Hide" : "Cancel",
       disabled: loading,
       onClick: () => {
         setOpen(false)

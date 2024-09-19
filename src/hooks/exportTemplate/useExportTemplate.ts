@@ -331,7 +331,7 @@ export default function useExportTemplate() {
         required: true
       },
       {
-      key: `occurredAt`,
+        key: `occurredAt`,
         id: `occurredAt`,
         label: "EventDate",
         valueType: "TEXT",
@@ -403,7 +403,7 @@ export default function useExportTemplate() {
 
   async function handleExportToWord(values: useExportTemplateProps) {
     try {
-      updateProgress({ progress: 0, buffer: 10 })
+      updateProgress({ stage: 'export', progress: 0, buffer: 10 })
 
       values.setLoadingExport && values.setLoadingExport(true)
 
@@ -420,7 +420,7 @@ export default function useExportTemplate() {
         })
       )
 
-      updateProgress({ progress: 10, buffer: 15 })
+      updateProgress({ stage: 'export', progress: 10, buffer: 15 })
 
       const allTeis: [] = eventsInstances.map((x: { trackedEntity: string }) => x.trackedEntity)
 
@@ -431,7 +431,7 @@ export default function useExportTemplate() {
         })
       )
 
-      updateProgress({ progress: 40, buffer: 45 })
+      updateProgress({ stage: 'export', progress: 40, buffer: 45 })
 
       let marksInstances: any[] = []
 
@@ -444,8 +444,8 @@ export default function useExportTemplate() {
             trackedEntity: tei
           })
         )
-        
-        updateProgress((progress: any) => ({ progress: progress.progress + 50 / allTeis.length, buffer: progress.buffer + 55 / allTeis.length }))
+
+        updateProgress((progress: any) => ({ stage: 'export', progress: progress.progress + 50 / allTeis.length, buffer: progress.buffer + 55 / allTeis.length }))
         marksInstances = marksInstances.concat(marksData)
       }
 
@@ -662,9 +662,10 @@ export default function useExportTemplate() {
       })
       setTimeout(hide, 5000)
 
-      updateProgress({ progress: 100, buffer: 100 })
+      updateProgress({ stage: 'export', progress: 100, buffer: 100 })
       values.setLoadingExport && values.setLoadingExport(false)
     } catch (err: any) {
+      updateProgress({ progress: null })
       console.log(err)
       show({
         message: err.message,
