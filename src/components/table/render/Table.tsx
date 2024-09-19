@@ -47,7 +47,7 @@ function Table() {
     const setLoading = useSetRecoilState(TableDataLoadingState)
     const { getDataStoreData } = getSelectedKey()
     const { program } = getDataStoreKeys()
-    const { getEvents, events, loadingMonitoriaEvents } = useGetEvents()
+    const { getEvents, events, loadingMonitoriaEvents, updateEvents } = useGetEvents()
     const [allChecked, setAllChecked] = useState(false)
     const setSelectedRows = useSetRecoilState(RowSelectorState)
     const filter = moduloAdministrativo ? [`${getDataStoreData.monitoria?.filters?.dataElements[0].dataElement}:in:${moduloAdministrativo}`] : []
@@ -59,6 +59,8 @@ function Table() {
     useEffect(() => {
         setpage(1)
     }, [headerFieldsState])
+
+    console.log(events)
 
     useEffect(() => {
         setAllChecked(false)
@@ -118,6 +120,7 @@ function Table() {
                                         events={events}
                                         allChecked={allChecked}
                                         setAllChecked={setAllChecked}
+                                        updateEvents={updateEvents}
                                     />
                                 </>
                             </TableComponent>

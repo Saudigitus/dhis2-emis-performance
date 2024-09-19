@@ -2,10 +2,13 @@ import { useDataMutation } from "@dhis2/app-runtime"
 import useShowAlerts from '../commons/useShowAlert';
 
 const POST_DATA_ELEMENT: any = {
-    resource: "events",
-    type: 'update',
-    id: ({ id }: any) => id,
-    data: ({ data }: any) => data
+    resource: "tracker",
+    type: 'create',
+    data: ({ data }: any) => data,
+    params: {
+        async: false,
+        importStrategy: 'UPDATE'
+    }
 }
 
 export default function usePostDataElement() {

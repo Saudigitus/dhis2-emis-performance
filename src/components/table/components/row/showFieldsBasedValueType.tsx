@@ -14,33 +14,42 @@ import { useRecoilValue } from 'recoil';
 import { ProgramConfigState } from '../../../../schema/programSchema';
 
 export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueTypeProps) {
-    const { column, value, currentEvent, saveMarks, showFeedBack, setShowFeedBack, headers, loader, trackedEntity, prevValues, setPrevValues, inactive, disableInput } = props;
+    const { column, value, currentEvent, saveMarks, updateEvents, showFeedBack, setShowFeedBack, headers, loader, trackedEntity, prevValues, setPrevValues, inactive, disableInput } = props;
     const dataElement = column.id.split('_')[0]
     const { imageUrl } = GetImageUrl()
     const programConfigState = useRecoilValue(ProgramConfigState);
 
-    function save(newMark: any) {
+    function save(value: any) {
+        const updates: any = {
+            dataValues: [
+                ...(currentEvent?.dataValues?.filter((x: any) => x.dataElement != dataElement) ?? []),
+                (dataElement === 'eventDate' ? {}
+                    : {
+                        dataElement,
+                        value
+                    }
+                )
+            ], ...(dataElement === 'eventDate' && { eventDate: value, occurredAt: value })
+        }
+
         void saveMarks({
             data: {
-                event: currentEvent?.event,
-                orgUnit: currentEvent?.orgUnit,
-                enrollment: currentEvent?.enrollment,
-                dataValues: [
-                    (dataElement === 'eventDate' ? currentEvent?.dataValues?.[0] ?? {}
-                        : {
-                            dataElement,
-                            value: newMark
-                        }
-                    )
-                ],
-                program: currentEvent?.program,
-                status: currentEvent?.status,
-                trackedEntity: currentEvent?.trackedEntity,
-                programStage: currentEvent?.programStage,
-                ...(dataElement === 'eventDate' && { eventDate: newMark, occurredAt: newMark })
+                events: [{
+                    ...currentEvent,
+                    ...updates
+                }]
             },
-            id: `${currentEvent?.event}/${dataElement}`
         }).then(() => {
+
+            updateEvents((events: any) => (events.map((x: any) => {
+                if (x.event === currentEvent.event) {
+                    return {
+                        ...x,
+                        ...updates
+                    }
+                } else return x
+            })))
+
             setShowFeedBack({
                 dataElement: `${currentEvent?.event}/${dataElement}`,
                 feedbackType: 'success'

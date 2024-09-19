@@ -52,5 +52,5 @@ export function useGetEvents() {
             })
     }
 
-    return { getEvents, events: data, loadingMonitoriaEvents }
+    return { getEvents, events: data, loadingMonitoriaEvents, updateEvents: setData }
 }

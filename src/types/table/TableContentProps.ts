@@ -41,6 +41,7 @@ interface RenderHeaderProps {
     events?: any[]
     setAllChecked: any
     allChecked?: any
+    updateEvents?: any
 }
 
 interface TableSortProps {
@@ -67,6 +68,7 @@ interface ShowFieldsBasedValueTypeProps {
     prevValues: any
     disableInput: boolean
     inactive: boolean
+    updateEvents?: any
 }
 interface RowActionsType {
     label: string

@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function RenderRows(props: RenderHeaderProps): React.ReactElement {
-    const { rowsData, headerData, loader, events, allChecked, setAllChecked } = props
+    const { rowsData, headerData, loader, events, allChecked, setAllChecked, updateEvents } = props
     const classes = useStyles()
     const [selectedTerm] = useRecoilState(SubTabState);
     const { getDataStoreData } = getSelectedKey()
@@ -128,6 +128,7 @@ function RenderRows(props: RenderHeaderProps): React.ReactElement {
                                     setPrevValues={setPrevValues}
                                     inactive={checkCompleted(currEvent?.status)}
                                     disableInput={currEvent?.event ? false : true}
+                                    updateEvents={updateEvents}
                                 />
                             </div>
                             {((moduloAdministrativo && column.id === selected?.id) || column.id == 'complete') &&
