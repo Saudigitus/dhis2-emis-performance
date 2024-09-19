@@ -35,36 +35,36 @@ const usetStyles = makeStyles({
 })
 
 function Table() {
-    const classes = usetStyles()
-    const { columns = [] } = useHeader()
-    const { getData, loading, tableData, getMarks } = useTableData()
-    const headerFieldsState = useRecoilValue(HeaderFieldsState)
-    const [page, setpage] = useState(1)
-    const [pageSize, setpageSize] = useState(10)
-    const [refetch] = useRecoilState(TeiRefetch)
-    const termMarksState = useRecoilValue(TermMarksState)
-    const { urlParamiters } = useParams()
-    const { academicYear, programStage, grade } = urlParamiters()
-    const setLoading = useSetRecoilState(TableDataLoadingState)
-    const { getDataStoreData } = getSelectedKey()
-    const customColumns = columns?.map((column: any) => { return { ...column, name: column.id.split("_")[0] } })
+  const classes = usetStyles()
+  const { columns = [] } = useHeader()
+  const { getData, loading, tableData, getMarks } = useTableData()
+  const headerFieldsState = useRecoilValue(HeaderFieldsState)
+  const [page, setpage] = useState(1)
+  const [pageSize, setpageSize] = useState(10)
+  const [refetch] = useRecoilState(TeiRefetch)
+  const termMarksState = useRecoilValue(TermMarksState)
+  const { urlParamiters } = useParams()
+  const { academicYear, programStage, grade } = urlParamiters()
+  const setLoading = useSetRecoilState(TableDataLoadingState)
+  const { getDataStoreData } = getSelectedKey()
+  const customColumns = columns?.map((column: any) => { return { ...column, name: column.id.split("_")[0] } })
 
-    const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
-        type: "programStage",
-        variables: customColumns,
-        formatKeyValueType: { [getDataStoreData.registration.grade as string]: "LIST" },
-        values: { [getDataStoreData.registration.grade as string]: grade, testi: "test" }
-    })
+  const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
+    type: "programStage",
+    variables: customColumns,
+    formatKeyValueType: { [getDataStoreData.registration.grade as string]: "LIST" },
+    values: { [getDataStoreData.registration.grade as string]: grade, testi: "test" }
+  })
 
-    useEffect(() => {
-        if (grade) {
-            runRulesEngine(customColumns)
-        }
-    }, [grade, programStage])
+  useEffect(() => {
+    if (grade) {
+      runRulesEngine(customColumns)
+    }
+  }, [grade, programStage])
 
-    useEffect(() => {
-        setLoading(loading)
-    }, [loading])
+  useEffect(() => {
+    setLoading(loading)
+  }, [loading])
 
   useEffect(() => {
     setLoading(loading)
@@ -118,7 +118,7 @@ function Table() {
               <TableComponent>
                 <>
                   <RenderHeader
-                    createSortHandler={() => {}}
+                    createSortHandler={() => { }}
                     order="asc"
                     orderBy="desc"
                     rowsHeader={updatedVariables}

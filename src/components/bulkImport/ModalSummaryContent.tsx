@@ -18,6 +18,7 @@ import { type ApiResponse } from "../../types/bulkImport/Interfaces";
 import { usePostEvent } from "../../hooks";
 import { type ButtonActionProps } from "../../types/Buttons/ButtonActions";
 import { ProgressState } from "../../schema/linearProgress";
+import IteractiveProgress from "../modal/components/importProgress";
 
 interface ModalContentProps {
     setOpen: (value: boolean) => void
@@ -41,9 +42,8 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
         loadUpdateEvent: loading,
         updateEvent,
         data,
-        error
     } = usePostEvent()
-    const setProgress = useSetRecoilState(ProgressState)
+    const [progress, setProgress] = useRecoilState(ProgressState)
 
     useEffect(() => {
         if (data !== undefined) {
@@ -69,17 +69,17 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
         }
     }, [data]);
 
-    useEffect(() => {
-        if (error !== undefined) {
-            const importResponse: ApiResponse = error.details as unknown as ApiResponse
-            setBulkImportResponseStatsState({
-                ...bulkImportResponseStatsState,
-                validationReport: importResponse.validationReport,
-                stats: importResponse.stats,
-                status: importResponse.status
-            })
-        }
-    }, [error])
+    // useEffect(() => {
+    //     if (error !== undefined) {
+    //         const importResponse: ApiResponse = error.details as unknown as ApiResponse
+    //         setBulkImportResponseStatsState({
+    //             ...bulkImportResponseStatsState,
+    //             validationReport: importResponse.validationReport,
+    //             stats: importResponse.stats,
+    //             status: importResponse.status
+    //         })
+    //     }
+    // }, [error])
 
     const handleShowDetails = () => {
         setShowDetails(!showDetails);
@@ -104,19 +104,16 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
             importMode,
             importStrategy: "CREATE_AND_UPDATE"
         }
+
         try {
             const EventsPayload: any = {
                 events: processedRecords?.updateEvents
             }
 
-            void updateEvent({
-                data: EventsPayload,
-                params
-            })
-                
+            void updateEvent(EventsPayload, params)
+
         } catch (error: any) {
             setProgress({ progress: null })
-            console.error("Error updating marks: ", error)
         }
     }
 
@@ -153,43 +150,60 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
 
     return (
         <div>
-            <Tag positive icon={<IconCheckmarkCircle16 />} className={styles.tagContainer}> Students import
-                preview </Tag>
+            {progress.progress != null ?
+                <>
+                    < IteractiveProgress />
+                    <ModalActions>
+                        <ButtonStrip end>
+                            <Button
+                                onClick={() => setOpen(false)}
+                            >
+                                Hide
+                            </Button>
+                        </ButtonStrip>
+                    </ModalActions>
+                </>
+                :
+                <>
+                    <Tag positive icon={<IconCheckmarkCircle16 />} className={styles.tagContainer}> Students import
+                        preview </Tag>
 
-            <WithPadding />
-            <Title label={`${summaryTitle} Summary`} />
-            <WithPadding />
+                    <WithPadding />
+                    <Title label={`${summaryTitle} Summary`} />
+                    <WithPadding />
 
-            <SummaryCards {...summaryData} />
+                    <SummaryCards {...summaryData} />
 
-            <WithPadding />
-            <WithPadding />
-            <ButtonStrip>
-                <Button small icon={<InfoOutlined className={styles.infoIcon} />} onClick={handleShowDetails}>More
-                    details</Button>
-            </ButtonStrip>
+                    <WithPadding />
+                    <WithPadding />
+                    <ButtonStrip>
+                        <Button small icon={<InfoOutlined className={styles.infoIcon} />} onClick={handleShowDetails}>More
+                            details</Button>
+                    </ButtonStrip>
 
-            <WithPadding />
-            <Collapse in={showDetails}>
-                <div className={styles.detailsContainer}>
-                    {summaryDetails}
-                </div>
-            </Collapse>
+                    <WithPadding />
+                    <Collapse in={showDetails}>
+                        <div className={styles.detailsContainer}>
+                            {summaryDetails}
+                        </div>
+                    </Collapse>
 
-            {loading && <LinearProgress />}
-            <Divider />
-            <ModalActions>
-                <ButtonStrip end>
-                    {modalActions.map((action, i) => (
-                        <Button
-                            key={i}
-                            {...action}
-                        >
-                            {action.label}
-                        </Button>
-                    ))}
-                </ButtonStrip>
-            </ModalActions>
+                    {loading && <LinearProgress />}
+                    <Divider />
+                    <ModalActions>
+                        <ButtonStrip end>
+                            {modalActions.map((action, i) => (
+                                <Button
+                                    key={i}
+                                    {...action}
+                                >
+                                    {action.label}
+                                </Button>
+                            ))}
+                        </ButtonStrip>
+                    </ModalActions>
+                </>
+            }
         </div>
     );
 }

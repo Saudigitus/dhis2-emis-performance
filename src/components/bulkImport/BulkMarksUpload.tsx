@@ -145,19 +145,8 @@ export const BulkMarksUpload = ({ setOpen, isOpen, forUpdate }: BulkMarksUploadP
                 <Modal large position={"middle"} className={styles.modalContainer}>
                     {progress.progress === null && <ModalTitle>{isProcessing ? "Processing Bulk Marks Upload" : "Bulk Marks Upload Summary"}</ModalTitle>}
                     <ModalContent>
-                        {progress.progress != null && processingStage !== "template-processing" && processingStage !== 'dry-run' ?
-                            <>
-                                < IteractiveProgress />
-                                <ModalActions>
-                                    <ButtonStrip end>
-                                        <Button
-                                            onClick={() => setOpen(false)}
-                                        >
-                                            Hide
-                                        </Button>
-                                    </ButtonStrip>
-                                </ModalActions>
-                            </>
+                        {isProcessing
+                            ? <CenteredContent className="p-5"><CircularLoader /></CenteredContent>
                             : <ModalSummaryContent
                                 setOpen={setSummaryOpen}
                                 summaryData={
