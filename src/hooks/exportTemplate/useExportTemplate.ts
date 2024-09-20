@@ -24,31 +24,6 @@ export enum SectionVariablesTypes {
   Profile = "Student Profile"
 }
 
-const oneProgramQuery: any = {
-  program: {
-    resource: "programs",
-    id: ({ programId }: { programId: string }) => programId,
-    params: {
-      fields: [
-        "id,displayName,programTrackedEntityAttributes[mandatory,trackedEntityAttribute[id,displayName,valueType,unique,generated,optionSetValue,optionSet[id,displayName,options[id,displayName,code]]]],programStages[id,displayName,programStageDataElements[compulsory,dataElement[id,displayName,valueType,optionSetValue,optionSet[id,displayName,options[id,displayName,code]]]]"
-      ]
-    }
-  }
-}
-
-const reserveValuesQuery: any = {
-  values: {
-    resource: "trackedEntityAttributes",
-    id: ({
-      numberOfReserve,
-      attributeID
-    }: {
-      numberOfReserve: number
-      attributeID: string
-    }) => `${attributeID}/generateAndReserve?numberToReserve=${numberOfReserve}`
-  }
-}
-
 const EVENT_QUERY = ({
   ouMode,
   page,
@@ -119,31 +94,9 @@ export default function useExportTemplate() {
   const { getDataStoreData: programConfigDataStore } = getSelectedKey()
 
   async function generateInformations(inputValues: useExportTemplateProps) {
-    const sectionType: string | null = searchParams.get("sectionType")
-
-    if (!sectionType) {
-      throw new Error("Couldn't find section type in url params")
-    }
-    if (!programConfigDataStore?.program) {
-      throw Error("Couldn't get program uid from datastore << values >>")
-    }
-    const { program: programId, registration }: any = programConfigDataStore
-    const correspondingProgram: any = await engine.query(oneProgramQuery, { variables: { programId } })
-
-    if (!correspondingProgram?.program) {
-      throw Error(`Couldn't find program << ${programId} >> in DHIS2`)
-    }
-
-    if (!registration) {
-      throw Error(`Couldn't find registration config in datastore`)
-    }
-
-    if (!programConfigDataStore?.["performance"]) {
-      throw Error(`Couldn't find performance config in datastore`)
-    }
 
     const currentAttributes =
-      correspondingProgram?.program?.programTrackedEntityAttributes?.map(
+      programConfig?.programTrackedEntityAttributes?.filter(x => x.displayInList)?.map(
         (p: { mandatory: boolean; trackedEntityAttribute: any }) => {
           return { mandatory: p.mandatory, ...p.trackedEntityAttribute }
         }
@@ -171,17 +124,8 @@ export default function useExportTemplate() {
 
     const reserveValuePayload: any = {}
 
-    for (let attr of newHeaders) {
-      if (attr.unique && attr.generated) {
-        const reserveValueResponse: any = await engine.query(reserveValuesQuery, { variables: { numberOfReserve: +inputValues.studentsNumber, attributeID: attr.id } })
-        if (reserveValueResponse?.values?.length > 0) {
-          reserveValuePayload[`${attr.id}`] = reserveValueResponse.values
-        }
-      }
-    }
-
     const registrationProgramStageDataElements =
-      correspondingProgram?.program?.programStages?.reduce(
+      programConfig?.programStages?.reduce(
         (prev: any, curr: any) => {
           if (curr.id === registration.programStage) {
             const newDataElements =
@@ -213,8 +157,8 @@ export default function useExportTemplate() {
         []
       ) || []
 
-    const finalResultsProgramStageDataElements =
-      correspondingProgram?.program?.programStages?.reduce(
+    const performanceProgramStageDataElements =
+      programConfig?.programStages?.reduce(
         (prev: any, curr: any) => {
           if (curr.id === programStage) {
             const newDataElements =
@@ -339,7 +283,7 @@ export default function useExportTemplate() {
       ...newBeginHeadersFormatted,
       ...newHeaders,
       ...registrationProgramStageDataElements,
-      ...finalResultsProgramStageDataElements
+      ...performanceProgramStageDataElements
     ]
 
     if (+inputValues.studentsNumber > 0) {
@@ -382,7 +326,7 @@ export default function useExportTemplate() {
     return {
       headers: newHeaders || [],
       datas: newDataList || [],
-      currentProgram: correspondingProgram
+      currentProgram: programConfig
     }
   }
 
