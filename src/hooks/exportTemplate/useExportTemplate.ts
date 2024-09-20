@@ -24,31 +24,6 @@ export enum SectionVariablesTypes {
   Profile = "Student Profile"
 }
 
-const oneProgramQuery: any = {
-  program: {
-    resource: "programs",
-    id: ({ programId }: { programId: string }) => programId,
-    params: {
-      fields: [
-        "id,displayName,programTrackedEntityAttributes[mandatory,trackedEntityAttribute[id,displayName,valueType,unique,generated,optionSetValue,optionSet[id,displayName,options[id,displayName,code]]]],programStages[id,displayName,programStageDataElements[compulsory,dataElement[id,displayName,valueType,optionSetValue,optionSet[id,displayName,options[id,displayName,code]]]]"
-      ]
-    }
-  }
-}
-
-const reserveValuesQuery: any = {
-  values: {
-    resource: "trackedEntityAttributes",
-    id: ({
-      numberOfReserve,
-      attributeID
-    }: {
-      numberOfReserve: number
-      attributeID: string
-    }) => `${attributeID}/generateAndReserve?numberToReserve=${numberOfReserve}`
-  }
-}
-
 const EVENT_QUERY = ({
   ouMode,
   page,
