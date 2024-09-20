@@ -1,4 +1,4 @@
-import { useDataEngine, useDataQuery } from "@dhis2/app-runtime"
+import { useDataEngine } from "@dhis2/app-runtime"
 import { format } from "date-fns"
 import { useSearchParams } from "react-router-dom"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
@@ -6,17 +6,12 @@ import { HeaderFieldsState } from "../../schema/headersSchema"
 import { ProgramConfigState } from "../../schema/programSchema"
 import type { EventQueryProps } from "../../types/api/WithoutRegistrationProps"
 import type { TeiQueryProps } from "../../types/api/WithRegistrationProps"
-import { Attribute } from "../../types/generated/models"
 import type { useExportTemplateProps } from "../../types/modal/ModalProps"
 import { VariablesTypes } from "../../types/variables/AttributeColumns"
 import { convertNumberToLetter } from "../../utils/commons/convertNumberToLetter"
 import { getDataStoreKeys } from "../../utils/commons/dataStore/getDataStoreKeys"
 import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey"
-import { capitalizeString } from "../../utils/commons/formatCamelCaseToWords"
-import {
-  cellBorders,
-  cellFillBg
-} from "../../utils/constants/exportTemplate/templateStyles"
+import { cellBorders, cellFillBg } from "../../utils/constants/exportTemplate/templateStyles"
 import { formatResponseRows } from "../../utils/table/rows/formatResponseRows"
 import { useParams } from "../commons/useQueryParams"
 import { validationSheetConstructor } from "./validationSheetConstructor"
@@ -118,16 +113,9 @@ export default function useExportTemplate() {
   const [selectedTerm] = useRecoilState(TermMarksState)
   const updateProgress = useSetRecoilState(ProgressState)
   const { getDataStoreData } = getSelectedKey()
-
   const { school, programStage } = urlParamiters()
   const [searchParams] = useSearchParams()
   const { hide, show } = useShowAlerts()
-  const { refetch: loadOneProgram, loading } = useDataQuery(oneProgramQuery, {
-    lazy: true
-  })
-  const { refetch: loadReserveValues, loading: loading2 } = useDataQuery(reserveValuesQuery, {
-    lazy: true
-  })
   const { getDataStoreData: programConfigDataStore } = getSelectedKey()
 
   async function generateInformations(inputValues: useExportTemplateProps) {
@@ -140,7 +128,7 @@ export default function useExportTemplate() {
       throw Error("Couldn't get program uid from datastore << values >>")
     }
     const { program: programId, registration }: any = programConfigDataStore
-    const correspondingProgram: any = await loadOneProgram({ programId })
+    const correspondingProgram: any = await engine.query(oneProgramQuery, { variables: { programId } })
 
     if (!correspondingProgram?.program) {
       throw Error(`Couldn't find program << ${programId} >> in DHIS2`)
@@ -185,10 +173,7 @@ export default function useExportTemplate() {
 
     for (let attr of newHeaders) {
       if (attr.unique && attr.generated) {
-        const reserveValueResponse: any = await loadReserveValues({
-          numberOfReserve: +inputValues.studentsNumber,
-          attributeID: attr.id
-        })
+        const reserveValueResponse: any = await engine.query(reserveValuesQuery, { variables: { numberOfReserve: +inputValues.studentsNumber, attributeID: attr.id } })
         if (reserveValueResponse?.values?.length > 0) {
           reserveValuePayload[`${attr.id}`] = reserveValueResponse.values
         }
@@ -428,7 +413,7 @@ export default function useExportTemplate() {
         TEI_QUERY({
           program: program as unknown as string,
           trackedEntity: allTeis.join(";")
-        })
+        } as unknown as any)
       )
 
       updateProgress({ stage: 'export', progress: 40, buffer: 45 })
@@ -647,7 +632,7 @@ export default function useExportTemplate() {
         const blob = new Blob([buffer], {
           type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         })
-        window.saveAs( blob, `SEMIS - ${selectedTerm.label} Performance - ${format(new Date(), `yyyy-MM-dd`)}.xlsx`)
+        window.saveAs(blob, `SEMIS - ${selectedTerm.label} Performance - ${format(new Date(), `yyyy-MM-dd`)}.xlsx`)
       })
 
 
