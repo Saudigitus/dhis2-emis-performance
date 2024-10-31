@@ -14,6 +14,7 @@ import { useRecoilValue } from 'recoil';
 import { ProgramConfigState } from '../../../../schema/programSchema';
 import { CustomDhis2RulesEngine } from '../../../../hooks/programRules/rules-engine/RulesEngine';
 import Tooltip from "@material-ui/core/Tooltip";
+import { useParams } from '../../../../hooks';
 
 export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueTypeProps) {
     const { column, value, currentEvent, saveMarks, showFeedBack, setShowFeedBack, headers, loader, trackedEntity, prevValues, setPrevValues, inactive } = props;
@@ -23,12 +24,15 @@ export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueType
     const [values, setValues] = useState<Record<string, string>>({})
     const { name, ...rest } = column
     const customVariables = [{ ...rest, name: dataElement }]
+    const { urlParamiters } = useParams();
+    const { programStage } = urlParamiters()
 
     const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
         type: "programStage",
         variables: customVariables,
         formatKeyValueType: { [dataElement]: column.valueType },
-        values
+        values,
+        programStage: programStage!
     })
 
     useEffect(() => {

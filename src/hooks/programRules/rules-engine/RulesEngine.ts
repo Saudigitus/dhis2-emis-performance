@@ -10,11 +10,12 @@ interface RulesEngineProps {
     variables: any[]
     values: Record<string, any>
     type: "programStage" | "programStageSection" | "attributesSection"
-    formatKeyValueType?: any
+    formatKeyValueType?: any,
+    programStage?: string
 }
 
 export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
-    const { variables = [], values, type, formatKeyValueType } = props
+    const { variables = [], values, type, formatKeyValueType, programStage } = props
     const getOptionGroups = useRecoilValue(OptionGroupsConfigState)
     const newProgramRules = useRecoilValue(ProgramRulesFormatedState)
     const [updatedVariables, setupdatedVariables] = useState<any>([])
@@ -70,116 +71,121 @@ export const CustomDhis2RulesEngine = (props: RulesEngineProps) => {
 
     // apply rules to variables
     function applyRulesToVariable(variable: any) {
-        for (const programRule of newProgramRules.filter(x => x.variable === variable.name) || []) {
-            switch (programRule.type) {
-                case "attribute":
-                case "dataElement":
-                    switch (programRule.programRuleActionType) {
-                        case "ASSIGN":
-                            if (variable.name === programRule.variable) {
-                                // Obter a primeira condição e o valor associado
-                                const firstCondition = existValue(programRule.condition, values, formatKeyValueType);
-                                const value = executeFunctionName(programRule.functionName, existValue(programRule.data, values, formatKeyValueType));
+        const newProgramRulesFiltered = programStage ? newProgramRules.filter(x => x.programStage === programStage) : newProgramRules.filter(x => x.variable === variable.name)
 
+        for (const programRule of newProgramRulesFiltered || []) {
+            try {
+                switch (programRule.type) {
+                    case "attribute":
+                    case "dataElement":
+                        switch (programRule.programRuleActionType) {
+                            case "ASSIGN":
+                                if (variable.name === programRule.variable) {
+                                    // Obter a primeira condição e o valor associado
+                                    const firstCondition = existValue(programRule.condition, values, formatKeyValueType);
+                                    const value = executeFunctionName(programRule.functionName, existValue(programRule.data, values, formatKeyValueType));
 
-                            
-                                try {
-                                    // Avaliar a condição uma vez
-                                    const evaluatedCondition = eval(firstCondition ?? "");
-                            
-                                    // Verificar se a condição é uma string e o tipo de variável
-                                    const isStringCondition = typeof evaluatedCondition === "string" || typeof evaluatedCondition === "boolean";
-                                    const isValidType = formatKeyValueType[variable.name] !== "INTEGER_ZERO_OR_POSITIVE" && formatKeyValueType[variable.name] !== "NUMBER";
-                                    
-                                    if (isStringCondition && isValidType) {
-                                        if (evaluatedCondition) {
-                                            // Atribuição de valores caso a condição seja verdadeira
+                                    try {
+                                        // Avaliar a condição uma vez
+                                        const evaluatedCondition = eval(firstCondition ?? "");
+
+                                        // Verificar se a condição é uma string e o tipo de variável
+                                        const isStringCondition = typeof evaluatedCondition === "string" || typeof evaluatedCondition === "boolean";
+                                        const isValidType = formatKeyValueType[variable.name] !== "INTEGER_ZERO_OR_POSITIVE" && formatKeyValueType[variable.name] !== "NUMBER";
+
+                                        if (isStringCondition && isValidType) {
+                                            if (evaluatedCondition) {
+                                                // Atribuição de valores caso a condição seja verdadeira
+                                                values[variable.name] = value !== undefined ? value : "";
+                                                variable.value = value !== undefined ? value : "";
+                                            }
+                                        }
+                                        // Verificar se a condição é um número
+                                        else if (typeof evaluatedCondition === "number") {
                                             values[variable.name] = value !== undefined ? value : "";
                                             variable.value = value !== undefined ? value : "";
                                         }
-                                    } 
-                                    // Verificar se a condição é um número
-                                    else if (typeof evaluatedCondition === "number") {
-                                        values[variable.name] = value !== undefined ? value : "";
-                                        variable.value = value !== undefined ? value : "";
-                                    }
-                                    
-                                    // Desabilitar a variável após o processamento
-                                    variable.disabled = true;
-                                    
-                                } catch (error) {
-                                    // Em caso de erro, desabilitar a variável
-                                    console.error("Erro ao avaliar a condição:", error);
-                                    variable.disabled = true;
-                                }
-                            }
-                            
-                            break;
-                        case "SHOWOPTIONGROUP":
-                            if (variable.name === programRule.variable) {
-                                if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType))) {
-                                    const options = getOptionGroups?.filter((op) => op.id === programRule.optionGroup)?.[0]?.options || []
-                                    variable.options = { optionSet: { options: options } }
-                                }
-                            }
-                            break;
-                        case "SHOWWARNING":
-                            if (variable.name === programRule.variable) {
-                                if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType))) {
-                                    variable.content = programRule.content
-                                    variable.warning = true
-                                } else {
-                                    variable.content = ""
-                                    variable.warning = false
-                                }
-                            }
-                            break;
-                        case "SHOWERROR":
-                            if (variable.name === programRule.variable) {
-                                if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType))) {
-                                    variable.error = true;
-                                    variable.content = programRule.content
-                                    variable.required = true;
-                                } else {
-                                    variable.error = false;
-                                    variable.content = ""
-                                    variable.required = false;
-                                }
-                            }
-                            break;
-                        case "HIDEFIELD":
-                            if (variable.name === programRule.variable) {
-                                if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType))) {
-                                    variable.visible = false;
-                                } else {
-                                    variable.visible = true;
-                                }
-                            }
-                            break;
-                        case "HIDESECTION":
-                            break;
 
-                        case "HIDEOPTIONGROUP":
-                            if (variable.name === programRule.variable) {
-                                const orgUnitGroup = programRule?.condition?.replace(/[^a-zA-Z]/g, '')
-                                const foundOrgUnitGroup = orgUnitsGroups?.filter(x => x.value === orgUnitGroup)
+                                        // Desabilitar a variável após o processamento
+                                        variable.disabled = true;
 
-                                if (foundOrgUnitGroup.length > 0) {
-
-                                    if (foundOrgUnitGroup[0]?.organisationUnits.findIndex(x => x.value === values["orgUnit"]) > -1) {
-                                        const options = getOptionGroups?.filter((op) => op.id === programRule.optionGroup)?.[0]?.options?.slice()?.sort(compareStringByLabel) || []
-
-                                        variable.options = { optionSet: { options: variable?.initialOptions?.optionSet?.options?.filter((obj1: { value: string }) => !options.some(obj2 => obj2.value === obj1.value)) } }
+                                    } catch (error) {
+                                        // Em caso de erro, desabilitar a variável
+                                        console.error("Erro ao avaliar a condição:", error);
+                                        variable.disabled = true;
                                     }
                                 }
-                            }
-                            break;
 
-                        default:
-                            break;
-                    }
-                    break;
+                                break;
+                            case "SHOWOPTIONGROUP":
+                                if (variable.name === programRule.variable) {
+                                    if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType))) {
+                                        const options = getOptionGroups?.filter((op) => op.id === programRule.optionGroup)?.[0]?.options || []
+                                        variable.options = { optionSet: { options: options } }
+                                    }
+                                }
+                                break;
+                            case "SHOWWARNING":
+                                if (variable.name === programRule.variable) {
+                                    if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType))) {
+                                        variable.content = programRule.content
+                                        variable.warning = true
+                                    } else {
+                                        variable.content = ""
+                                        variable.warning = false
+                                    }
+                                }
+                                break;
+                            case "SHOWERROR":
+                                if (variable.name === programRule.variable) {
+                                    if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType))) {
+                                        variable.error = true;
+                                        variable.content = programRule.content
+                                        variable.required = true;
+                                    } else {
+                                        variable.error = false;
+                                        variable.content = ""
+                                        variable.required = false;
+                                    }
+                                }
+                                break;
+                            case "HIDEFIELD":
+                                if (variable.name === programRule.variable) {
+                                    if (executeFunctionName(programRule.functionName, existValue(programRule.condition, values, formatKeyValueType))) {
+                                        variable.visible = false;
+                                    } else {
+                                        variable.visible = true;
+                                    }
+                                }
+                                break;
+                            case "HIDESECTION":
+                                break;
+
+                            case "HIDEOPTIONGROUP":
+                                if (variable.name === programRule.variable) {
+                                    const orgUnitGroup = programRule?.condition?.replace(/[^a-zA-Z]/g, '')
+                                    const foundOrgUnitGroup = orgUnitsGroups?.filter(x => x.value === orgUnitGroup)
+
+                                    if (foundOrgUnitGroup.length > 0) {
+
+                                        if (foundOrgUnitGroup[0]?.organisationUnits.findIndex(x => x.value === values["orgUnit"]) > -1) {
+                                            const options = getOptionGroups?.filter((op) => op.id === programRule.optionGroup)?.[0]?.options?.slice()?.sort(compareStringByLabel) || []
+
+                                            variable.options = { optionSet: { options: variable?.initialOptions?.optionSet?.options?.filter((obj1: { value: string }) => !options.some(obj2 => obj2.value === obj1.value)) } }
+                                        }
+                                    }
+                                }
+                                break;
+
+                            default:
+                                break;
+                        }
+                        break;
+                }
+            } catch (error) {
+                console.log("Error when running programRules:", error)
             }
+
         }
         return variable;
     }

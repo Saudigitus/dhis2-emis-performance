@@ -53,7 +53,8 @@ function Table() {
     type: "programStage",
     variables: customColumns,
     formatKeyValueType: { [getDataStoreData.registration.grade as string]: "LIST" },
-    values: { [getDataStoreData.registration.grade as string]: grade, testi: "test" }
+    values: { [getDataStoreData.registration.grade as string]: grade, testi: "test" },
+    programStage: programStage!
   })
 
   useEffect(() => {
