@@ -20,15 +20,15 @@ export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueType
     const programConfigState = useRecoilValue(ProgramConfigState);
 
     function save(value: any) {
+        let newValue: any[] = []
+
+        if (dataElement != 'eventDate')
+            newValue.push({ dataElement, value })
+
         const updates: any = {
             dataValues: [
                 ...(currentEvent?.dataValues?.filter((x: any) => x.dataElement != dataElement) ?? []),
-                (dataElement === 'eventDate' ? {}
-                    : {
-                        dataElement,
-                        value
-                    }
-                )
+                ...newValue
             ], ...(dataElement === 'eventDate' && { eventDate: value, occurredAt: value })
         }
 
