@@ -60,8 +60,6 @@ function Table() {
         setpage(1)
     }, [headerFieldsState])
 
-    console.log(events)
-
     useEffect(() => {
         setAllChecked(false)
         if (orgUnit)

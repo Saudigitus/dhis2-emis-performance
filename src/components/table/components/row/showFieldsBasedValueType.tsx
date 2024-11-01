@@ -12,18 +12,28 @@ import { IconButton } from '@material-ui/core';
 import CropOriginal from '@material-ui/icons/CropOriginal';
 import { useRecoilValue } from 'recoil';
 import { ProgramConfigState } from '../../../../schema/programSchema';
+import { useShowAlerts } from '../../../../hooks';
 
 export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueTypeProps) {
     const { column, value, currentEvent, saveMarks, updateEvents, showFeedBack, setShowFeedBack, headers, loader, trackedEntity, prevValues, setPrevValues, inactive, disableInput } = props;
-    const dataElement = column.id.split('_')[0]
-    const { imageUrl } = GetImageUrl()
     const programConfigState = useRecoilValue(ProgramConfigState);
+    const dataElement = column.id.split('_')[0]
+    const { hide, show } = useShowAlerts()
+    const { imageUrl } = GetImageUrl()
 
     function save(value: any) {
         let newValue: any[] = []
 
         if (dataElement != 'eventDate')
             newValue.push({ dataElement, value })
+        else if (new Date() < new Date(value)) {
+            show({
+                message: "A data introduzida é invalida",
+                type: { warning: true }
+            });
+            setTimeout(hide, 5000);
+            return
+        }
 
         const updates: any = {
             dataValues: [
