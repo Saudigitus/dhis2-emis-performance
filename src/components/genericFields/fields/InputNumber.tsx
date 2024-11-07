@@ -14,7 +14,7 @@ import { formatToString } from '../../../utils';
 const { Field } = ReactFinalForm
 
 // Omitting the underscore here since it messes up i18n
-const lowerbound = 1
+const lowerbound = 0
 const upperbound = 86400
 
 const VALIDATOR = composeValidators(
@@ -28,7 +28,7 @@ function InputNumber(props: FormFieldsProps) {
         <Field
             {...props}
             component={InputFieldFF}
-            validate={(Boolean(props.required)) && VALIDATOR}
+            validate={(Boolean(props.required)) || VALIDATOR}
             type={props.type}
             format={formatToString}
             disabled={props.disabled}
