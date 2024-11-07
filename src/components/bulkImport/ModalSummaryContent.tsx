@@ -21,6 +21,7 @@ import { ProgressState } from "../../schema/linearProgress";
 import IteractiveProgress from "../modal/components/importProgress";
 
 interface ModalContentProps {
+    setOpenDropZone: (value: boolean) => void
     setOpen: (value: boolean) => void
     summaryData: any
     summaryDetails?: React.ReactElement
@@ -28,6 +29,7 @@ interface ModalContentProps {
 
 const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
     const {
+        setOpenDropZone,
         setOpen,
         summaryData,
         summaryDetails
@@ -143,6 +145,7 @@ const ModalSummaryContent = (props: ModalContentProps): React.ReactElement => {
             disabled: loading,
             loading: false,
             onClick: () => {
+                setOpenDropZone(false)
                 setOpen(false)
             }
         }
