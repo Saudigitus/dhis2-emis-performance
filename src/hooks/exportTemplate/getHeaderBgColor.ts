@@ -12,9 +12,11 @@ export const getHeaderBgColor = (metadataType: string) => {
       return "D9EAD3";
 
     case VariablesTypes.DataElement:
+    case VariablesTypes.Performance:
     case SectionVariablesTypes.SocioEconomics:
       return "FFF2CC";
+
     default:
-      return "FFFFFF";
+      return "FFF2CC";
   }
 };
