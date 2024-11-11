@@ -72,7 +72,8 @@ export default function ShowFieldsBasedValueType(props: ShowFieldsBasedValueType
     }
 
     const onSubmit = (event: any, pristine: boolean) => {
-        if (event.target.value && prevValues[column.id] !== event.target.value) {
+        // event.target.validity.valid - tells if the typed value is valid
+        if (event.target.validity.valid && event.target.value && prevValues[column.id] !== event.target.value) {
             setValues({ [dataElement]: event.target.value })
             setPrevValues((prevValues: any) => ({ ...prevValues, [column.id]: event?.target?.value }))
             save(event.target.value)

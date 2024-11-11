@@ -39,7 +39,7 @@ function GenericFields({ attribute, disabled, valueType }: GenericFieldsComponen
       return <InputNumber {...attribute} type="number" disabled={disabled || attribute.disabled} />;
 
     case Attribute.valueType.INTEGER_ZERO_OR_POSITIVE as unknown as CustomAttributeProps["valueType"]:
-      return <InputNumber {...attribute} type="number" disabled={disabled || attribute.disabled} />;
+      return <InputNumber {...{ ...attribute, min: 0 }} type="number" disabled={disabled || attribute.disabled} />;
 
     case Attribute.valueType.DATE as unknown as CustomAttributeProps["valueType"]:
       return <DateInput {...attribute} disabled={disabled || attribute.disabled} />;
