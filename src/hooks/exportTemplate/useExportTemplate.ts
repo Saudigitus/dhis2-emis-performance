@@ -174,7 +174,8 @@ export default function useExportTemplate() {
                     optionSetId: dxCurr.dataElement?.optionSet?.id || null,
                     required: dxCurr?.compulsory || false,
                     metadataType: VariablesTypes.DataElement,
-                    sectionDataType: selectedTerm.label
+                    sectionDataType: selectedTerm.label,
+                    type: VariablesTypes.Performance
                   })
                   return dxPrev
                 },
@@ -537,12 +538,9 @@ export default function useExportTemplate() {
         // Validate that stage cells (number fields) are between 0 and 100
         headers.forEach((header: any, idx: number) => {
           const cell = row.getCell(idx + 1)
-
           // Apply validation for stage cells (only allow numbers between 0 and 100)
-          if (
-            header.metadataType === VariablesTypes.DataElement &&
-            header.valueType === "NUMBER"
-          ) {
+          /** Use VariablesTypes.Performance to not lock cells */
+          if (header.type === VariablesTypes.Performance) {
             if (!header.key.includes(registration.programStage)) {
               cell.protection = { locked: false }
             }

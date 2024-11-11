@@ -112,7 +112,7 @@ export const BulkMarksUpload = ({ setOpen, isOpen, forUpdate }: BulkMarksUploadP
     }
     return (
         <>
-            { (!isProcessing && !summaryOpen) &&
+            {(!isProcessing && !summaryOpen) &&
                 // <MuiThemeProvider theme={theme}>
                 //     <DropzoneDialog
                 //         dialogTitle={"Bulk Marks Upload"}
@@ -142,7 +142,7 @@ export const BulkMarksUpload = ({ setOpen, isOpen, forUpdate }: BulkMarksUploadP
                 //     />
                 // </MuiThemeProvider>
 
-                <DropZone onSave={onSave}/>
+                <DropZone onSave={onSave} setOpenDropZone={setOpen}/>
             }
             {(summaryOpen) &&
                 <Modal large position={"middle"} className={styles.modalContainer}>
@@ -151,6 +151,7 @@ export const BulkMarksUpload = ({ setOpen, isOpen, forUpdate }: BulkMarksUploadP
                         {isProcessing
                             ? <CenteredContent className="p-5"><CircularLoader /></CenteredContent>
                             : <ModalSummaryContent
+                                setOpenDropZone={setOpen}
                                 setOpen={setSummaryOpen}
                                 summaryData={
                                     {
