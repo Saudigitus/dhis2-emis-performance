@@ -14,16 +14,19 @@ import { UpdatingEventState } from "../../../../schema/updateEventSchema";
 import { useGetEventUpdateFormData } from "../../../../hooks/form/useGetEventUpdateFormData";
 import Actions from "./Actions";
 import { useGetNextActions } from "../../../../hooks/programStages/useGetNextActions";
+import { useParams } from "../../../../hooks";
 
 export default function RowActions(props: RowActionsProps) {
   const { row, inactive } = props;
   const dataStore = useRecoilValue(DataStoreState)
+  const { urlParamiters } = useParams()
+  const { program } = urlParamiters()
   const getProgram = useRecoilValue(ProgramConfigState);
   const [openEditionModal, setOpenEditionModal] = useState<boolean>(false);
   const [actionPStage, setActionPStage] = useState<string>();
   const { completeEvents, loading: completing } = useCompleteEvents()
   const [loadingRow, setLoadingRow] = useRecoilState(UpdatingEventState)
-  const title = getProgram?.programStages?.filter((x: any) => x.id === actionPStage)?.[0]?.displayName || ""
+  const title = getProgram.find(x => x.id == program)?.programStages?.filter((x: any) => x.id === actionPStage)?.[0]?.displayName || ""
   const eventsIsCompleted = checkCompleted(row?.eventStatus as string)
   const { buildFormData, error, loading, initialValues, setInitialValues } = useGetEventUpdateFormData()
   const { nextAction, currentProgramStage } = useGetNextActions()
@@ -91,7 +94,6 @@ export default function RowActions(props: RowActionsProps) {
               "nomeAsca": row[dataStore[0].mappingVariables.nomeAsca]
             }}
             row={row}
-            mapping={dataStore[0].mappingVariables}
           />
         </ModalComponent>
       }

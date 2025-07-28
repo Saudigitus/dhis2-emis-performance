@@ -1,9 +1,9 @@
 
-interface MenuItemsProps { 
+interface MenuItemsProps {
     menuItems: MenuItemTypes[]
     dataElementId: string
     onToggle: () => void
- }
+}
 
 interface MenuItemTypes {
     label: string
@@ -13,6 +13,7 @@ interface MenuItemTypes {
 interface MenuItemContainerProps {
     dataElementId: string
     onToggle: () => void
+    options: any[]
 }
 
 type ComponentMapping = Record<string, React.ComponentType<any>>;

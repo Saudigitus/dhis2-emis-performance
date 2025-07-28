@@ -3,14 +3,13 @@ import { ProgramConfigState } from "../../schema/programSchema";
 import { useDataQuery } from "@dhis2/app-runtime";
 import { useEffect, useState } from "react";
 import useShowAlerts from "../commons/useShowAlert";
-import { useGetInitialValues } from "../initialValues/useGetInitialValues";
 import { ProgramConfig } from "../../types/programConfig/ProgramConfig";
 import { getSelectedKey } from "../../utils/commons/dataStore/getSelectedKey";
 
 const PROGRAMQUERY: any = {
     results: {
         resource: "programs",
-        id: ({ id }: { id: string }) => id,
+        // id: ({ id }: { id: string }) => id,
         params: {
             fields: [
                 "access",
@@ -18,7 +17,7 @@ const PROGRAMQUERY: any = {
                 "programIndicators[id,displayName,displayFormName,expression]",
                 "trackedEntityType[id,trackedEntityTypeAttributes[trackedEntityAttribute[id]]]",
                 "programTrackedEntityAttributes[mandatory,displayInList,trackedEntityAttribute[generated,pattern,id,displayName,valueType,optionSet[options[code~rename(value),displayName~rename(label)]]]]",
-                "programStages[id,displayName,autoGenerateEvent,programStageDataElements[displayInReports,compulsory,dataElement[id,formName,displayName,valueType,optionSet[options[code~rename(value),displayName~rename(label)]]]],programStageSections[displayName,displayInReports,compulsory,dataElements[id,displayName,valueType,optionSet[options[code~rename(value),displayName~rename(label)]]]]]",
+                "programStages[id,repeatable,displayName,autoGenerateEvent,programStageDataElements[displayInReports,compulsory,dataElement[id,formName,displayName,valueType,optionSet[options[code~rename(value),displayName~rename(label)]]]],programStageSections[displayName,displayInReports,compulsory,dataElements[id,displayName,valueType,optionSet[options[code~rename(value),displayName~rename(label)]]]]]",
             ]
         }
     }
@@ -39,7 +38,7 @@ export function useGetProgramConfig() {
     }, [program])
 
     const { loading, refetch } = useDataQuery<{ results: ProgramConfig }>(PROGRAMQUERY, {
-        variables: { id: program },
+        // variables: { id: program },
         onError(error) {
             show({
                 message: `${("Could not get program")}: ${error.message}`,
@@ -48,8 +47,8 @@ export function useGetProgramConfig() {
             setTimeout(hide, 5000);
             setcustomLoading(false)
         },
-        onComplete(response) {
-            setProgramConfigState(response?.results);
+        onComplete(response: any) {
+            setProgramConfigState(response?.results?.programs);
             setcustomLoading(false)
         },
         lazy: true

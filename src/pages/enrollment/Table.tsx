@@ -8,20 +8,22 @@ import styles from './table.module.css'
 import ModalContentAddGroups from "../../components/modal/ModalAddGroups";
 import useGetGroupForm from "../../hooks/form/useGetGroupForm";
 import { Tooltip } from "@material-ui/core";
+import { useRecoilValue } from "recoil";
+import { ProgramConfigState } from "../../schema/programSchema";
 
 function TableComponent() {
   const { urlParamiters } = useParams()
-  const { orgUnitLevel, orgUnit } = urlParamiters()
+  const { orgUnitLevel, orgUnit, tab } = urlParamiters()
   const { assessment } = getDataStoreKeys()
   const [open, setOpen] = useState(false);
   const { buildForm } = useGetGroupForm();
-  const formData = buildForm(assessment.tabGroups?.[0].programStage)
+  const formData = buildForm(tab!)
 
   return (
     <>
       <Table />
-
-      <Fab disabled={(orgUnitLevel !== assessment?.groupsLevel - 1 && assessment?.groupsLevel !== undefined && parseInt(orgUnitLevel) !== parseInt(assessment?.groupsLevel) - 1)} color='primary' className={styles['float-button__container']} onClick={() => { setOpen(true) }}>
+      {/* disabled={(parseInt(orgUnitLevel!) !== assessment?.groupsLevel - 1 && assessment?.groupsLevel !== undefined && parseInt(orgUnitLevel!) !== parseInt(assessment?.groupsLevel) - 1)}  */}
+      <Fab color='primary' className={styles['float-button__container']} onClick={() => { setOpen(true) }}>
         <Tooltip title="Criar grupo">
           <AddIcon />
         </Tooltip>

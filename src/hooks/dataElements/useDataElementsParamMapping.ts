@@ -4,8 +4,8 @@ import { formatFilterItems } from "../../utils/constants/headBar/formatFilterIte
 const useDataElementsParamMapping = () => {
     const { registration, filterItems } = getDataStoreKeys();
     return {
+        program: 'program',
         ...formatFilterItems(filterItems)
-
     }
 }
 export default useDataElementsParamMapping;

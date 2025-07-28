@@ -42,7 +42,7 @@ function Table() {
     const [refetch] = useRecoilState(TeiRefetch)
     const selectedTab = useRecoilValue(TabsState)
     const { urlParamiters } = useParams()
-    const { orgUnit, tab } = urlParamiters()
+    const { orgUnit, tab, program } = urlParamiters()
     const setLoading = useSetRecoilState(TableDataLoadingState)
 
     useEffect(() => {
@@ -54,9 +54,10 @@ function Table() {
     }, [headerFieldsState])
 
     useEffect(() => {
-        if (orgUnit)
-            void getData(page, pageSize, selectedTab?.programStage, [])
-    }, [headerFieldsState, page, pageSize, refetch, orgUnit, tab])
+        if (orgUnit && program) {
+            void getData(page, pageSize, tab!, [], program)
+        }
+    }, [headerFieldsState, page, pageSize, refetch, orgUnit, tab, program])
 
     const onPageChange = (newPage: number) => {
         setpage(newPage)

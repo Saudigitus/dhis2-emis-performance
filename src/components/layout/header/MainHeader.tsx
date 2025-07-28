@@ -15,19 +15,20 @@ export default function MainHeader(): React.ReactElement {
     const { urlParamiters } = useParams();
     const selectedOptions = urlParamiters();
     const { getDataStoreData } = getSelectedKey()
-    const programConfig: ProgramConfig = useRecoilValue(ProgramConfigState)
-    const programStageDataElements: programStageDataElements[] | any = programConfig?.programStages?.find((programStage: any) => programStage.id === getDataStoreData.registration.programStage)?.programStageDataElements
+    const programConfig: ProgramConfig[] = useRecoilValue(ProgramConfigState)
+    // const programStageDataElements: programStageDataElements[] | any = programConfig?.programStages?.find((programStage: any) => programStage.id === getDataStoreData.registration.programStage)?.programStageDataElements
     const { initialize } = initializeRulesEngine()
-    const { tab, orgUnit } = urlParamiters()
+    const { tab, orgUnit, program } = urlParamiters()
     const [totals, setTotals] = useState<any>({ Total: 0, COMPLETED: 0 });
     const { getTotals } = useGetTotalCompleted({ setTotals })
     const refetch = useRecoilValue<boolean>(TeiRefetch)
     const percent = ((100 * totals.COMPLETED) / totals.Total).toFixed(0)
+    const filterContent = programConfig?.map(x => { return { value: x.id, label: x.displayName } })
 
     useEffect(() => {
-        if (orgUnit)
+        if (orgUnit && program)
             void getTotals()
-    }, [orgUnit, refetch, tab])
+    }, [orgUnit, refetch, tab, program])
 
     useEffect(() => {
         initialize()
@@ -36,13 +37,25 @@ export default function MainHeader(): React.ReactElement {
     return (
         <nav className={style.nav}>
             <div className={style.MainHeaderContainer}>
-                {headBarData(selectedOptions, getDataStoreData, programStageDataElements).map(headerItem => (
-                    <HeaderItem disabled={headerItem.disabled} key={headerItem.id} id={headerItem.id} dataElementId={headerItem.dataElementId} component={headerItem.component} placeholder={headerItem.placeholder} label={headerItem.label} value={headerItem.value} selected={headerItem.selected} />
+                {headBarData(selectedOptions, getDataStoreData, filterContent as unknown as any).map(headerItem => (
+                    <HeaderItem
+                        disabled={headerItem.disabled}
+                        key={headerItem.id}
+                        id={headerItem.id}
+                        dataElementId={headerItem.dataElementId}
+                        component={headerItem.component}
+                        placeholder={headerItem.placeholder}
+                        label={headerItem.label}
+                        value={headerItem.value}
+                        selected={headerItem.selected}
+                        options={headerItem?.options}
+                    />
                 ))}
             </div>
 
             <div className={style.percentContainer}>
-                <span style={{ display: "flex", alignItems: "center" }}>{tab}</span>
+                <span style={{ display: "flex", alignItems: "center" }}>{programConfig?.find(x => x.id == program)?.programStages?.find(x => x.id == tab)?.displayName
+                }</span>
 
                 <div className={style.totals}>
                     <span>Registados: {totals.Total ?? 0}</span>

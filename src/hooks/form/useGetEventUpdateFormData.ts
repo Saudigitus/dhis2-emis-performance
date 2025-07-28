@@ -10,20 +10,20 @@ export const useGetEventUpdateFormData = () => {
     const { getEvent } = useGetEvent()
     const { urlParamiters } = useParams()
     const { show } = useShowAlerts()
-    const { orgUnit: orgUnit } = urlParamiters()
-    const { getDataStoreData } = getSelectedKey()
+    const { orgUnit: orgUnit, program } = urlParamiters()
     const [initialValues, setInitialValues] = useState<any>({})
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<boolean>(false)
 
     async function buildFormData(teiId: string, programStage: string) {
         setLoading(true)
-        await getEvent(getDataStoreData.program, programStage, teiId, orgUnit!)
-            .then((event) => {
+        await getEvent(program!, programStage, teiId, orgUnit!)
+            .then((event: any) => {
+                const data = event?.results?.instances ?? event?.results?.events
                 setInitialValues({
-                    ...dataValues(event?.results?.instances?.[0]?.dataValues ?? []),
-                    event: event?.results?.instances?.[0]?.event,
-                    event_date: event?.results?.instances?.[0]?.occurredAt? format(new Date(event?.results?.instances?.[0]?.occurredAt) as unknown as Date , "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd")
+                    ...dataValues(data?.[0]?.dataValues ?? []),
+                    event: data?.[0]?.event,
+                    event_date: data?.[0]?.occurredAt ? format(new Date(data?.[0]?.occurredAt) as unknown as Date, "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd")
                 })
             })
             .catch((error) => {

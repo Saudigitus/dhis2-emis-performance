@@ -12,7 +12,7 @@ function TabComponent(props: TabBarProps): React.ReactElement {
       {elements.map((element, i) => (
         <Tab
           key={i}
-          selected={selectedValue.value === element.value}
+          selected={selectedValue?.value === element?.value}
           onClick={() => {
             setSelectedValue(element);
           }}

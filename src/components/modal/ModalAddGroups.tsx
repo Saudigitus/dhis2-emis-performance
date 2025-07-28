@@ -3,20 +3,19 @@ import { ModalActions, Button, ButtonStrip, CircularLoader, CenteredContent } fr
 import { Form } from "react-final-form";
 import format from "date-fns/format";
 import GroupForm from "../form/GroupForm.js";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import useValidateOuName from "../../hooks/organisationUnit/useValidateOrgUnitName";
 import useCreateGroup from "../../hooks/organisationUnit/useCreateGroup";
-import useDebounce from "../../utils/commons/useDebounce";
 import { formFields } from "../../utils/constants/groupsForm/groupsForm.js";
 import { postBody } from "../../utils/organisationUnit/formatDataForPost.js";
 import WithPadding from "../template/WithPadding";
-import { TeiRefetch } from "../../schema/refecthTeiSchema.js";
 import { useGetOrgUnitCode } from "../../hooks/organisationUnit/useGetOrgUnitCode.js";
 import { useParams } from "../../hooks/commons/useQueryParams";
 import { CustomDhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine.js";
 import { formatKeyValueType } from "../../utils/programRules/formatKeyValueType.js";
 import useGetGroupForm from "../../hooks/form/useGetGroupForm.js";
 import { TabsState } from "../../schema/tabSchema.js";
+import { ProgramConfigState } from "../../schema/programSchema.js";
 
 function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
   const formRef = useRef<any>(null);
@@ -26,20 +25,20 @@ function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
   const { createGroup, loading } = useCreateGroup()
   const { orgUnitCode, loadingOrgUnitCode, getOrgUnitCode } = useGetOrgUnitCode()
   const [initialValues] = useState({ registrationDate: format(new Date(), "yyyy-MM-dd") })
-  const setRefetch = useSetRecoilState(TeiRefetch)
   const { urlParamiters } = useParams()
-  const { orgUnitName } = urlParamiters()
-  const tab = useRecoilValue(TabsState)
-  const [fieldsWithValue, setFieldsWitValues] = useState<any[]>([...formFields(ouNameValidationObject, formData)])
+  const { orgUnitName, orgUnit, program, tab } = urlParamiters()
+  const programValues = useRecoilValue(ProgramConfigState)
+  const selectedProgram = programValues?.find(x => x.id == program)
+  const formfieldsData = formFields(ouNameValidationObject, formData, selectedProgram?.programTrackedEntityAttributes??[])
+  const [fieldsWithValue, setFieldsWitValues] = useState<any[]>([...formfieldsData])
   const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
-    variables: formFields(ouNameValidationObject, formData),
-    values, type: "programStageSection", formatKeyValueType: formatKeyValueType(formFields(ouNameValidationObject, formData) as any)
+    variables: formfieldsData,
+    values, type: "programStageSection", formatKeyValueType: formatKeyValueType(formfieldsData as any)
   })
   const { getAllDataElementsToPost } = useGetGroupForm()
 
-
   useEffect(() => {
-    runRulesEngine(formFields(ouNameValidationObject, formData))
+    runRulesEngine(formfieldsData)
   }, [values, validating])
 
   useEffect(() => {
@@ -55,7 +54,7 @@ function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
   function onSubmit() {
     const allFields = fieldsWithValue.flat()
     if (allFields.filter((element: any) => (element?.value === undefined && element.required))?.length === 0) {
-      createGroup({ data: postBody(values, parentId).data, formData: { ...values, parentId: parentId }, closeModal, fieldsWithValue: getAllDataElementsToPost(tab.programStage)!, values });
+      createGroup({ data: postBody(values, parentId).data, formData: { ...values, parentId: parentId }, closeModal, fieldsWithValue: getAllDataElementsToPost(tab!)!, values });
     }
   }
 

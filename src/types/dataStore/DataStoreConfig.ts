@@ -69,9 +69,7 @@ interface assessment {
     files_id: {
         ficha: string
     }
-    trackedEntityTypes: {
-        groups: string,
-    },
+    trackedEntityType: string
     tableStatus: nextProgramStageType[]
 }
 

@@ -12,7 +12,7 @@ export function useFormatDataStore() {
         groupsLevel: dataStore[0]?.assessment?.groupsLevel,
         lastChildLevel: dataStore[0]?.assessment?.lastChildLevel,
         groupsAccess: dataStore[0]?.assessment?.programs.filter((program: programDataStoreType) => program?.accessTo == 'groups').map((element) => element?.program),
-        groupsTEI: dataStore[0]?.assessment?.trackedEntityTypes.groups,
+        groupsTEI: dataStore[0]?.assessment?.trackedEntityType,
         groupsManagementProgram: groupsProgram,
     }
 }

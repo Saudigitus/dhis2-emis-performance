@@ -31,7 +31,7 @@ function WorkingLists() {
 
   useEffect(() => {
     if (selectedValue?.value) {
-      add("tab", selectedValue?.value)
+      add("tab", selectedValue?.programStage)
     }
   }, [selectedValue])
 

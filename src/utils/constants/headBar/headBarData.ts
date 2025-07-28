@@ -13,7 +13,19 @@ function headBarData(selectedOptions: SelectedOptionsTypes, dataStoreData: dataS
             component: "orgUnitTree",
             selected: Boolean(selectedOptions?.orgUnitName),
         },
-        ...headBarDataElements(selectedOptions, dataStoreData, programStageDataElements)
+        {
+            disabled: !(selectedOptions?.orgUnit && selectedOptions?.orgUnitName),
+            id: 'program',
+            dataElementId:'program',
+            label: 'Programa',
+            value: programStageDataElements?.find((x: any) => x.value == selectedOptions.program)?.label ?? `Select a program`,
+            placeholder: `Search for program`,
+            component: "menuItemContainer",
+            selected: Boolean(selectedOptions.program),
+            options: programStageDataElements
+        }
+
+        // ...headBarDataElements(selectedOptions, dataStoreData, programStageDataElements)
     ]
 }
 export { headBarData }

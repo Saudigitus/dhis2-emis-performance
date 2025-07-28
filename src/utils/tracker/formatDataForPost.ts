@@ -1,10 +1,7 @@
 import { programDataStoreType } from "../../schema/dataStoreSchema";
-import { ProgramConfig } from "../../types/programConfig/ProgramConfig";
 import { programStageDataElements } from "../../types/programStageConfig/ProgramStageConfig";
-import { reducer } from "../commons/formatDistinctValue";
 
 const postTrackerBody = (formData: Record<string, any>, program: programDataStoreType, trackedEntityType: string | undefined, orgUnit: string, fieldsWithValue: programStageDataElements['dataElement'][], values: any, programStage: string) => {
-    const events: any = []
     const dataValues: any = []
 
     for (const field of fieldsWithValue) {

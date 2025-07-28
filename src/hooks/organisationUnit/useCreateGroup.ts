@@ -4,13 +4,15 @@ import useShowAlerts from '../commons/useShowAlert';
 import useCreateTracker from '../tei/useCreateTracker';
 import useAddOrgUnitToProgram from './useAddOrgUnitToProgram';
 import { useGenerateUsers } from '../users/useGenerateUsers';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { TeiRefetch } from '../../schema/refecthTeiSchema';
 import { postTrackerBody } from '../../utils/tracker/formatDataForPost';
 import { useFormatDataStore } from '../dataStore/useFormatDataStore';
 import useDeleteOrgUnit from './useDeleteOrgUnit';
 import { TabsState } from '../../schema/tabSchema';
 import useDeleteTracker from '../tei/useDeleteTracker';
+import { useParams } from '../commons/useQueryParams';
+import { ProgramConfigState } from '../../schema/programSchema';
 
 
 const POST_OU: any = {
@@ -38,12 +40,14 @@ export default function useCreateGroup() {
     const { addOuToProgram } = useAddOrgUnitToProgram()
     const [loading, setLoading] = useState<boolean>(false)
     const { createUser, generateUsers } = useGenerateUsers()
-    const [refetch,setRefetch] = useRecoilState(TeiRefetch)
+    const [refetch, setRefetch] = useRecoilState(TeiRefetch)
     const { deleteOrgUnit } = useDeleteOrgUnit()
     const { deleteTracker } = useDeleteTracker()
     const programStage = useRecoilValue(TabsState).programStage
-
-    const { groupsAccess, groupsManagementProgram, groupsTEI } = useFormatDataStore()
+    const { groupsTEI } = useFormatDataStore()
+    const { urlParamiters } = useParams()
+    const { program } = urlParamiters()
+    const programs = useRecoilValue(ProgramConfigState)
 
     const createGroup = async ({ data, formData, closeModal, fieldsWithValue, values }: createGroupTypes) => {
         setLoading(true)
@@ -54,8 +58,8 @@ export default function useCreateGroup() {
             let createTrackerResponse: any
 
             try {
-                await addOuToProgram(groupsAccess, saveOrgUnitResponse?.response?.uid)
-                createTrackerResponse = await createTracker({ data: postTrackerBody(formData, groupsManagementProgram, groupsTEI, saveOrgUnitResponse?.response?.uid, fieldsWithValue, values, programStage) })
+                await addOuToProgram([`${program}`], saveOrgUnitResponse?.response?.uid)
+                createTrackerResponse = await createTracker({ data: postTrackerBody(formData, programs?.find(x => x.id == program) as unknown as any, groupsTEI, saveOrgUnitResponse?.response?.uid, fieldsWithValue, values, programStage) })
             }
             catch (error: any) {
                 show({

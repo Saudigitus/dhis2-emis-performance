@@ -12,7 +12,7 @@ import { OuQueryString } from '../../../schema/headerSearchInputSchema'
 import HeaderResetItemValue from './HeaderResetItemValue'
 
 export default function HeaderItem(props: HeadBarTypes): React.ReactElement {
-    const { label, value, placeholder, component, dataElementId, id, selected, disabled } = props;
+    const { label, value, placeholder, component, dataElementId, id, selected, disabled, options } = props;
     const { remove } = useParams()
     const Component = (component != null) ? componentMapping[component] : null;
     const [openDropDown, setOpenDropDown] = useState<boolean>(false);
@@ -45,7 +45,7 @@ export default function HeaderItem(props: HeadBarTypes): React.ReactElement {
             component={
                 < FlyoutMenu>
                     <SimpleSearch id={id} placeholder={placeholder}>
-                        {(Component != null) && <Component dataElementId={dataElementId} onToggle={onToggle} />}
+                        {(Component != null) && <Component options={options} dataElementId={dataElementId} onToggle={onToggle} />}
                     </SimpleSearch>
                 </FlyoutMenu>
             }

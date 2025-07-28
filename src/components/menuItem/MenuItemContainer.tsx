@@ -10,25 +10,26 @@ import { formatKeyValueTypeHeader } from '../../utils/programRules/formatKeyValu
 import { useParams } from '../../hooks/commons/useQueryParams';
 
 function MenuItemContainer(props: MenuItemContainerProps): React.ReactElement {
-    const { dataElementId, onToggle } = props;
-    const { urlParamiters } = useParams();
-    const { grade, orgUnit } = urlParamiters()
-    const { getDataStoreData } = getSelectedKey()
-    const programConfigState = useRecoilValue(ProgramConfigState);
-    const { registration } = getDataStoreKeys();
+    const { dataElementId, onToggle, options } = props;
+    // const { urlParamiters } = useParams();
+    // const { grade, orgUnit } = urlParamiters()
+    // const { getDataStoreData } = getSelectedKey()
+    // const programConfigState = useRecoilValue(ProgramConfigState);
+    // const { registration } = getDataStoreKeys();
 
-    const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
-        variables: formatResponse(programConfigState, registration?.programStage)?.filter(element => element.rawId === dataElementId).map((x) => { return { ...x, name: x.rawId } }),
-        values: { orgUnit: orgUnit, [getDataStoreData.registration.grade as string]: grade },
-        type: "programStage",
-        formatKeyValueType: formatKeyValueTypeHeader(formatResponse(programConfigState, registration?.programStage)?.filter(element => element.rawId === dataElementId)) || []
-    })
+    console.log(options,'kakaka')
+    // const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
+    //     variables: formatResponse(programConfigState, registration?.programStage)?.filter(element => element.rawId === dataElementId).map((x) => { return { ...x, name: x.rawId } }),
+    //     values: { orgUnit: orgUnit, [getDataStoreData.registration.grade as string]: grade },
+    //     type: "programStage",
+    //     formatKeyValueType: formatKeyValueTypeHeader(formatResponse(programConfigState, registration?.programStage)?.filter(element => element.rawId === dataElementId)) || []
+    // })
 
-    useEffect(() => {
-        runRulesEngine()
-    }, [orgUnit])
+    // useEffect(() => {
+    //     runRulesEngine()
+    // }, [orgUnit])
 
-    const options = updatedVariables?.find(element => element.rawId === dataElementId)?.options.optionSet.options ?? []
+    // const options = updatedVariables?.find((element: any) => element.rawId === dataElementId)?.options.optionSet.options ?? []
 
     return (
         <Item onToggle={onToggle} dataElementId={dataElementId} menuItems={options} />

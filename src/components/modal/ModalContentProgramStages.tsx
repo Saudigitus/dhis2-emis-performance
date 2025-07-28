@@ -20,11 +20,11 @@ import useGetGroupForm from "../../hooks/form/useGetGroupForm";
 import { formatKeyValueType } from "../../utils/programRules/formatKeyValueType";
 
 function ModalContentProgramStages(props: ModalContentProgramStageProps): React.ReactElement {
-  const { setOpen, nexProgramStage, loading: loadingEvents, formInitialValues, row, mapping } = props;
+  const { setOpen, nexProgramStage, loading: loadingEvents, formInitialValues, row } = props;
   const getProgram = useRecoilValue(ProgramConfigState);
-  const { useQuery } = useParams();
+  const { urlParamiters } = useParams();
   const formRef: React.MutableRefObject<FormApi<IForm, Partial<IForm>>> = useRef(null);
-  const orgUnit = useQuery().get("orgUnit");
+  const { orgUnit, program } = urlParamiters()
   const [, setClicked] = useRecoilState<boolean>(onSubmitClicked);
   const [values, setValues] = useState<Record<string, string>>({})
   const { updateEvent, loadUpdateEvent: loading, data } = usePostEvent()
@@ -35,7 +35,7 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
   const formData = buildForm(nexProgramStage)
 
   const varibales = [
-    ...formEvents(getProgram.programStages.find((x) => x.id === nexProgramStage)?.executionDateLabel),
+    ...formEvents(getProgram?.find(x => x.id == program)?.programStages.find((x) => x.id === nexProgramStage)?.executionDateLabel),
     ...formData!
   ]
 
@@ -82,7 +82,7 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
         orgUnit: row.orgUnit,
         status: "ACTIVE",
         programStage: nexProgramStage,
-        program: getProgram.id,
+        program: getProgram?.find(x => x.id == program)?.id,
         notes: [],
         enrollment: row.enrollment,
         trackedEntity: row.trackedEntity,

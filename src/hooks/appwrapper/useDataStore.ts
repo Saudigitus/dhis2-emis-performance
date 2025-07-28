@@ -5,7 +5,7 @@ import useShowAlerts from '../commons/useShowAlert';
 
 const DATASTORE_QUERY = ({
     config: {
-        resource: "dataStore/Poupar/assessment",
+        resource: "dataStore/ingemo/config",
         params: {
             fields: "*"
         }

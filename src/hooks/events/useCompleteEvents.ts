@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useRecoilState, useRecoilValue } from "recoil"
 import { useGetEvents } from "./useGetEvents"
-import { getDataStoreKeys } from "../../utils"
 import { useParams } from "../commons/useQueryParams"
 import { useChangeEventStatus } from "./useChangeEventStatus"
 import { TabsState } from '../../schema/tabSchema'
@@ -11,9 +10,8 @@ import { TeiRefetch } from '../../schema/refecthTeiSchema'
 
 export const useCompleteEvents = () => {
     const { getEvents } = useGetEvents()
-    const { program } = getDataStoreKeys()
     const { urlParamiters } = useParams()
-    const { orgUnit } = urlParamiters()
+    const { orgUnit, program } = urlParamiters()
     const selectedTab = useRecoilValue(TabsState)
     const { changeEventStatus } = useChangeEventStatus()
     const [loading, setLoading] = useState(false)
@@ -25,7 +23,7 @@ export const useCompleteEvents = () => {
         const events: any[] = []
 
         for (const tei of teisToUpdate) {
-            await getEvents(1, 10, program, selectedTab.programStage, [], [], orgUnit, tei)
+            await getEvents(1, 10, program!, selectedTab.programStage, [], [], orgUnit, tei)
                 .then((resp) => {
                     events.push(...resp?.results?.instances)
                 })

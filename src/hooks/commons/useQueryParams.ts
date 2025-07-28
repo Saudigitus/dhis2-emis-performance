@@ -20,14 +20,10 @@ const useParams = () => {
         return {
             orgUnit: useQuery().get('orgUnit'),
             orgUnitName: useQuery().get('orgUnitName'),
-            academicYear: useQuery().get('academicYear'),
-            grade: useQuery().get('grade'),
-            class: useQuery().get('class'),
-            position: useQuery().get('position'),
-            employmentType: useQuery().get('employmentType'),
-            programStage: useQuery().get('programStage'),
+            program: useQuery().get('program'),
             tab: useQuery().get('tab'),
-            orgUnitLevel: useQuery().get('orgUnitLevel')
+            orgUnitLevel: useQuery().get('orgUnitLevel'),
+            grade: useQuery().get('grade'),
         }
     }
     return { add, remove, useQuery, urlParamiters }

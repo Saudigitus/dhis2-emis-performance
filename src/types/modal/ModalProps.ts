@@ -18,7 +18,6 @@ interface ModalContentProgramStageProps {
     loading: boolean
     formInitialValues: any
     row: any
-    mapping: dataStoreRecord["mappingVariables"]
 }
 
 

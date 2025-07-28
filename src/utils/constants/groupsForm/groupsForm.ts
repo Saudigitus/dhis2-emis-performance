@@ -52,8 +52,7 @@ const staticForm = () => {
   }
 }
 
-function formFields(validationObj: ValidationNameType, formData: any): FormSectionProps[] {
-  const [mapeamentoFields = []] = formData
+function formFields(validationObj: ValidationNameType, formData: any, attributes: any[]): FormSectionProps[] {
 
   return [
     {
@@ -61,100 +60,108 @@ function formFields(validationObj: ValidationNameType, formData: any): FormSecti
       description: "Detalhes gerais",
       fields: [
         staticForm().enrollmentDate,
-        staticForm().registeringorgUnit
+        ...(attributes ? attributes?.map((x) => {
+          return {
+            required: true,
+            name: x?.trackedEntityAttribute?.id,
+            labelName: x?.trackedEntityAttribute?.displayName,
+            valueType: x?.trackedEntityAttribute?.valueType,
+            options: undefined,
+            disabled: false,
+            pattern: "",
+            visible: true,
+            description: x?.trackedEntityAttribute?.displayName,
+            searchable: false,
+            error: false,
+            programStage: "",
+            content: "",
+            id: x?.trackedEntityAttribute?.id,
+            displayName: x?.trackedEntityAttribute?.displayName,
+            header: x?.trackedEntityAttribute?.displayName,
+            type: VariablesTypes.DataElement,
+          }
+        }) : []),
+        // staticForm().registeringorgUnit
       ]
     },
-    {
-      section: "Detalhes da ASCA",
-      description: "Detalhes da ASCA",
-      fields: [
-        // {
-        //   id: "registrationDate",
-        //   labelName: "Data do Cadastro",
-        //   displayName: "Data do Cadastro",
-        //   header: "Data do Cadastro",
-        //   disabled: false,
-        //   valueType: Attribute.valueType.DATE as unknown as CustomAttributeProps["valueType"],
-        //   name: "registrationDate",
-        //   required: true,
-        //   visible: true,
-        //   description: "Description for the field"
-        // },
-        {
-          id: "groupCode",
-          labelName: "Código do Grupo",
-          displayName: "Código do Grupo",
-          header: "Código do Grupo",
-          disabled: true,
-          valueType: Attribute.valueType.TEXT as unknown as CustomAttributeProps["valueType"],
-          name: "groupCode",
-          required: true,
-          visible: true,
-          description: "Description for the field"
-        },
-        {
-          id: "ouName",
-          labelName: "Nome do Grupo",
-          displayName: "Nome do Grupo",
-          header: "Nome do Grupo",
-          disabled: false,
-          valueType: Attribute.valueType.TEXT as unknown as CustomAttributeProps["valueType"],
-          name: "ouName",
-          required: true,
-          visible: true,
-          description: "Description for the field",
-          helpText: validationObj.validationText,
-          content: validationObj.validationText,
-          error: validationObj.error,
-          warning: validationObj.warning,
-          info: "Se não puder alterar o nome do grupo, combine o nome com o bairro ou distrito do grupo."
-        },
-        {
-          id: "meetingAddress",
-          labelName: "Endereço (Local dos encontros)",
-          displayName: "Endereço (Local dos encontros)",
-          header: "Endereço (Local dos encontros)",
-          disabled: false,
-          valueType: Attribute.valueType
-            .TEXT as unknown as CustomAttributeProps["valueType"],
-          name: "meetingAddress",
-          required: true,
-          visible: true,
-          description: "Description for the field"
-        },
-        {
-          id: "focalPointName",
-          labelName: "Nome da Pessoa de Contacto",
-          displayName: "Nome da Pessoa de Contacto",
-          header: "Nome da Pessoa de Contacto",
-          disabled: false,
-          valueType: Attribute.valueType
-            .TEXT as unknown as CustomAttributeProps["valueType"],
-          name: "focalPointName",
-          required: true,
-          visible: true,
-          description: "Description for the field"
-        },
-        {
-          id: "focalPointPhone",
-          labelName: "Telefone da Pessoa de Contacto",
-          displayName: "Telefone da Pessoa de Contacto",
-          header: "Telefone da Pessoa de Contacto",
-          disabled: false,
-          valueType: Attribute.valueType
-            .TEXT as unknown as CustomAttributeProps["valueType"],
-          name: "focalPointPhone",
-          required: true,
-          visible: true,
-          description: "Description for the field"
-        }
-      ]
-    },
+    // {
+    //   section: "Detalhes da ASCA",
+    //   description: "Detalhes da ASCA",
+    //   fields: [
+    //     {
+    //       id: "groupCode",
+    //       labelName: "Código do Grupo",
+    //       displayName: "Código do Grupo",
+    //       header: "Código do Grupo",
+    //       disabled: true,
+    //       valueType: Attribute.valueType.TEXT as unknown as CustomAttributeProps["valueType"],
+    //       name: "groupCode",
+    //       required: true,
+    //       visible: true,
+    //       description: "Description for the field"
+    //     },
+    //     {
+    //       id: "ouName",
+    //       labelName: "Nome do Grupo",
+    //       displayName: "Nome do Grupo",
+    //       header: "Nome do Grupo",
+    //       disabled: false,
+    //       valueType: Attribute.valueType.TEXT as unknown as CustomAttributeProps["valueType"],
+    //       name: "ouName",
+    //       required: true,
+    //       visible: true,
+    //       description: "Description for the field",
+    //       helpText: validationObj.validationText,
+    //       content: validationObj.validationText,
+    //       error: validationObj.error,
+    //       warning: validationObj.warning,
+    //       info: "Se não puder alterar o nome do grupo, combine o nome com o bairro ou distrito do grupo."
+    //     },
+    //     {
+    //       id: "meetingAddress",
+    //       labelName: "Endereço (Local dos encontros)",
+    //       displayName: "Endereço (Local dos encontros)",
+    //       header: "Endereço (Local dos encontros)",
+    //       disabled: false,
+    //       valueType: Attribute.valueType
+    //         .TEXT as unknown as CustomAttributeProps["valueType"],
+    //       name: "meetingAddress",
+    //       required: true,
+    //       visible: true,
+    //       description: "Description for the field"
+    //     },
+    //     {
+    //       id: "focalPointName",
+    //       labelName: "Nome da Pessoa de Contacto",
+    //       displayName: "Nome da Pessoa de Contacto",
+    //       header: "Nome da Pessoa de Contacto",
+    //       disabled: false,
+    //       valueType: Attribute.valueType
+    //         .TEXT as unknown as CustomAttributeProps["valueType"],
+    //       name: "focalPointName",
+    //       required: true,
+    //       visible: true,
+    //       description: "Description for the field"
+    //     },
+    //     {
+    //       id: "focalPointPhone",
+    //       labelName: "Telefone da Pessoa de Contacto",
+    //       displayName: "Telefone da Pessoa de Contacto",
+    //       header: "Telefone da Pessoa de Contacto",
+    //       disabled: false,
+    //       valueType: Attribute.valueType
+    //         .TEXT as unknown as CustomAttributeProps["valueType"],
+    //       name: "focalPointPhone",
+    //       required: true,
+    //       visible: true,
+    //       description: "Description for the field"
+    //     }
+    //   ]
+    // },
     ...formData.map((field: any) => ({
       section: field.displayName,
       description: field.displayName,
       fields: field.fields
-
     })),
   ]
 }

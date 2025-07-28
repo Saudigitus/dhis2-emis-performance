@@ -7,12 +7,12 @@ interface HeadBarTypes {
     dataElementId?: string
     selected?: boolean
     disabled?: boolean
+    options?: any[]
 }
 
 interface SelectedOptionsTypes {
-    academicYear: string | null
-    class: string | null
-    grade: string | null
+    tab: string | null
+    program: string | null
     orgUnit: string | null
     orgUnitName: string | null
 }

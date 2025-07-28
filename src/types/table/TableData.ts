@@ -34,6 +34,13 @@ export interface EventQueryResults {
             enrollment: string
             trackedEntity: string
             dataValues: dataValuesProps[]
+        }],
+        events: [{
+            status: enrollmentStatus
+            event: string
+            enrollment: string
+            trackedEntity: string
+            dataValues: dataValuesProps[]
         }]
     }
 }
@@ -47,6 +54,11 @@ export interface MarksQueryResults {
 export interface TeiQueryResults {
     results: {
         instances: [{
+            enrollments: any
+            trackedEntity: string
+            attributes: attributesProps[]
+        }],
+        trackedEntities: [{
             enrollments: any
             trackedEntity: string
             attributes: attributesProps[]
