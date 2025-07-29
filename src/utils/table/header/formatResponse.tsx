@@ -32,7 +32,7 @@ export function formatResponse(data: ProgramConfig, programStageId: string, tabl
                     content: '',
                     key: programStageDataElement.dataElement.id + "_" + programStageId,
                     displayInFilters: programStageDataElement.displayInReports,
-                    type: VariablesTypes.Performance
+                    type: VariablesTypes.DataElement
                 }
             }) as []
             : []

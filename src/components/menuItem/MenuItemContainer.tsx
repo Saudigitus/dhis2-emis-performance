@@ -17,7 +17,6 @@ function MenuItemContainer(props: MenuItemContainerProps): React.ReactElement {
     // const programConfigState = useRecoilValue(ProgramConfigState);
     // const { registration } = getDataStoreKeys();
 
-    console.log(options,'kakaka')
     // const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
     //     variables: formatResponse(programConfigState, registration?.programStage)?.filter(element => element.rawId === dataElementId).map((x) => { return { ...x, name: x.rawId } }),
     //     values: { orgUnit: orgUnit, [getDataStoreData.registration.grade as string]: grade },

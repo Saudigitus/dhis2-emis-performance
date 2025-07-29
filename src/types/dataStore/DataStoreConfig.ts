@@ -64,13 +64,12 @@ interface tabGroupItem {
 interface assessment {
     groupsLevel: string
     lastChildLevel: number
-    tabGroups: tabGroupItem[]
     programs: programDataStoreType[]
     files_id: {
         ficha: string
     }
     trackedEntityType: string
-    tableStatus: nextProgramStageType[]
+    nameDataElement: string
 }
 
 interface dataStoreRecord {
@@ -88,11 +87,7 @@ interface dataStoreRecord {
     defaults: defaults
     filters: filters
     mappingVariables: {
-        "nomeAsca": string,
-        "homensAdultos": string
-        "homensJovens": string
-        "mulheresAdultas": string
-        "mulheresJovens": string
+        "nomeActual": string,
     }
 }
 

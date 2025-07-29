@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
-import style from './rowActions.module.css'
-import { Button, IconCheckmarkCircle24 } from "@dhis2/ui";
+import { IconCheckmarkCircle24 } from "@dhis2/ui";
 import { RowActionsProps, RowActionsType } from '../../../../types/table/TableContentProps';
 import { CancelOutlined, Edit, Gavel } from '@material-ui/icons';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { DataStoreState } from '../../../../schema/dataStoreSchema';
-import { TabsState } from '../../../../schema/tabSchema';
 import { ModalComponent, ModalContentProgramStages } from '../../../modal';
 import { ProgramConfigState } from "../../../../schema/programSchema";
 import { useCompleteEvents } from '../../../../hooks/events/useCompleteEvents';
@@ -77,6 +75,7 @@ export default function RowActions(props: RowActionsProps) {
     })) || [],
   ];
 
+  console.log(row, row[dataStore[0]?.mappingVariables?.nomeActual], 'asas')
 
   return (
     <div>
@@ -91,7 +90,7 @@ export default function RowActions(props: RowActionsProps) {
             loading={loading}
             formInitialValues={{
               ...initialValues,
-              "nomeAsca": row[dataStore[0].mappingVariables.nomeAsca]
+              "nomeActual": row[dataStore[0]?.mappingVariables?.nomeActual]
             }}
             row={row}
           />

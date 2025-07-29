@@ -8,16 +8,14 @@ import styles from './table.module.css'
 import ModalContentAddGroups from "../../components/modal/ModalAddGroups";
 import useGetGroupForm from "../../hooks/form/useGetGroupForm";
 import { Tooltip } from "@material-ui/core";
-import { useRecoilValue } from "recoil";
-import { ProgramConfigState } from "../../schema/programSchema";
 
 function TableComponent() {
   const { urlParamiters } = useParams()
-  const { orgUnitLevel, orgUnit, tab } = urlParamiters()
+  const { orgUnit, program } = urlParamiters()
   const { assessment } = getDataStoreKeys()
   const [open, setOpen] = useState(false);
   const { buildForm } = useGetGroupForm();
-  const formData = buildForm(tab!)
+  const formData = buildForm(assessment?.programs?.find(x => x?.program == program)?.registration!)
 
   return (
     <>

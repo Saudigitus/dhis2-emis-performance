@@ -19,7 +19,7 @@ const postTrackerBody = (formData: Record<string, any>, program: programDataStor
                 {
                     occurredAt: formData["registrationDate"],
                     enrolledAt: formData["registrationDate"],
-                    program: program?.program,
+                    program: program?.program ?? program?.id,
                     orgUnit: orgUnit,
                     attributes: program?.attributes?.map((attribute: any) => {
                         if (formData[attribute.attributeName] !== undefined)
@@ -31,7 +31,7 @@ const postTrackerBody = (formData: Record<string, any>, program: programDataStor
                         occurredAt: formData["registrationDate"],
                         notes: [],
                         status: "ACTIVE",
-                        program: program?.program,
+                        program: program?.program ?? program?.id,
                         programStage: programStage,
                         orgUnit,
                         scheduledAt: formData["registrationDate"],
@@ -40,7 +40,7 @@ const postTrackerBody = (formData: Record<string, any>, program: programDataStor
                 }
             ],
             orgUnit: orgUnit,
-            program: program?.program,
+            program: program?.program ?? program?.id,
             trackedEntityType: trackedEntityType
         }]
     };

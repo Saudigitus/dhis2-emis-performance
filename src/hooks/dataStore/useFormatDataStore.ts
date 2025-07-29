@@ -1,4 +1,4 @@
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { DataStoreState } from "../../schema/dataStoreSchema";
 import { type programDataStoreType } from "../../schema/dataStoreSchema";
 
@@ -14,5 +14,6 @@ export function useFormatDataStore() {
         groupsAccess: dataStore[0]?.assessment?.programs.filter((program: programDataStoreType) => program?.accessTo == 'groups').map((element) => element?.program),
         groupsTEI: dataStore[0]?.assessment?.trackedEntityType,
         groupsManagementProgram: groupsProgram,
+        programs: dataStore[0]?.assessment?.programs
     }
 }

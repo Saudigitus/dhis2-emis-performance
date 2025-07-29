@@ -1,4 +1,4 @@
-import { useDataEngine, useDataMutation } from "@dhis2/app-runtime"
+import { useDataEngine } from "@dhis2/app-runtime"
 
 const USERQUERY: any = {
     resource: "users",
@@ -17,13 +17,12 @@ export const useGenerateUsers = () => {
     const passwordStandart = "POUPAR"
     const engine = useDataEngine()
 
-    function generateUsers(groupAutoGenerate: string) {
+    function generateUsers() {
         const randomNumberUsername = Math.floor(Math.random() * 1000000)
         const randomNumber = Math.floor(Math.random() * 1000)
 
         const username = `${usernameBase}${randomNumberUsername}`
         const password = `${passwordStandart}${randomNumber}!`
-
 
         return {
             username,

@@ -1,6 +1,6 @@
 import { useRecoilValue } from "recoil";
 import { ProgramConfigState } from "../../schema/programSchema";
-import { formatResponse } from "../../utils";
+import { formatResponse, getDataStoreKeys } from "../../utils";
 import { TableColumnState } from "../../schema/columnSchema";
 import { useGetNextActions } from "../programStages/useGetNextActions";
 import { useParams } from "../commons/useQueryParams";
@@ -12,8 +12,10 @@ export function useHeader() {
     const { urlParamiters } = useParams()
     const { program } = urlParamiters()
     const programConfig = programConfigState?.find(x => x.id == program)
+    const { assessment } = getDataStoreKeys()
+    const registration =assessment?.programs?.find(x => x?.program == program)?.registration
 
     return {
-        columns: formatResponse(programConfig!, '', tableColumns, [], tableStatus)
+        columns: formatResponse(programConfig!, registration!, tableColumns, [], tableStatus as unknown as any)
     }
 }

@@ -24,8 +24,8 @@ export const useCompleteEvents = () => {
 
         for (const tei of teisToUpdate) {
             await getEvents(1, 10, program!, selectedTab.programStage, [], [], orgUnit, tei)
-                .then((resp) => {
-                    events.push(...resp?.results?.instances)
+                .then((resp: any) => {
+                    events.push(...resp?.results?.instances ?? resp?.results?.events)
                 })
         }
 
@@ -40,8 +40,6 @@ export const useCompleteEvents = () => {
 
         setLoading(false)
         setLoadingRow({ event: '', loading: false })
-
-
     }
 
     return { completeEvents, loading }

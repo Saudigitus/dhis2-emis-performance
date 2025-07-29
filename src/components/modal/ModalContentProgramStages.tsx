@@ -4,15 +4,15 @@ import { NoticeBox } from '@dhis2/ui'
 import WithPadding from "../template/WithPadding";
 import { Form } from "react-final-form";
 import GroupForm from "../form/GroupForm";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { ProgramConfigState } from "../../schema/programSchema";
 import { onSubmitClicked } from "../../schema/formOnSubmitClicked";
-import { ModalContentProgramStageProps, ModalContentProps } from "../../types/modal/ModalProps";
+import { ModalContentProgramStageProps } from "../../types/modal/ModalProps";
 import { useParams } from "../../hooks";
 import { CustomDhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine";
 import styles from "./modal.module.css";
 import classNames from "classnames";
-import { formatResponseDataElements, formEvents } from "../../utils/events/formatResponseDataElements";
+import { formEvents } from "../../utils/events/formatResponseDataElements";
 import { removeFalseKeys } from "../../utils/commons/removeFalseKeys";
 import { usePostEvent } from "../../hooks/events/useCreateEvents";
 import { TeiRefetch } from "../../schema/refecthTeiSchema";
@@ -72,7 +72,7 @@ function ModalContentProgramStages(props: ModalContentProgramStageProps): React.
 
   function onSubmit() {
     if (clickedButton === "saveandcontinue") {
-      const exclude = ["nomeAsca", "event", "orgUnit", "event_date"]
+      const exclude = ["nomeActual", "event", "orgUnit", "event_date"]
       const transformedArray = Object.entries(values).map(([key, value]) => ({
         dataElement: key,
         value: value

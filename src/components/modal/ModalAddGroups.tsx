@@ -7,19 +7,18 @@ import { useRecoilValue } from "recoil";
 import useValidateOuName from "../../hooks/organisationUnit/useValidateOrgUnitName";
 import useCreateGroup from "../../hooks/organisationUnit/useCreateGroup";
 import { formFields } from "../../utils/constants/groupsForm/groupsForm.js";
-import { postBody } from "../../utils/organisationUnit/formatDataForPost.js";
 import WithPadding from "../template/WithPadding";
 import { useGetOrgUnitCode } from "../../hooks/organisationUnit/useGetOrgUnitCode.js";
 import { useParams } from "../../hooks/commons/useQueryParams";
 import { CustomDhis2RulesEngine } from "../../hooks/programRules/rules-engine/RulesEngine.js";
 import { formatKeyValueType } from "../../utils/programRules/formatKeyValueType.js";
 import useGetGroupForm from "../../hooks/form/useGetGroupForm.js";
-import { TabsState } from "../../schema/tabSchema.js";
 import { ProgramConfigState } from "../../schema/programSchema.js";
+import { getDataStoreKeys } from "../../utils/index.jsx";
 
 function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
   const formRef = useRef<any>(null);
-  const [values, setValues] = useState({})
+  const [values, setValues] = useState<any>({})
   const closeModal = () => setOpen(false);
   const { validateOuname, ouNameValidationObject, validating } = useValidateOuName()
   const { createGroup, loading } = useCreateGroup()
@@ -29,13 +28,14 @@ function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
   const { orgUnitName, orgUnit, program, tab } = urlParamiters()
   const programValues = useRecoilValue(ProgramConfigState)
   const selectedProgram = programValues?.find(x => x.id == program)
-  const formfieldsData = formFields(ouNameValidationObject, formData, selectedProgram?.programTrackedEntityAttributes??[])
+  const formfieldsData = formFields(ouNameValidationObject, formData, selectedProgram?.programTrackedEntityAttributes ?? [])
   const [fieldsWithValue, setFieldsWitValues] = useState<any[]>([...formfieldsData])
   const { runRulesEngine, updatedVariables } = CustomDhis2RulesEngine({
     variables: formfieldsData,
     values, type: "programStageSection", formatKeyValueType: formatKeyValueType(formfieldsData as any)
   })
   const { getAllDataElementsToPost } = useGetGroupForm()
+  const { assessment } = getDataStoreKeys()
 
   useEffect(() => {
     runRulesEngine(formfieldsData)
@@ -54,7 +54,15 @@ function ModalContentAddGroups({ setOpen, parentId, formData }: any) {
   function onSubmit() {
     const allFields = fieldsWithValue.flat()
     if (allFields.filter((element: any) => (element?.value === undefined && element.required))?.length === 0) {
-      createGroup({ data: postBody(values, parentId).data, formData: { ...values, parentId: parentId }, closeModal, fieldsWithValue: getAllDataElementsToPost(tab!)!, values });
+      createGroup({
+        data: {
+          name: values?.[assessment?.nameDataElement],
+          code: values?.["groupCode"] ?? values?.[assessment?.nameDataElement],
+          shortName: values?.[assessment?.nameDataElement],
+          openingDate: values?.["registrationDate"],
+          parent: { id: parentId },
+        }, formData: { ...values, parentId: parentId }, closeModal, fieldsWithValue: getAllDataElementsToPost(tab!)!, values
+      });
     }
   }
 

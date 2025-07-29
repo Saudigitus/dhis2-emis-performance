@@ -6,12 +6,11 @@ import { HeaderFieldsState } from "../../schema/headersSchema";
 import useShowAlerts from "../commons/useShowAlert";
 import { EventsState } from "../../schema/termMarksSchema";
 import { type TableDataProps, type EventQueryProps, type TeiQueryProps, type MarksQueryResults, type EventQueryResults, type TeiQueryResults } from "../../types/table/TableData";
-import { formatResponseRowsMarks, formatResponseRows, getDataStoreKeys } from "../../utils";
+import { formatResponseRows, getDataStoreKeys } from "../../utils";
 import { useGetProgramIndicators } from "../programIndicators/useGetProgramIndicators";
 import { formatAttributesFilter } from "../../utils/tei/formatAttributesFilter";
 import { returnTeiProgramIndicators } from "../../utils/tei/returnTeiProgramIndicators";
 import { AllTeisSchema } from "../../schema/allTeisSchema";
-import { useGetOrgUnitCode } from "../organisationUnit/useGetOrgUnitCode";
 import { useGetEvents } from "../events/useGetEvents";
 import { useGetNextActions } from "../programStages/useGetNextActions";
 import { teiHasEvents } from "../../utils/table/rows/formatTeiHasEvents";
@@ -42,21 +41,18 @@ export function useTableData() {
     const { urlParamiters } = useParams()
     const [loading, setLoading] = useState<boolean>(false)
     const [tableData, setTableData] = useState<TableDataProps[]>([])
-    const [immutableTeiData, setImmutableTeiData] = useState<any[]>([]) // this variable receives the attributes and dataElements of the registragion programStage
     const { hide, show } = useShowAlerts()
-    const [allTeis, setAllTeis] = useRecoilState(AllTeisSchema)
+    const [_, setAllTeis] = useRecoilState(AllTeisSchema)
     const { assessment } = getDataStoreKeys()
     const [, setAllEvents] = useRecoilState(EventsState);
     const { orgUnit } = urlParamiters()
     const { getProgramIndicators } = useGetProgramIndicators()
-    const { getOrgUnitCode } = useGetOrgUnitCode()
     const { getEvents } = useGetEvents()
-    const { nextAction = [], tableStatus = [] } = useGetNextActions()
+    const { tableStatus = [] } = useGetNextActions()
 
     async function getData(page: number, pageSize: number, selectedProgramStage: string, selectedProgramIndicators: string[], program: string) {
         setLoading(true)
         setAllEvents([])
-        setImmutableTeiData([])
 
         const events: EventQueryResults = await engine.query(EVENT_QUERY({
             ouMode: "DESCENDANTS",
@@ -67,7 +63,7 @@ export function useTableData() {
             programStage: selectedProgramStage,
             // filter: headerFieldsState?.dataElements,
             filterAttributes: headerFieldsState?.attributes,
-            orgUnit: orgUnit as unknown as string
+            orgUnit: orgUnit as unknown as string,
         })).catch((error) => {
             show({
                 message: `${("Could not get events")}: ${error.message}`,
@@ -104,21 +100,21 @@ export function useTableData() {
         }
 
         const theResults: any = teiResults?.results?.instances ?? teiResults?.results?.trackedEntities
-        if (theResults) {
-            let counter = 0
-            for (const tei of theResults) {
-                const attId = assessment.programs.find(x => x?.program === tei.enrollments[0]?.program)?.attributes.find(x => x.attributeName == 'parentId')?.attribute
-                const ouId = tei.attributes.find((x: any) => x.attribute === attId)?.value
+        // if (theResults) {
+        //     let counter = 0
+        //     for (const tei of theResults) {
+        //         const attId = assessment?.programs?.find(x => x?.program === tei.enrollments[0]?.program)?.attributes?.find(x => x.attributeName == 'parentId')?.attribute
+        //         const ouId = tei?.attributes?.find((x: any) => x.attribute === attId)?.value
 
-                if (ouId) {
-                    const teiName: any = await getOrgUnitCode(ouId as unknown as string, true)
-                    theResults[counter].attributes.map((x: any) => {
-                        if (x.attribute === attId) x.value = teiName?.results?.name
-                    })
-                }
-                counter++
-            }
-        }
+        //         if (ouId) {
+        //             const teiName: any = await getOrgUnitCode(ouId as unknown as string, true)
+        //             theResults[counter].attributes.map((x: any) => {
+        //                 if (x.attribute === attId) x.value = teiName?.results?.name
+        //             })
+        //         }
+        //         counter++
+        //     }
+        // }
 
         const promises = []
         const nextPstageEvents: any = {
@@ -140,14 +136,24 @@ export function useTableData() {
                 }
             })
 
-        // if (selectedProgramStage !== null && selectedProgramStage !== undefined && selectedProgramStage !== '') {
-        //     for (const tei of allTeis) {
-        //         const marksResults: MarksQueryResults = await fetchMarks(tei, selectedProgramStage)
-        //         marskEvents?.results?.instances?.push(...marksResults?.results?.instances)
-        //     }
-        // }
+        if (selectedProgramStage !== null && selectedProgramStage !== undefined && selectedProgramStage !== '') {
+            const stage = assessment?.programs?.find(x => x?.program == program)?.registration
+            for (const tei of allTeis) {
+                const registration: any = await engine.query(EVENT_QUERY({
+                    page,
+                    pageSize,
+                    program: program,
+                    order: "createdAt:desc",
+                    programStage: stage!,
+                    filterAttributes: headerFieldsState?.attributes,
+                    orgUnit: orgUnit as unknown as string,
+                    trackedEntity: tei
+                }))
+                const data = registration?.results?.instances ?? registration?.results?.events
+                marskEvents?.results?.instances?.push(...data)
+            }
+        }
 
-        // console.log(nextPstageEvents, ...nextPstageEvents)
         const programIndicatorsInstances = []
 
         if (selectedProgramIndicators?.length) {
@@ -163,11 +169,11 @@ export function useTableData() {
             teiInstances: theResults,
             marksInstances: marskEvents?.results?.instances,
             programIndicatorsInstances: programIndicatorsInstances as any,
-            setImmutableTeiData,
             programStage: selectedProgramStage,
             nextPstageEvents: teiHasEvents(tableStatus as unknown as any, nextPstageEvents.results, allTeis)
         })
 
+        console.log(localData)
         for (const row of localData) {
             setAllEvents((prev) => [...prev, marskEvents.results.instances.find((event: any) => (event.trackedEntity === row.trackedEntity) && (event.enrollment === row.enrollment))])
         }

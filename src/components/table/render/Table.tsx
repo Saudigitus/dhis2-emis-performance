@@ -13,7 +13,6 @@ import { HeaderFieldsState } from '../../../schema/headersSchema';
 import { useHeader, useParams, useTableData } from '../../../hooks';
 import { TeiRefetch } from '../../../schema/refecthTeiSchema';
 import { TableDataLoadingState } from '../../../schema/tableDataLoadingSchema';
-import { TabsState } from '../../../schema/tabSchema';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -40,7 +39,6 @@ function Table() {
     const [page, setpage] = useState(1)
     const [pageSize, setpageSize] = useState(10)
     const [refetch] = useRecoilState(TeiRefetch)
-    const selectedTab = useRecoilValue(TabsState)
     const { urlParamiters } = useParams()
     const { orgUnit, tab, program } = urlParamiters()
     const setLoading = useSetRecoilState(TableDataLoadingState)
@@ -71,7 +69,7 @@ function Table() {
     return (
         <Paper>
             <div className={classes.workingListsContainer}>
-                <h4 className={classes.h4}>Mapeamento das ASCAS</h4>
+                <h4 className={classes.h4}>INGEMO</h4>
                 <WorkingLists />
             </div>
             <WithBorder type='bottom' />

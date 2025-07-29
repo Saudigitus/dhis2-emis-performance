@@ -4,12 +4,12 @@ import HeaderItem from './HeaderItem'
 import { useParams } from '../../../hooks'
 import { getSelectedKey, headBarData } from '../../../utils';
 import { ProgramConfig } from '../../../types/programConfig/ProgramConfig';
-import { programStageDataElements } from '../../../types/programStageConfig/ProgramStageConfig';
 import { ProgramConfigState } from '../../../schema/programSchema';
 import { useRecoilValue } from 'recoil';
 import { initializeRulesEngine } from '../../../hooks/programRules/rules-engine/InitializeRulesEngine';
 import { useGetTotalCompleted } from '../../../hooks/events/totals/useGetTotalCompleted';
 import { TeiRefetch } from '../../../schema/refecthTeiSchema';
+import { useFormatDataStore } from '../../../hooks/dataStore/useFormatDataStore';
 
 export default function MainHeader(): React.ReactElement {
     const { urlParamiters } = useParams();
@@ -23,7 +23,8 @@ export default function MainHeader(): React.ReactElement {
     const { getTotals } = useGetTotalCompleted({ setTotals })
     const refetch = useRecoilValue<boolean>(TeiRefetch)
     const percent = ((100 * totals.COMPLETED) / totals.Total).toFixed(0)
-    const filterContent = programConfig?.map(x => { return { value: x.id, label: x.displayName } })
+    const { programs } = useFormatDataStore()
+    const filterContent = programConfig?.filter(x => programs?.map(x => x?.program).includes(x.id))?.map(x => { return { value: x.id, label: x.displayName } })
 
     useEffect(() => {
         if (orgUnit && program)

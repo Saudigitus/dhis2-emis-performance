@@ -29,8 +29,10 @@ export type programStageType = {
 export type programDataStoreType = {
     accessTo: string
     program: string
+    id?: string
     programName: string
     dataElements?: dataElementType[]
     attributes: attributeType[]
     programStages: programStageType[]
+    registration: string
 } | undefined

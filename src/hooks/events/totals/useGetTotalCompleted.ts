@@ -1,12 +1,10 @@
 import { useParams } from "../../commons/useQueryParams";
 import { useGetEvents } from "../useGetEvents";
-import { getSelectedKey } from '../../../utils';
 import { useRecoilValue } from "recoil";
 import { ProgramConfigState } from "../../../schema/programSchema";
 
 export function useGetTotalCompleted({ setTotals }: { setTotals: (args: any) => void }) {
     const { getEvents } = useGetEvents()
-    const { getDataStoreData } = getSelectedKey()
     const programconfig = useRecoilValue(ProgramConfigState)
     const { urlParamiters } = useParams()
     const { orgUnit, tab, program } = urlParamiters()
@@ -20,19 +18,19 @@ export function useGetTotalCompleted({ setTotals }: { setTotals: (args: any) => 
             totals[stage ? stage : 'Total'] = response?.results?.total
         }
 
-        setTotals(totals)
+        setTotals(() => totals)
     }
 
     async function getTotalToAllStage() {
         let totals: any = {}
-        const programStages = programconfig?.find(x => x.id == program)?.programStages?.filter(x => !x.repeatable) ?? []
+        const programStages = programconfig?.find(x => x.id == program)?.programStages?.filter((x: any) => !x.repeatable) ?? []
 
         for (const stage of programStages!) {
             const response: any = await getEvents(1, 1, program!, stage.id, [], [], orgUnit, '', "")
             totals[stage.displayName] = response?.results?.total
         }
 
-        setTotals(totals)
+        setTotals(() => totals)
     }
 
     return { getTotals, getTotalToAllStage }

@@ -1,5 +1,4 @@
 interface TabElementsProps {
-  order: string,
   name: string
   value: string
   programStage: string

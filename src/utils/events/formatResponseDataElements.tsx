@@ -65,22 +65,22 @@ export function formEvents(executionDateLabel = "Data do Evento") {
             fields: [
                 {
                     required: false,
-                    name: "nomeAsca",
-                    labelName: "Nome da ASCA",
+                    name: "nomeActual",
+                    labelName: "Nome actual",
                     valueType: Attribute.valueType.TEXT as unknown as CustomAttributeProps["valueType"],
                     options: { optionSet: undefined },
                     initialOptions: { optionSet: undefined },
                     disabled: true,
                     pattern: "",
                     visible: true,
-                    description: "Nome da ASCA",
+                    description: "Nome actual",
                     searchable: false,
                     error: false,
                     programStage: "programStageObject.id",
                     content: "",
-                    id: "nomeAsca",
-                    displayName: "Nome da ASCA",
-                    header: "Nome da ASCA",
+                    id: "nomeActual",
+                    displayName: "Nome actual",
+                    header: "Nome actual",
                     type: VariablesTypes.DataElement,
                     value: undefined
                 }
